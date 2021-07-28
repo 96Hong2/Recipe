@@ -1,0 +1,98 @@
+.wrap {
+	margin: 0 150px 0 150px;
+}
+
+#header {
+	position: relative;
+	display: flex;
+}
+
+#logo {
+	margin: auto;
+	position: absolute;
+}
+
+#top_menu {
+	position: absolute;
+	right: 1%;
+}
+
+#top_menu li {
+	padding: 10px;
+	display: inline;
+}
+
+.search {
+	text-align: center;
+	width: 100%;
+}
+
+#search {
+	text-align: center;
+	margin: auto;
+	margin-bottom: 10px;
+}
+
+#keyword {
+	border: 2px solid #bbb;
+	height: 30px;
+	line-height: 30px;
+	width: 300px;
+}
+
+a {
+	color: #333;
+	text-decoration: none;
+}
+
+a:hover, a:focus {
+	color: #bbbbbb;
+}
+
+#menu {
+	top: 500px;
+	width: 100%;
+	border-top: 2px solid #bbb;
+	border-bottom: 2px solid #bbb;
+	text-align: center;
+	display: flex;
+}
+
+#menu ul {
+	width: 100%;
+}
+
+#menu ul li {
+	padding: 100px;
+	display: inline;
+}
+
+#banner {
+	margin: auto;
+	margin-top: 15px;
+	text-align: center;
+	width: 900px;
+	height: 300px;
+	background-color: #eee;
+}
+#week, #month {
+	margin-left: 300px;
+	margin-top: 50px;
+}
+#weekbest {
+	margin: auto;
+	margin-top: 15px;
+	text-align: center;
+	width: 900px;
+	height: 300px;
+	background-color: #eee;
+}
+
+#monthbest {
+	margin: auto;
+	margin-top: 15px;
+	text-align: center;
+	width: 900px;
+	height: 300px;
+	background-color: #eee;
+}
