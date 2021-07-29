@@ -33,6 +33,17 @@
 	margin-bottom: 10px;
 }
 
+.searchshop {
+	text-align: center;
+	width: 100%;
+}
+
+#searchshop {
+	text-align: center;
+	margin: auto;
+	margin-bottom: 10px;
+}
+
 #keyword {
 	border: 2px solid #bbb;
 	height: 30px;
@@ -67,9 +78,11 @@ a:hover, a:focus {
 	display: inline;
 }
 
+#body {
+	margin-top: 15px;
+}
 #banner {
 	margin: auto;
-	margin-top: 15px;
 	text-align: center;
 	width: 900px;
 	height: 300px;
@@ -95,4 +108,15 @@ a:hover, a:focus {
 	width: 900px;
 	height: 300px;
 	background-color: #eee;
+}
+
+table, th, td {
+	border: 1px solid;
+	border-collapse: collapse;
+	padding: 5px 10px;
+}
+
+td {
+	
+	text-align: center;
 }
