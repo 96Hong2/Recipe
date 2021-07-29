@@ -56,4 +56,5 @@
 		</main>
 		<footer>푸터</footer>
 	</div>
+</body>
 </html>
