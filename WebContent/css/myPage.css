@@ -1,0 +1,145 @@
+@charset "UTF-8";
+
+.wrap {
+	margin: 0 150px 0 150px;
+}
+
+.body_wrap {
+	margin: 20px 160px 0 160px;
+	background-color : lavender;
+}
+
+h1{
+	position: absolute;
+	left: 42%;
+	top: 25%;
+}
+
+img{
+	margin: 10px;
+}
+
+#info{
+	position: absolute;
+	top:50%;
+	right:15%;
+}
+
+#header {
+	position: relative;
+	display: flex;
+}
+
+#logo {
+	margin: auto;
+	position: absolute;
+}
+
+#top_menu {
+	position: absolute;
+	right: 1%;
+	padding-top : 6px;
+}
+
+#greeting {
+	position: absolute;
+	right: 2%;	
+}
+
+#top_menu li {
+	padding: 10px;
+	display: inline;
+}
+
+.search {
+	text-align: center;
+	width: 100%;
+}
+
+#search {
+	text-align: center;
+	margin: auto;
+	margin-bottom: 10px;
+}
+
+#keyword {
+	border: 2px solid #bbb;
+	height: 30px;
+	line-height: 30px;
+	width: 300px;
+}
+
+a {
+	color: #333;
+	text-decoration: none;
+}
+
+a:hover, a:focus {
+	color: pink;
+}
+
+#menu {
+	top: 500px;
+	width: 100%;
+	border-top: 2px solid #bbb;
+	border-bottom: 2px solid #bbb;
+	text-align: center;
+	display: flex;
+}
+
+#menu ul {
+	width: 100%;
+}
+
+#menu ul li {
+	padding: 60px;
+	display: inline;
+}
+
+#info img, p{
+	display: inline;
+}
+
+#myMenu, #like, #myRecipe {
+	padding-left:15px;
+	padding-bottom:40px;
+	border-bottom: 2px solid #bbb;
+}
+#myComment{
+	padding-left:10px;
+}
+
+#myMenu button, #like button, #myRecipe button, #myComment button{
+	margin-top:10px;
+}
+
+#myComment button{
+	margin-bottom:100px;
+}
+
+#myMenu{
+	margin-top: 30px;
+}
+
+#myMenu div{
+	display: inline;
+}
+
+table, th, td{
+	border : 1px solid;
+	border-collapse : collapse;
+}
+th, td{
+	text-align : center;
+	padding : 5px 10px;
+}
+
+/* #delAccount{
+	position : absolute;
+	bottom: -70%;
+	right: 17%;
+} */
+
+#margin{
+	height:100px;
+}

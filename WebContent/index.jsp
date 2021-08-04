@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,9 +18,10 @@
 
 				<div id="top_menu">
 					<ul>
-						<li><a href="#">로그인</a></li>
-						<li><a href="#">회원가입</a></li>
-						<li><a href="#">마이페이지</a></li>
+						<!-- 이미지테스트 임시로 넣어뒀음 -->
+						<li><a href="./updateTest.jsp">로그인</a></li>
+						<li><a href="./uploadTest.jsp">회원가입</a></li>
+						<li><a href="./myPage">마이페이지</a></li>
 						<li><a href="#">공지사항</a></li>
 					</ul>
 				</div>
