@@ -1,5 +1,28 @@
+@charset "UTF-8";
+
 .wrap {
 	margin: 0 150px 0 150px;
+}
+
+.body_wrap {
+	margin: 20px 160px 0 160px;
+	background-color : lavender;
+}
+
+h1{
+	position: absolute;
+	left: 42%;
+	top: 25%;
+}
+
+img{
+	margin: 10px;
+}
+
+#info{
+	position: absolute;
+	top:50%;
+	right:15%;
 }
 
 #header {
@@ -15,6 +38,12 @@
 #top_menu {
 	position: absolute;
 	right: 1%;
+	padding-top : 6px;
+}
+
+#greeting {
+	position: absolute;
+	right: 2%;	
 }
 
 #top_menu li {
@@ -33,17 +62,6 @@
 	margin-bottom: 10px;
 }
 
-.searchshop {
-	text-align: center;
-	width: 100%;
-}
-
-#searchshop {
-	text-align: center;
-	margin: auto;
-	margin-bottom: 10px;
-}
-
 #keyword {
 	border: 2px solid #bbb;
 	height: 30px;
@@ -57,7 +75,7 @@ a {
 }
 
 a:hover, a:focus {
-	color: #bbbbbb;
+	color: pink;
 }
 
 #menu {
@@ -74,49 +92,54 @@ a:hover, a:focus {
 }
 
 #menu ul li {
-	padding: 100px;
+	padding: 60px;
 	display: inline;
 }
 
-#body {
-	margin-top: 15px;
-}
-#banner {
-	margin: auto;
-	text-align: center;
-	width: 900px;
-	height: 300px;
-	background-color: #eee;
-}
-#week, #month {
-	margin-left: 300px;
-	margin-top: 50px;
-}
-#weekbest {
-	margin: auto;
-	margin-top: 15px;
-	text-align: center;
-	width: 900px;
-	height: 300px;
-	background-color: #eee;
+#info img, p{
+	display: inline;
 }
 
-#monthbest {
-	margin: auto;
-	margin-top: 15px;
-	text-align: center;
-	width: 900px;
-	height: 300px;
-	background-color: #eee;
+#myMenu, #like, #myRecipe {
+	padding-left:15px;
+	padding-bottom:40px;
+	border-bottom: 2px solid #bbb;
+}
+#myComment{
+	padding-left:10px;
 }
 
-table, th, td {
-	border: 1px solid;
-	border-collapse: collapse;
-	padding: 5px 10px;
+#myMenu button, #like button, #myRecipe button, #myComment button{
+	margin-top:10px;
 }
 
-td {
-	
-	text-align: center;
+#myComment button{
+	margin-bottom:100px;
+}
+
+#myMenu{
+	margin-top: 30px;
+}
+
+#myMenu div{
+	display: inline;
+}
+
+table, th, td{
+	border : 1px solid;
+	border-collapse : collapse;
+}
+th, td{
+	text-align : center;
+	padding : 5px 10px;
+}
+
+/* #delAccount{
+	position : absolute;
+	bottom: -70%;
+	right: 17%;
+} */
+
+#margin{
+	height:100px;
 }
