@@ -53,7 +53,7 @@ public class AdminDAO {
 		}
 	}
 
-	public ArrayList<MainDTO> memberList() throws SQLException{
+	public ArrayList<MainDTO> memberList() throws SQLException{ //지현
 		sql = "SELECT userid, nickname, name, rankid FROM member WHERE userdel = ?";
 		String sql2 = "SELECT userid FROM suspend WHERE userid= ?";
 		ArrayList<MainDTO> memberList = new ArrayList<MainDTO>();
@@ -96,7 +96,7 @@ public class AdminDAO {
 			return memberList;
 	}
 
-	public ArrayList<MainDTO> memberSearch(String options, String content) throws SQLException{
+	public ArrayList<MainDTO> memberSearch(String options, String content) throws SQLException{ //지현
 		sql = "SELECT userid, nickname, name, rankid FROM member WHERE ";
 
 		ArrayList<MainDTO> searchList = new ArrayList<MainDTO>();	
@@ -246,10 +246,9 @@ public class AdminDAO {
 		return change;
 	}
 
-	public int memberSuspend(String userId, String adminName, String opt, String textArea) {
+	public int memberSuspend(String userId, String adminName, String opt, String textArea) {//지현
 		
 		int change = 0;
-		int change2 = 0;
 		String option = "";
 		String sql = "INSERT INTO suspend(suspendid, suspendreason, managerid, userid, categoryid) "
 				+ "values(SUSPEND_SEQ.nextval, ?, ?, ?, ?)";
@@ -271,32 +270,17 @@ public class AdminDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		if(change > 0) {
-			
-			String sql2 = "UPDATE member SET userdel = ? where userId = ?";
-			try {
-				ps = conn.prepareStatement(sql2);
-				ps.setString(1, "Y");
-				ps.setString(2, userId);
-				change2 = ps.executeUpdate();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}else {
-			System.out.println("회원 정지 실패!");
-		}
-		return change2;
+
+		return change;
 	}
 
-	public int memberSusNot(String userId) {
+	public int memberSusNot(String userId) {//지현
 		int change = 0;
-		String sql = "UPDATE member SET userdel = ? where userId = ?";
+		String sql = "DELETE FROM suspend WHERE userId = ?";
 		
 			try {
 				ps = conn.prepareStatement(sql);
-				ps.setString(1, "N");
-				ps.setString(2, userId);
+				ps.setString(1, userId);
 				change = ps.executeUpdate();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -305,7 +289,7 @@ public class AdminDAO {
 		return change;
 	}
 
-	public boolean nickOverlay(String nickname) throws SQLException {
+	public boolean nickOverlay(String nickname) throws SQLException {//지현
 
 		String sql = "SELECT nickname FROM member WHERE nickname = ?";
 		ps = conn.prepareStatement(sql);
@@ -315,7 +299,7 @@ public class AdminDAO {
 		return rs.next();
 	}
 
-	public int memberBlind(String userId, String classification, String adminName, String blindReason, String fieldId) {
+	public int memberBlind(String userId, String classification, String adminName, String blindReason, String fieldId) {//지현
 
 		int change = 0;
 		//int change2 = 0;
@@ -339,7 +323,7 @@ public class AdminDAO {
 		return change;
 	}
 
-	public ArrayList<MainDTO> reportList() throws SQLException {
+	public ArrayList<MainDTO> reportList() throws SQLException {//지현
 		sql = "SELECT userid, reportid, classification, fieldid, categoryid, reportdate, details, reportstatus, managerid FROM report";
 		ArrayList<MainDTO> reportList = new ArrayList<MainDTO>();
 
@@ -362,7 +346,7 @@ public class AdminDAO {
 		return reportList;
 	}
 
-	public ArrayList<MainDTO> reportSearch(String options, String content) throws SQLException {
+	public ArrayList<MainDTO> reportSearch(String options, String content) throws SQLException {//지현
 		sql = "SELECT userid, reportid, classification, fieldid, categoryid, reportdate, details, reportstatus, managerid FROM report WHERE ";
 
 		ArrayList<MainDTO> searchList = new ArrayList<MainDTO>();	
@@ -421,7 +405,7 @@ public class AdminDAO {
 		
 	}
 
-	public ArrayList<MainDTO> reportNotYet() throws SQLException {
+	public ArrayList<MainDTO> reportNotYet() throws SQLException {//지현
 		sql = "SELECT userid, fieldid, classification, reportid, categoryid, reportdate, details, reportstatus, managerid FROM report where reportstatus = ?";
 		ArrayList<MainDTO> reportList = new ArrayList<MainDTO>();
 
@@ -445,7 +429,7 @@ public class AdminDAO {
 		return reportList;
 	}
 
-	public int reportChk(String reportId, String adminWho) throws SQLException {
+	public int reportChk(String reportId, String adminWho) throws SQLException {//지현
 		
 		sql = "UPDATE report SET reportstatus = ? WHERE reportid = ?";
 		int change = 0;
@@ -467,7 +451,7 @@ public class AdminDAO {
 		return change;
 	}
 
-	public ArrayList<MainDTO> blindList() throws SQLException {
+	public ArrayList<MainDTO> blindList() throws SQLException {//지현
 		sql = "SELECT userid, blindid, classification, fieldid, blinddate, blindreason, managerid FROM blind";
 		ArrayList<MainDTO> blindList = new ArrayList<MainDTO>();
 
@@ -488,7 +472,7 @@ public class AdminDAO {
 		return blindList;
 	}
 
-	public ArrayList<MainDTO> blindSearch(String options, String content) throws SQLException {
+	public ArrayList<MainDTO> blindSearch(String options, String content) throws SQLException {//지현
 		sql = "SELECT userid, blindid, classification, fieldid, blinddate, blindreason, managerid FROM blind WHERE ";
 
 		ArrayList<MainDTO> blindList = new ArrayList<MainDTO>();	
@@ -560,7 +544,7 @@ public class AdminDAO {
 		return blindList;
 	}
 
-	public int blindNot(String blindId) throws SQLException {
+	public int blindNot(String blindId) throws SQLException {//지현
 		sql = "DELETE FROM blind WHERE blindid = ?";
 		System.out.println("dao에서 받는 블라인드아이디 : "+blindId);
 		int change = 0;

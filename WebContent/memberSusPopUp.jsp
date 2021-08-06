@@ -6,6 +6,12 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+if("${sessionScope.isAdmin}"!="Y"){
+   alert("해당 서비스 접근 권한이 없습니다.");
+   location.href = "../";
+}
+</script>
 <style>
 
 	table{

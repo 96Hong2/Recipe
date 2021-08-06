@@ -79,7 +79,7 @@ public class AdminService {
 		
 	}
 
-	public MainDTO memberInfo(String currId) throws IOException {
+	public MainDTO memberInfo(String currId) throws IOException {//지현
 
 		MainDTO dto = null;
 		AdminDAO adDao = new AdminDAO();
@@ -126,7 +126,7 @@ public class AdminService {
 	}
 
 
-	public int memberSuspend() {
+	public int memberSuspend() {//지현
 		
 		int change = 0;
 		
@@ -149,24 +149,24 @@ public class AdminService {
 
 	}
 
-	public int memberSusNot() throws IOException {
+	public int memberSusNot() throws IOException {//지현
 		String userId = req.getParameter("userId");
-		String userDel = req.getParameter("userDel");
+		String userSus = req.getParameter("userSus");
 		int change = 0;
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		System.out.println("아이디 : "+userId+" /정지여부 : "+userDel);
+		System.out.println("아이디 : "+userId+" /정지여부 : "+userSus);
 		
-		if(userDel.equals("Y")) {
+		if(userSus.equals("Y")) {
 			AdminDAO adDao = new AdminDAO();
 			change = adDao.memberSusNot(userId);
 			if(change > 0) {
 				System.out.println("정지 해제 성공 : "+change);
-				userDel = "N";
+				userSus = "N";
 			}else {
 				System.out.println("정지 해제 실패");
 			}
 			adDao.resClose();
-			map.put("newUserDel", userDel);
+			map.put("newUserSus", userSus);
 		}else {
 			System.out.println("정지여부가 이상합니다...");
 		}
@@ -178,7 +178,7 @@ public class AdminService {
 
 	}
 
-	public void nickOverlay() throws IOException {
+	public void nickOverlay() throws IOException {//지현
 		String nickname = req.getParameter("nickName");
 		System.out.println("중복 체크 닉네임 : "+nickname);
 		boolean overlay = false;
@@ -202,7 +202,7 @@ public class AdminService {
 		}
 	}
 
-	public int memberBlind() {
+	public int memberBlind() {//지현
 		
 		int change = 0;
 		String userId = req.getParameter("userId");
@@ -226,7 +226,7 @@ public class AdminService {
 		
 	}
 
-	public void reportList() throws IOException {
+	public void reportList() throws IOException {//지현
 		AdminDAO adDao = new AdminDAO();
 		ArrayList<MainDTO> list = null;
 		HashMap<String, Object> map = new HashMap<String, Object>();
@@ -246,7 +246,7 @@ public class AdminService {
 		
 	}
 
-	public void reportSearch() throws IOException {
+	public void reportSearch() throws IOException {//지현
 		AdminDAO adDao = new AdminDAO();
 		ArrayList<MainDTO> searchList = null;
 		HashMap<String, Object> map = new HashMap<String, Object>();
@@ -280,7 +280,7 @@ public class AdminService {
 		
 	}
 
-	public void reportNotYet() throws IOException {
+	public void reportNotYet() throws IOException {//지현
 		AdminDAO adDao = new AdminDAO();
 		ArrayList<MainDTO> list = null;
 		HashMap<String, Object> map = new HashMap<String, Object>();
@@ -299,7 +299,7 @@ public class AdminService {
 		
 	}
 
-	public int reportChk() throws SQLException {
+	public int reportChk() throws SQLException {//지현
 		AdminDAO adDao = new AdminDAO();
 		int change = 0; 
 		String reportId = req.getParameter("reportId");
@@ -319,7 +319,7 @@ public class AdminService {
 		
 	}
 
-	public void blindList() throws IOException {
+	public void blindList() throws IOException {//지현
 		AdminDAO adDao = new AdminDAO();
 		ArrayList<MainDTO> list = null;
 		HashMap<String, Object> map = new HashMap<String, Object>();
@@ -338,7 +338,7 @@ public class AdminService {
 		
 	}
 
-	public void blindSearch() throws IOException {
+	public void blindSearch() throws IOException {//지현
 		AdminDAO adDao = new AdminDAO();
 		ArrayList<MainDTO> blindList = null;
 		HashMap<String, Object> map = new HashMap<String, Object>();
@@ -372,7 +372,7 @@ public class AdminService {
 		
 	}
 
-	public void blindNot() throws SQLException, IOException {
+	public void blindNot() throws SQLException, IOException {//지현
 		AdminDAO adDao = new AdminDAO();
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		int change = 0; 

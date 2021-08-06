@@ -7,11 +7,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<% //테스트용 세션 저장
-session.setAttribute("nickName", "슈퍼관리자");
-session.setAttribute("userId", "admin"); 
-session.setAttribute("isAdmin","Y");
-%>
 <script>
 if("${sessionScope.isAdmin}"!="Y"){
    alert("해당 서비스 접근 권한이 없습니다.");
@@ -147,12 +142,12 @@ p {
 		 location.reload();
 	 }
 
-	 function susPopUp(userId, nickname, userDel){
+	 function susPopUp(userId, nickname, userSus){
 		 //console.log("아이디 : "+userId);
 		 //console.log("닉네임 : "+nickname);
 		 //console.log("정지여부 : "+userDel);
 		 
-		 if(userDel == "N"){
+		 if(userSus == "N"){
 		 	var url = "./memberSusPopUp?userId="+userId+"&&nickname="+nickname;
 		 	var option = "width=650, height=500, top=500, location = no, resizable = no";
 		 	window.open(url, "memberSus", option);
@@ -167,7 +162,7 @@ p {
 					url : './memberSusNot',
 					data : {
 						"userId" : userId,
-						"userDel" : userDel
+						"userSus" : userSus
 					},
 					dataType : 'JSON',
 					success : function(data) {
