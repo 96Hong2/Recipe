@@ -902,14 +902,81 @@ public class MemberDAO {
 
 	}
 	
-	public boolean overlay1(String nickName) throws SQLException {//진후
-	      System.out.println("닉네임 중복체크DAO");
-	      String sql="SELECT nickName FROM member WHERE nickName = ?";
-	      ps = conn.prepareStatement(sql);
-	      ps.setString(1, nickName);
-	      rs = ps.executeQuery();   
-	      return rs.next();
-	   }
+	
+/*================================================진후============================================================================= */
+	
+	
+	public int join(MainDTO dto) throws SQLException {// 진후
+		System.out.println("멤버DAO 조인 들어옴");
+		String sql = "INSERT INTO member(userId, pw, name, nickName, address, tel)" + "VALUES(?,?,?,?,?,?)";
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, dto.getUserId());
+		ps.setString(2, dto.getPw());
+		ps.setString(3, dto.getName());
+		ps.setString(4, dto.getNickName());
+		ps.setString(5, dto.getAddress());
+		ps.setString(6, dto.getTel());
+		return ps.executeUpdate();
+	}
+
+	public boolean overlay(String userId) throws SQLException {// 진후
+		System.out.println("아이디 중복체크DAO");
+		String sql = "SELECT userId FROM member WHERE userId = ?";
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, userId);
+		rs = ps.executeQuery();
+		return rs.next();
+	}
+
+	public boolean overlay1(String nickName) throws SQLException {// 진후
+		System.out.println("닉네임 중복체크DAO");
+		String sql = "SELECT nickName FROM member WHERE nickName = ?";
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, nickName);
+		rs = ps.executeQuery();
+		return rs.next();
+	}
+
+	public HashMap<String, Object> login(String userId, String pw) throws SQLException {//진후
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		System.out.println("멤버DAO 들어옴");
+		String sql="SELECT userId, nickName, isAdmin FROM member WHERE userId=? AND pw=?";
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, userId);
+		ps.setString(2, pw);	
+		rs = ps.executeQuery();			
+		
+		
+		String loginId="";
+		String nickName="";
+		String isAdmin="";
+		
+		if(rs.next()) {
+		loginId=rs.getString("userId");
+		nickName=rs.getString("nickName");
+		isAdmin=rs.getString("isAdmin");
+		map.put("userId", loginId);
+		map.put("nickName", nickName);
+		map.put("isAdmin", isAdmin);
+		}
+		
+		sql="SELECT suspendId, suspendReason, to_char(suspendDate,'yyyy-mm-dd hh24:mi') suspendDate From suspend WHERE userId=?";
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, loginId);
+		rs = ps.executeQuery();
+		
+		if(rs.next()) {
+			String suspendId=rs.getString("suspendId");
+			String suspendReason=rs.getString("suspendReason");
+			String suspendDate=rs.getString("suspendDate");
+			map.put("suspendId", suspendId);
+			map.put("suspendReason", suspendReason);
+			map.put("suspendDate", suspendDate);
+			}		
+		
+		return map;		
+	}
 	
 	
 	

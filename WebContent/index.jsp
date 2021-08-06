@@ -19,8 +19,8 @@
 				<div id="top_menu">
 					<ul>
 						<!-- 이미지테스트 임시로 넣어뒀음 -->
-						<li><a href="./updateTest.jsp">로그인</a></li>
-						<li><a href="./uploadTest.jsp">회원가입</a></li>
+						<li><a href="./login.jsp">로그인</a></li>
+						<li><a href="./joinForm.jsp">회원가입</a></li>
 						<li><a href="./myPage">마이페이지</a></li>
 						<li><a href="#">공지사항</a></li>
 					</ul>

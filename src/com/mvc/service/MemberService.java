@@ -2,6 +2,7 @@ package com.mvc.service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -198,30 +199,108 @@ public class MemberService {
 		return map;
 	}
 	
+	
+	
+	
+	/*================================================진후============================================================================= */
+	
+	public void join() throws IOException {//회원가입(진후)
+		String userId = req.getParameter("userId");
+		String pw = req.getParameter("pw");
+		String name = req.getParameter("name");
+		String nickName = req.getParameter("nickName");
+		String address = req.getParameter("address");
+		String tel = req.getParameter("tel");	
+		System.out.println(userId+"/"+pw+"/"+name+"/"+nickName+"/"+address+"/"+tel);
+		System.out.println("멤버서비스 조인 들어옴");
+		MainDTO dto = new MainDTO();
+		dto.setUserId(userId);
+		dto.setPw(pw);
+		dto.setName(name);
+		dto.setNickName(nickName);
+		dto.setAddress(address);
+		dto.setTel(tel);
+		
+		MemberDAO dao = new MemberDAO();
+		int success = 0;
+		try {
+			success = dao.join(dto);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			dao.resClose();
+			System.out.println("회원가입 성공 여부 : "+success);
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("success", success);
+			Gson gson = new Gson();
+			String obj = gson.toJson(map);
+			resp.getWriter().println(obj);
+		}		
+		
+	}
+	public void overlay() throws IOException {//아이디 중복체크(진후)
+		String userId = req.getParameter("userId");
+		System.out.println("멤버서비스 오버레이(아이디)");
+		System.out.println("중복 체크 ID : "+userId);
+		boolean overlay = false;
+		boolean success = false;		
+		MemberDAO dao = new MemberDAO();
+		try {
+			overlay = dao.overlay(userId);
+			success = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			dao.resClose();
+			Gson json = new Gson();
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("success", success);
+			map.put("overlay", overlay);
+			String obj = json.toJson(map);			
+			resp.getWriter().println(obj);			
+		}		
+	}
+	
 	public void overlay1() throws IOException {//닉네임 중복체크(진후)
-	      String nickName = req.getParameter("nickName");
-	      System.out.println("멤버서비스 오버레이(닉네임)");
-	      System.out.println("중복 체크 nickName : "+nickName);
-	      boolean overlay1 = false;
-	      boolean success = false;      
-	      MemberDAO dao = new MemberDAO();
-	      try {
-	         overlay1 = dao.overlay1(nickName);
-	         success = true;
-	      } catch (Exception e) {
-	         e.printStackTrace();
-	      }finally {
-	         dao.resClose();
-	         Gson json = new Gson();
-	         HashMap<String, Object> map = new HashMap<String, Object>();
-	         map.put("success", success);
-	         map.put("overlay1", overlay1);
-	         String obj = json.toJson(map);         
-	         resp.getWriter().println(obj);         
-	      }      
-	   }
-	
-	
+		String nickName = req.getParameter("nickName");
+		System.out.println("멤버서비스 오버레이(닉네임)");
+		System.out.println("중복 체크 nickName : "+nickName);
+		boolean overlay1 = false;
+		boolean success = false;		
+		MemberDAO dao = new MemberDAO();
+		try {
+			overlay1 = dao.overlay1(nickName);
+			success = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			dao.resClose();
+			Gson json = new Gson();
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("success", success);
+			map.put("overlay1", overlay1);
+			String obj = json.toJson(map);			
+			resp.getWriter().println(obj);			
+		}		
+	}
+
+	public HashMap<String, Object> login() throws IOException {//로그인(진후)
+        System.out.println("멤버서비스 로그인 들어옴");
+        String userId = req.getParameter("userId");
+        String pw = req.getParameter("pw");
+        System.out.println(userId+"/"+pw);
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        MemberDAO dao = new MemberDAO();
+        try {
+            map = dao.login(userId, pw);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            dao.resClose();
+        }   
+
+        return map;
+   }
 	
 
 }

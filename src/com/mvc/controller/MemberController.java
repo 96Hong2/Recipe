@@ -18,7 +18,7 @@ import com.mvc.service.UploadService;
 
 import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
 
-@WebServlet({"/myPage","/myCash", "/info","/showCash", "/cashHistory", "/chargeCash", "/write", "/fileUpload", "/fileUpdate", "/test", "/clientInfo", "/updateForm", "/update", "/userDel", "/myWrite", "/myWritedetail", "/myLike", "/myComment"})
+@WebServlet({"/myPage","/myCash", "/info","/showCash", "/cashHistory", "/chargeCash", "/write", "/fileUpload", "/fileUpdate", "/test", "/clientInfo", "/updateForm", "/update", "/userDel", "/myWrite", "/myWritedetail", "/myLike", "/myComment", "/overlay", "/overlay1", "/join", "/login", "/logout"})
 public class MemberController extends HttpServlet {
 
 	@Override
@@ -46,6 +46,7 @@ public class MemberController extends HttpServlet {
 		boolean success = false;
 		int result = 0;
 		String userId = "";
+		
 
 		switch (addr) {
 		
@@ -269,12 +270,85 @@ public class MemberController extends HttpServlet {
 			dis.forward(req, resp);
 			break;
 			
-		case "/overlay1"://진후
-	         System.out.println("nickName 중복 확인 요청");
-	         service.overlay1();
-	         break;
 		
+
+	         
+	         
+	       /*================================================진후============================================================================= */
 		
+		case "/join":// 진후
+			System.out.println("멤버 컨트롤러 회원 가입 요청");
+			service.join();
+			break;
+
+		case "/login":// 진후
+			System.out.println("로그인 요청");
+			msg = "";
+			page = "";
+			String obj = "";
+			map = new HashMap<String, Object>();
+			HashMap<String, Object> ajaxMap = new HashMap<String, Object>();
+			
+			map = service.login();
+			
+			ajaxMap.put("success", false);
+			ajaxMap.put("suspend", false);
+			String loginId = (String) map.get("userId");
+			System.out.println("로그인아이디" + loginId);
+			if (loginId == null || loginId.equals("")) {
+				System.out.println("로그인 실패 - 잘못된 id/pw");
+			} else {
+				System.out.println(map.get("suspendId"));
+				if (map.get("suspendId") == null || map.get("suspendId").equals("")) {
+					// 회원 로그인 처리
+					System.out.println("로그인 성공");
+					req.getSession().setAttribute("userId", loginId);
+					req.getSession().setAttribute("nickName", (String)map.get("nickName"));
+					ajaxMap.put("success", true);
+					
+					// 관리자 처리
+					if (map.get("isAdmin").equals("Y")) {
+						System.out.println("관리자__" + map.get("isAdmin"));
+						System.out.println("관리자 입니다.");
+						req.getSession().setAttribute("isAdmin", "Y");			
+					}
+				} else {
+					// 정지된 회원 처리
+					ajaxMap.put("suspend", true);
+					ajaxMap.put("suspendId", map.get("suspendId"));
+					ajaxMap.put("suspendReason", map.get("suspendReason"));
+					ajaxMap.put("suspendDate", map.get("suspendDate"));
+					System.out.println("로그인 실패 - 정지된 회원");				
+				}
+			}
+			Gson gson = new Gson();
+			obj = gson.toJson(ajaxMap);
+			resp.setContentType("text/html; charset=UTF-8");
+			resp.getWriter().println(obj);
+			
+			break;
+
+		case "/logout":// 진후
+			System.out.println("로그아웃 요청");
+			req.getSession().removeAttribute("LoginId");			
+			msg = "로그아웃 되었습니다.";
+			page = "/index.jsp";
+			req.setAttribute("msg", msg);
+			dis = req.getRequestDispatcher(page);
+			dis.forward(req, resp);
+			break;
+
+		case "/overlay":// 진후
+			System.out.println("ID 중복 확인 요청");
+			service.overlay();
+			break;
+
+		case "/overlay1":// 진후
+			System.out.println("nickName 중복 확인 요청");
+			service.overlay1();
+			break;     
+	         
+	         
 		} //end switch-case		
 	}//end dual()
 	

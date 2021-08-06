@@ -79,7 +79,7 @@ if("${sessionScope.userId}"==""){
 				</tr>
 			</c:forEach>
 		</table>
-		<button onclick="href.location='index.jsp'">좋아요한 레시피 더보기</button>
+		<button onclick="location.href='myLike.jsp'">좋아요한 레시피 더보기</button>
 		</div>
 		
 		<div id="myRecipe">
@@ -103,7 +103,7 @@ if("${sessionScope.userId}"==""){
 				</tr>
 			</c:forEach>
 		</table>
-		<button onclick="href.location='./myWrite'">내가 작성한 레시피 더보기</button>
+		<button onclick="location.href='./myWrite'">내가 작성한 레시피 더보기</button>
 		</div>
 		
 		<div id="myComment">
@@ -123,7 +123,7 @@ if("${sessionScope.userId}"==""){
 				</tr>
 			</c:forEach>
 		</table>
-		<button onclick="href.location='./myComment'">내가 작성한 댓글 더보기</button>
+		<button onclick="location.href='./myComment'">내가 작성한 댓글 더보기</button>
 		</div>
 		
 		<button id='delAccount' onclick="href.location='index.jsp'">회원 탈퇴</button>
