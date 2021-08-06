@@ -1,10 +1,6 @@
 .wrap {
-	margin: 0 150px 0 150px;
-}
-
-#header {
-	position: relative;
-	display: flex;
+	margin: 0 auto 70px;
+	width: 900px;
 }
 
 #logo {
@@ -13,13 +9,12 @@
 }
 
 #top_menu {
-	position: absolute;
-	right: 1%;
+	float: right;
 }
 
 #top_menu li {
-	padding: 10px;
 	display: inline;
+	font-size: 0.8em;
 }
 
 .search {
@@ -33,12 +28,12 @@
 	margin-bottom: 10px;
 }
 
-.searchshop {
+.searchShop {
 	text-align: center;
 	width: 100%;
 }
 
-#searchshop {
+#searchShop {
 	text-align: center;
 	margin: auto;
 	margin-bottom: 10px;
@@ -57,12 +52,11 @@ a {
 }
 
 a:hover, a:focus {
-	color: #bbbbbb;
+	color: white;
 }
 
 #menu {
 	top: 500px;
-	width: 100%;
 	border-top: 2px solid #bbb;
 	border-bottom: 2px solid #bbb;
 	text-align: center;
@@ -71,16 +65,18 @@ a:hover, a:focus {
 
 #menu ul {
 	width: 100%;
+	padding: 0 20px;
 }
 
 #menu ul li {
-	padding: 100px;
 	display: inline;
+	margin: 50px;
 }
 
 #body {
 	margin-top: 15px;
 }
+
 #banner {
 	margin: auto;
 	text-align: center;
@@ -88,11 +84,13 @@ a:hover, a:focus {
 	height: 300px;
 	background-color: #eee;
 }
+
 #week, #month {
-	margin-left: 300px;
+	margin-left: 20px;
 	margin-top: 50px;
 }
-#weekbest {
+
+#weeklyBest {
 	margin: auto;
 	margin-top: 15px;
 	text-align: center;
@@ -101,22 +99,86 @@ a:hover, a:focus {
 	background-color: #eee;
 }
 
-#monthbest {
+#monthlyBest {
 	margin: auto;
 	margin-top: 15px;
 	text-align: center;
 	width: 900px;
 	height: 300px;
 	background-color: #eee;
-}
-
-table, th, td {
-	border: 1px solid;
-	border-collapse: collapse;
-	padding: 5px 10px;
 }
 
 td {
-	
 	text-align: center;
+}
+
+td.info {
+	text-align: left;
+}
+
+.container {
+	margin: auto;
+	width: 840px;
+	display: grid;
+	grid-template-columns: repeat(3, 280px);
+	grid-template-rows: 256px;
+	width: 840px;
+}
+
+.figure {
+	position: absolute;
+	text-align: center;
+	width: 200px;
+	height: 200px;
+	background-color: #bbb;
+	border-radius: 10px;
+}
+
+.figure:hover, .figure:focus {
+	opacity: 0.5;
+}
+
+.img {
+	border-radius: 10px;
+}
+
+.table {
+	margin: 0 auto 10px;
+	width: 680px;
+	float: left;
+}
+
+th {
+	background-color: #fafafa;
+	height: 40px;
+	display: table-cell;
+	vertical-align: inherit;
+	font-weight: bold;
+}
+.table-right {
+	margin-left:20px;
+	
+	width: 200px;
+	float: right;
+	text-align: right;
+	
+}
+.table-chk {
+	width: 30px;
+}
+
+.table-select {
+	width: 120px;
+}
+
+.table-info {
+	width: 350px;
+}
+
+.table-total {
+	
+}
+.cartprice {
+	float:left;
+	margin-left:30px;
 }
