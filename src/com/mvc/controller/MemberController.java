@@ -18,7 +18,7 @@ import com.mvc.service.UploadService;
 
 import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
 
-@WebServlet({"/myPage","/myCash", "/info","/showCash", "/cashHistory", "/chargeCash", "/write", "/fileUpload", "/fileUpdate", "/test", "/clientInfo", "/updateForm", "/update", "/userDel", "/myWrite", "/myWritedetail", "/myLike", "/myComment", "/overlay", "/overlay1", "/join", "/login", "/logout"})
+@WebServlet({"/myPage","/myCash", "/info","/showCash", "/cashHistory", "/chargeCash", "/write", "/fileUpload", "/fileUpdate", "/test", "/clientInfo", "/updateForm", "/update", "/userDel", "/myWrite", "/myWritedetail", "/myLike", "/myComment", "/overlay", "/overlay1", "/join", "/login", "/logout", "/pointHistory"})
 public class MemberController extends HttpServlet {
 
 	@Override
@@ -160,6 +160,26 @@ public class MemberController extends HttpServlet {
 				dis.forward(req, resp);
 			} catch (Exception e) {
 				System.out.println("**에러 : MemberController /chargeCash");
+				e.printStackTrace();
+			}
+		break;
+		
+		case "/pointHistory": //은홍
+			System.out.println("명예 획득 내역 조회 요청");
+			list = new ArrayList<MainDTO>();
+			try {
+				list = service.pointHistory();
+				req.setAttribute("pointList", list);
+				
+				msg = req.getParameter("msg");
+				if(msg != null && msg != "") {
+					req.setAttribute("msg", msg);
+				}
+				
+				dis = req.getRequestDispatcher("myPage_myPoint.jsp");
+				dis.forward(req, resp);
+			} catch (Exception e) {
+				System.out.println("**에러 : MemberController /cashHistory");
 				e.printStackTrace();
 			}
 		break;
@@ -330,7 +350,7 @@ public class MemberController extends HttpServlet {
 
 		case "/logout":// 진후
 			System.out.println("로그아웃 요청");
-			req.getSession().removeAttribute("LoginId");			
+			req.getSession().removeAttribute("userId");			
 			msg = "로그아웃 되었습니다.";
 			page = "/index.jsp";
 			req.setAttribute("msg", msg);

@@ -98,6 +98,17 @@ public class MemberService {
 		return map;
 	}
 	
+	public ArrayList<MainDTO> pointHistory() {
+		System.out.println("MemberService pointHistory() 들어옴");
+		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
+		String userId = (String) req.getSession().getAttribute("userId");
+		System.out.println("pointHistory() 세션에 저장된 userId : "+userId);
+		MemberDAO dao = new MemberDAO();
+		list = dao.pointHistory(userId);
+		dao.resClose();
+		return list;
+	}
+	
 	public MainDTO clientInfo() throws IOException { // 찬호
 		String userId = (String) req.getSession().getAttribute("userId");
 		req.getSession().setAttribute("userId", "123123");

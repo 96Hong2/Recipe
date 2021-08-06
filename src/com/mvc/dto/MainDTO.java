@@ -3,6 +3,9 @@ package com.mvc.dto;
 import java.sql.Date;
 
 public class MainDTO {
+	private String pointDate;
+	private String pointField;
+	private int getPoint;
    private Date regDate;
    private String commentId;
    private String recomId;
@@ -549,5 +552,23 @@ public class MainDTO {
    public void setField(String field) {
       this.field = field;
    }
-
+public String getPointDate() {
+	return pointDate;
+}
+public void setPointDate(String pointDate) {
+	this.pointDate = pointDate;
+}
+public String getPointField() {
+	return pointField;
+}
+public void setPointField(String pointField) {
+	this.pointField = pointField;
+}
+public int getGetPoint() {
+	return getPoint;
+}
+public void setGetPoint(int getPoint) {
+	this.getPoint = getPoint;
+}
+   
 }

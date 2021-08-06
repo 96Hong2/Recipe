@@ -513,6 +513,76 @@ public class MemberDAO {
 		return success;
 	}
 	
+	public ArrayList<MainDTO> pointHistory(String userId) { //은홍
+		//명예 획득 내역 리스트 조회
+		System.out.println("MemberDAO pointHistory() 들어옴");
+		MainDTO dto = null;
+		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
+		String pointDate = "로드실패";
+		String pointField = "로드실패";
+		int getPoint = 0;
+		int totalPoint = 0;
+		try {
+			sql = "SELECT * FROM (SELECT to_char(pointDate,'yyyy-mm-dd hh24:mi') pointDate, "
+					+ "pointField, getPoint, totalPoint FROM point WHERE userId=? ORDER BY pointDate DESC) "
+					+ "WHERE ROWNUM <= 10";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, userId);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				dto = new MainDTO();
+				pointDate = rs.getString("pointDate");
+				pointField = rs.getString("pointField");
+				getPoint = rs.getInt("getPoint");
+				totalPoint = rs.getInt("totalPoint");
+				
+				dto.setPointDate(pointDate);
+				dto.setPointField(pointField);
+				dto.setGetPoint(getPoint);
+				dto.setTotalPoint(totalPoint);
+				list.add(dto);
+			}
+			System.out.println("마지막줄 pointDate/pointField/getPoint/totalPoint : "+pointDate+"/"+pointField+"/"+getPoint+"/"+totalPoint);
+			System.out.println("pointHistory list size : " + list.size());
+		} catch (Exception e) {
+			System.out.println("**에러 : MemberDAO pointHistory()");
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public boolean getPoint(String userId, String pointField, int getPoint) { // 은홍
+		// 명예점수를 더하고 획득내역 히스토리를 추가하는 메서드
+		System.out.println("MemberDAO getPoint() 명예점수 획득 : + "+getPoint+"점!");
+		boolean success = false;
+			//먼저 현재의 명예점수를 가져온다
+			String point_sql = "SELECT totalPoint FROM (SELECT totalPoint FROM point WHERE userId=? ORDER BY pointDate DESC) WHERE ROWNUM=1";
+			int point_now = 0;
+			try {
+				ps = conn.prepareStatement(point_sql);
+				ps.setString(1, userId);
+				rs = ps.executeQuery();
+				if (rs.next()) {
+					point_now = Integer.parseInt(rs.getString("totalPoint"));
+				
+					//현재 명예점수를 가져왔다면 명예점수 히스토리를 추가해준다
+					sql = "INSERT INTO point(getPoint,totalPoint,userId,pointField)VALUES(?,?,?,?)";
+					ps = conn.prepareStatement(sql);
+					ps.setInt(1, getPoint);
+					ps.setInt(2, point_now+getPoint);
+					ps.setString(3, userId);
+					ps.setString(4, pointField);
+					if (ps.executeUpdate() > 0) {
+						success = true;
+					}
+				}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("명예 획득 쿼리 적용 성공여부 : " + success);
+		return success;
+	}
+	
 	public MainDTO clientInfo(String userId) { // 찬호
 
 		MainDTO dto = null;

@@ -15,10 +15,6 @@ if("${sessionScope.userId}"==""){
 	location.href = "./";
 }
 </script>
-<script>
-	function popUp()
-	{ window.open("popUp.jsp", "회원 탈퇴", "width=600, height=200, left=100, top=50"); }
-</script>
 <header>
 	<c:import url="./header_afterLogin.jsp"/>
 </header>
@@ -54,7 +50,7 @@ if("${sessionScope.userId}"==""){
 			</div>
 			<div id="myMenu_honor">
 				<img src="./staticImg/catIcon.png" alt="명예아이콘" width=50px; height=50px;/>
-				<button type='button' onclick="location.href='index.jsp'">명예조회</button>
+				<button type='button' onclick="location.href='./pointHistory'">명예조회</button>
 			</div>
 		</div>
 		
@@ -79,7 +75,7 @@ if("${sessionScope.userId}"==""){
 				</tr>
 			</c:forEach>
 		</table>
-		<button onclick="location.href='myLike.jsp'">좋아요한 레시피 더보기</button>
+		<button onclick="href.location='index.jsp'">좋아요한 레시피 더보기</button>
 		</div>
 		
 		<div id="myRecipe">
@@ -103,7 +99,7 @@ if("${sessionScope.userId}"==""){
 				</tr>
 			</c:forEach>
 		</table>
-		<button onclick="location.href='./myWrite'">내가 작성한 레시피 더보기</button>
+		<button onclick="href.location='./myWrite'">내가 작성한 레시피 더보기</button>
 		</div>
 		
 		<div id="myComment">
@@ -123,7 +119,7 @@ if("${sessionScope.userId}"==""){
 				</tr>
 			</c:forEach>
 		</table>
-		<button onclick="location.href='./myComment'">내가 작성한 댓글 더보기</button>
+		<button onclick="href.location='./myComment'">내가 작성한 댓글 더보기</button>
 		</div>
 		
 		<button id='delAccount' onclick="href.location='index.jsp'">회원 탈퇴</button>
