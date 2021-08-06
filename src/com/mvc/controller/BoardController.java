@@ -14,7 +14,7 @@ import com.mvc.dto.MainDTO;
 import com.mvc.service.BoardService;
 import com.mvc.service.MemberService;
 
-@WebServlet({"/","/postWriteForm","/postDetail","/postUpdateForm","/postUpdate","/postDel","/postList","/category","/postSearch"})
+@WebServlet({"/postWriteForm","/postDetail","/postUpdateForm","/postUpdate","/postDel","/postList","/category","/postSearch"})
 public class BoardController extends HttpServlet {
 
 	@Override
