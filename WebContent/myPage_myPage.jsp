@@ -9,12 +9,6 @@
 <script src=https://code.jquery.com/jquery-3.6.0.min.js></script>
 <link rel="stylesheet" type="text/css" href="css/myPage.css" media="all" />
 </head>
-<% //테스트용 세션 저장
-session.setAttribute("nickName", "사나이광배");
-session.setAttribute("userId", "kwangbae@gmail.com"); 
-//사용가능 샘플 아이디 "kwangbae@gmail.com" , "chanho@naver.com"
-//session.removeAttribute("nickName");
-%>
 <script>
 if("${sessionScope.userId}"==""){
 	alert("로그인이 필요한 서비스입니다.");
