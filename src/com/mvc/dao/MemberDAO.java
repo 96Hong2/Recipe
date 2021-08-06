@@ -512,5 +512,406 @@ public class MemberDAO {
 		}
 		return success;
 	}
+	
+	public MainDTO clientInfo(String userId) { // 찬호
+
+		MainDTO dto = null;
+		String sql = "SELECT userId, pw, name, nickName, address, tel, rankId, blindCount, regDate"
+				+ " FROM member where userId = ?";
+
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, userId);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				dto = new MainDTO();
+				dto.setUserId(rs.getString("userId"));
+				dto.setPw(rs.getString("pw"));
+				dto.setName(rs.getString("name"));
+				dto.setNickName(rs.getString("nickName"));
+				dto.setAddress(rs.getString("address"));
+				dto.setTel(rs.getString("tel"));
+				dto.setRankId(rs.getString("rankId"));
+				dto.setBlindCount(rs.getInt("blindCount"));
+				dto.setRegDate(rs.getDate("regDate"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return dto;
+
+	}
+
+	public int update(String pw, String nickName, int tel, String address) { // 찬호
+
+		int change = 0;
+		String sql = "UPDATE member SET pw = ?, nickname = ?, tel = ?, address = ?";
+
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, pw);
+			ps.setString(2, nickName);
+			ps.setInt(3, tel);
+			ps.setString(4, address);
+			change = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return change;
+
+	}
+
+	public String userDel(String userId) { // 찬호
+
+		String sql = "UPDATE member SET userDel = 'Y' where userId = ?";
+		String del = "";
+
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, userId);
+			int a = ps.executeUpdate();
+			if (a > 0) {
+				del = "Y";
+			} else {
+				del = "N";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return del;
+
+	}
+
+	public HashMap<String, Object> myWrite(int page, String userId) { // 찬호
+
+		System.out.println("page : " + page);
+
+		ArrayList<MainDTO> myWrite = new ArrayList<MainDTO>();
+		String item = "로드실패";
+		userId = "chanho@naver.com"; // 지워야하는거에용
+		int start = 0;
+		int end = 0;
+		int endPage = 0;
+		int startPage = 0;
+		int pagePerCnt = 9; // 한 페이지당 보여줄 게시글 수
+		int pagePerPage = 5; // 한 페이지당 보여줄 페이지 수
+		int total = 0;
+		try {
+			total = myWriteTotalCount(userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // 총 게시글 수
+		int pages = total % pagePerCnt == 0 ? total / pagePerCnt : (total / pagePerCnt) + 1; // 만들 수 있는 페이지 수
+		System.out.println("total pages : " + total + " / pages : " + pages);
+
+		if (page > pages) {
+			page = pages;
+		}
+		System.out.println("DAO 요청 받은 페이지 : " + page);
+
+		start = ((page - 1) * pagePerCnt) + 1;
+		end = page * pagePerCnt; 
+		endPage = pagePerPage * ((int) ((page - 1) / pagePerPage) + 1);
+		startPage = endPage - pagePerPage + 1;
+		System.out.println("DAO startPage/endPage : " + startPage + "/" + endPage);
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+
+		String sql = "SELECT rnum, postid, title, recipePrice, hits ,likes, userid, item FROM "
+				+ "(SELECT ROW_NUMBER() OVER (ORDER BY postid) AS rnum, post.* FROM post where userid = ?"
+				+ " ORDER BY postid desc) WHERE rnum BETWEEN ? AND ?";
+
+
+		myWrite = new ArrayList<MainDTO>();
+		System.out.println("DAO myWrite() size : " + myWrite.size());
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, userId);
+			ps.setInt(2, start);
+			ps.setInt(3, end);
+			rs = ps.executeQuery();
+			myWrite = new ArrayList<MainDTO>();
+			System.out.println("들어오는지확인");
+			while (rs.next()) {
+				MainDTO dto = new MainDTO();
+				item = rs.getString("item");
+				dto.setPostId(rs.getString("postId"));
+				dto.setTitle(rs.getString("title"));
+				dto.setRecipePrice(rs.getInt("recipePrice"));
+				dto.setHits(rs.getInt("hits"));
+				dto.setLikes(rs.getInt("likes"));
+				dto.setUserId(rs.getString("userId"));
+				// 재료 3개만 가져오기
+	            String[] itemArr = item.split(",");
+	            item = "";
+	            int i = 0;
+	            while (i < 3 && itemArr.length > i) {
+	               // 재료가 3개 미만일 경우 itemArr.length < i 에 걸린다
+	               item += (",#" + itemArr[i]);
+	               i += 1;
+	               System.out.println("i : " + i);
+	            }
+	            item = item.substring(1);
+	            // System.out.println("재료(item)3개만 : "+item);
+				dto.setItem(item);
+				System.out.println("dto : " + dto);
+				myWrite.add(dto);
+			}
+			System.out.println("들어간 userId : " + userId);
+			System.out.println("DAO myWrite() size : " + myWrite.size());
+
+			map.put("myWrite", myWrite);
+			map.put("totalPage", pages);
+			map.put("currPage", page);
+			map.put("start", startPage);
+			map.put("end", endPage);
+		} catch (Exception e) {
+			System.out.println("**DAO list()에러**");
+			e.printStackTrace();
+		}
+		return map;
+	}
+
+	public int myWriteTotalCount(String userId) throws SQLException {
+
+		String sql = "SELECT count(*) FROM post where userid = ?";
+		
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, userId);
+		rs = ps.executeQuery();
+
+		int total = 0;
+
+		if (rs.next()) {
+			total = rs.getInt(1);
+		}
+
+		return total;
+	}
+	
+	public int myCommentTotalCount(String userId) throws SQLException {
+
+		String sql = "SELECT count(*)"
+				+ "FROM (SELECT commentid, comment_content, userid, comment_date FROM (SELECT ROW_NUMBER() OVER (ORDER BY comment_date DESC) as rnum, commentid, comment_content, userid, comment_date "
+				+ "FROM (SELECT commentid, comment_content, userid, comment_date FROM recomment WHERE userid = ? UNION SELECT commentid, comment_content, userid, comment_date "
+				+ "FROM postcomment WHERE userid = ?))) c, post p WHERE p.postid IN (SELECT postid FROM postcomment WHERE commentid=c.commentid)";
+		
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, userId);
+		ps.setString(2, userId);
+		rs = ps.executeQuery();
+
+		int total = 0;
+
+		if (rs.next()) {
+			total = rs.getInt(1);
+		}
+
+		return total;
+	}
+	
+	public int myLikeTotalCount(String userId) throws SQLException {
+
+		String sql = "SELECT count(*) "
+				+ "FROM (SELECT * FROM post WHERE postid IN (SELECT postId "
+				+ "FROM (SELECT postId FROM postLike WHERE userId= ? ORDER BY likedate DESC) ) ORDER BY postdate DESC) p";
+		
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, userId);
+		rs = ps.executeQuery();
+
+		int total = 0;
+
+		if (rs.next()) {
+			total = rs.getInt(1);
+		}
+
+		return total;
+	}
+
+	public HashMap<String, Object> myLike(int page, String userId) { // 찬호
+
+		System.out.println("page : " + page);
+
+		ArrayList<MainDTO> myLike = new ArrayList<MainDTO>();
+		String item = "로드실패";
+		userId = "kwangbae@gmail.com"; // 지워야하는거에용
+		int start = 0;
+		int end = 0;
+		int endPage = 0;
+		int startPage = 0;
+		int pagePerCnt = 9; // 한 페이지당 보여줄 게시글 수
+		int pagePerPage = 5; // 한 페이지당 보여줄 페이지 수
+		int total = 0;
+		try {
+			total = myLikeTotalCount(userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // 총 게시글 수
+		int pages = total % pagePerCnt == 0 ? total / pagePerCnt : (total / pagePerCnt) + 1; // 만들 수 있는 페이지 수
+		System.out.println("total pages : " + total + " / pages : " + pages);
+
+		if (page > pages) {
+			page = pages;
+		}
+		System.out.println("DAO 요청 받은 페이지 : " + page);
+
+		start = ((page - 1) * pagePerCnt) + 1;
+		end = page * pagePerCnt; 
+		endPage = pagePerPage * ((int) ((page - 1) / pagePerPage) + 1);
+		startPage = endPage - pagePerPage + 1;
+		System.out.println("DAO startPage/endPage : " + startPage + "/" + endPage);
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+
+		String sql = "SELECT postId,likes,title,hits,item,recipePrice,(SELECT nickName FROM member WHERE userid=p.userid) nickName FROM "
+				+ "(SELECT * FROM post WHERE postid IN (SELECT postId FROM (SELECT postId FROM "
+				+ "postLike WHERE userId=? ORDER BY likedate DESC) WHERE ROWNUM between ? and ?) ORDER BY postdate DESC) p";
+
+
+		myLike = new ArrayList<MainDTO>();
+		System.out.println("DAO myLike() size : " + myLike.size());
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, userId);
+			ps.setInt(2, start);
+			ps.setInt(3, end);
+			rs = ps.executeQuery();
+			myLike = new ArrayList<MainDTO>();
+			System.out.println("들어오는지확인");
+			while (rs.next()) {
+				MainDTO dto = new MainDTO();
+				item = rs.getString("item");
+				dto.setPostId(rs.getString("postId"));
+				dto.setLikes(rs.getInt("likes"));
+				dto.setTitle(rs.getString("title"));
+				dto.setHits(rs.getInt("hits"));
+				// 재료 3개만 가져오기
+	            String[] itemArr = item.split(",");
+	            item = "";
+	            int i = 0;
+	            while (i < 3 && itemArr.length > i) {
+	               // 재료가 3개 미만일 경우 itemArr.length < i 에 걸린다
+	               item += (",#" + itemArr[i]);
+	               i += 1;
+	               System.out.println("i : " + i);
+	            }
+	            item = item.substring(1);
+	            // System.out.println("재료(item)3개만 : "+item);
+
+				dto.setItem(item);
+				dto.setRecipePrice(rs.getInt("recipePrice"));
+				dto.setUserId(rs.getString("nickName"));
+				System.out.println("dto : " + dto);
+				myLike.add(dto);
+			}
+			System.out.println("들어간 userId : " + userId);
+			System.out.println("DAO myWrite() size : " + myLike.size());
+
+			map.put("myLike", myLike);
+			map.put("totalPage", pages);
+			map.put("currPage", page);
+			map.put("start", startPage);
+			map.put("end", endPage);
+		} catch (Exception e) {
+			System.out.println("**DAO list()에러**");
+			e.printStackTrace();
+		}
+		return map;
+	}
+	
+	
+
+	public HashMap<String, Object> myComment(int page, String userId) { // 찬호
+
+		System.out.println("page : " + page);
+
+		ArrayList<MainDTO> myComment = new ArrayList<MainDTO>();
+		userId = "kwangbae@gmail.com"; // 로그인 안되니까 일단 값만 넣엇음 실제로 할때 "" 안에 지우기
+		int start = 0;
+		int end = 0;
+		int endPage = 0;
+		int startPage = 0;
+		int pagePerCnt = 10; 
+		int pagePerPage = 5; 
+		int total = 0;
+		try {
+			total = myCommentTotalCount(userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		int pages = total % pagePerCnt == 0 ? total / pagePerCnt : (total / pagePerCnt) + 1; // 만들 수 있는 페이지 수
+		System.out.println("total pages : " + total + " / pages : " + pages);
+
+		if (page > pages) {
+			page = pages;
+		}
+		System.out.println("DAO 요청 받은 페이지 : " + page);
+
+		start = ((page - 1) * pagePerCnt) + 1;
+		end = page * pagePerCnt; 
+		endPage = pagePerPage * ((int) ((page - 1) / pagePerPage) + 1);
+		startPage = endPage - pagePerPage + 1;
+		System.out.println("DAO startPage/endPage : " + startPage + "/" + endPage);
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		String sql = "SELECT c.commentid commentid, c.comment_content content, c.userid userid, to_char(c.comment_date,'yyyy-mm-dd hh24:mi') comment_date, p.postId postid, p.title title "
+				+ "FROM (SELECT commentid, comment_content, userid, comment_date FROM (SELECT ROW_NUMBER() OVER (ORDER BY comment_date DESC) as rnum, commentid, comment_content, userid, comment_date "
+				+ "FROM (SELECT commentid, comment_content, userid, comment_date FROM recomment WHERE userid = ? UNION SELECT commentid, comment_content, userid, comment_date "
+				+ "FROM postcomment WHERE userid = ?)) where rnum between ? and ?) c, post p WHERE p.postid IN (SELECT postid FROM postcomment WHERE commentid=c.commentid)";
+
+
+		myComment = new ArrayList<MainDTO>();
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, userId);
+			ps.setString(2, userId);
+			ps.setInt(3, start);
+			ps.setInt(4, end);
+			rs = ps.executeQuery();
+			myComment = new ArrayList<MainDTO>();
+			System.out.println("들어오는지확인");
+			
+			while (rs.next()) {
+				MainDTO dto = new MainDTO();
+				dto.setCommentId(rs.getString("commentId"));
+				dto.setComment_content(rs.getString("content"));
+				dto.setUserId(rs.getString("userId"));
+				dto.setComment_date(rs.getString("comment_date"));
+				dto.setPostId(rs.getString("postId"));
+				dto.setTitle(rs.getString("title"));
+				System.out.println("dto : " + dto);
+				myComment.add(dto);
+			}
+			System.out.println("들어간 userId : " + userId);
+			System.out.println("DAO myComment() size : " + myComment.size());
+
+			map.put("myComment", myComment);
+			map.put("totalPage", pages);
+			map.put("currPage", page);
+			map.put("start", startPage);
+			map.put("end", endPage);
+		} catch (Exception e) {
+			System.out.println("**DAO list()에러**");
+			e.printStackTrace();
+		}
+		return map;
+
+	}
+	
+	public boolean overlay1(String nickName) throws SQLException {//진후
+	      System.out.println("닉네임 중복체크DAO");
+	      String sql="SELECT nickName FROM member WHERE nickName = ?";
+	      ps = conn.prepareStatement(sql);
+	      ps.setString(1, nickName);
+	      rs = ps.executeQuery();   
+	      return rs.next();
+	   }
+	
+	
+	
 
 }

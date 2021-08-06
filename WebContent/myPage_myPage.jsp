@@ -15,6 +15,10 @@ if("${sessionScope.userId}"==""){
 	location.href = "./";
 }
 </script>
+<script>
+	function popUp()
+	{ window.open("popUp.jsp", "회원 탈퇴", "width=600, height=200, left=100, top=50"); }
+</script>
 <header>
 	<c:import url="./header_afterLogin.jsp"/>
 </header>

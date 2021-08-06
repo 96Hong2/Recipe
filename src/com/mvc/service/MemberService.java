@@ -1,5 +1,6 @@
 package com.mvc.service;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
 import com.mvc.dao.MemberDAO;
 import com.mvc.dto.MainDTO;
 
@@ -94,5 +96,132 @@ public class MemberService {
 		
 		return map;
 	}
+	
+	public MainDTO clientInfo() throws IOException { // 찬호
+		String userId = (String) req.getSession().getAttribute("userId");
+		req.getSession().setAttribute("userId", "123123");
+
+		System.out.println("userId : " + userId);
+
+		MainDTO dto = null;
+		MemberDAO dao = new MemberDAO();
+
+		dto = dao.clientInfo(userId);
+
+		System.out.println("clientInfo DTO : " + dto);
+		dao.resClose();
+
+		return dto;
+
+	}
+
+	public MainDTO updateForm() { // 찬호
+
+		String userId = req.getParameter("userId");
+		System.out.println("userId : " + userId);
+
+		MemberDAO dao = new MemberDAO();
+		MainDTO dto = dao.clientInfo(userId);
+		System.out.println("dto : " + dto);
+		dao.resClose();
+
+		return dto;
+	}
+
+	public int update(String userId) { // 찬호
+
+		int change = 0;
+
+		String pw = req.getParameter("pw");
+		String nickname = req.getParameter("nickName");
+		int tel = Integer.parseInt(req.getParameter("tel"));
+		String address = req.getParameter("address");
+
+		System.out.println(pw + "/" + nickname + "/" + tel + "/" + address);
+		MemberDAO dao = new MemberDAO();
+		change = dao.update(pw, nickname, tel, address);
+		System.out.println("update change : " + change);
+		dao.resClose();
+
+		return change;
+	}
+
+	public String userDel() { // 찬호
+
+		// String userId = (String) req.getSession().getAttribute("userId");
+		// 원래대로 되돌릴려면 위에 주석풀고 아래 userId 지우고
+		String userId = "123123";
+
+		System.out.println("userId : " + userId);
+		MemberDAO dao = new MemberDAO();
+		String result = dao.userDel(userId);
+		System.out.println("result : " + result);
+
+		dao.resClose();
+		return result;
+
+	}
+
+	public HashMap<String, Object> myWrite(int page, String userId) { // 찬호
+
+		MemberDAO dao = new MemberDAO();
+		HashMap<String, Object> map = dao.myWrite(page, userId);
+		System.out.println("map : " + map.size());
+		System.out.println("map : " + map);
+
+		dao.resClose();
+
+		return map;
+	}
+
+	public  HashMap<String, Object> myLike(int page, String userId) { // 찬호
+
+		MemberDAO dao = new MemberDAO();
+		HashMap<String, Object> map = dao.myLike(page, userId);
+		System.out.println("map : " + map.size());
+		System.out.println("map : " + map);
+
+
+		dao.resClose();
+
+		return map;
+	}
+
+	public HashMap<String, Object> myComment(int page, String userId) { // 찬호
+
+		MemberDAO dao = new MemberDAO();
+		HashMap<String, Object> map = dao.myComment(page, userId);
+		System.out.println("map : " + map.size());
+
+		dao.resClose();
+
+		return map;
+	}
+	
+	public void overlay1() throws IOException {//닉네임 중복체크(진후)
+	      String nickName = req.getParameter("nickName");
+	      System.out.println("멤버서비스 오버레이(닉네임)");
+	      System.out.println("중복 체크 nickName : "+nickName);
+	      boolean overlay1 = false;
+	      boolean success = false;      
+	      MemberDAO dao = new MemberDAO();
+	      try {
+	         overlay1 = dao.overlay1(nickName);
+	         success = true;
+	      } catch (Exception e) {
+	         e.printStackTrace();
+	      }finally {
+	         dao.resClose();
+	         Gson json = new Gson();
+	         HashMap<String, Object> map = new HashMap<String, Object>();
+	         map.put("success", success);
+	         map.put("overlay1", overlay1);
+	         String obj = json.toJson(map);         
+	         resp.getWriter().println(obj);         
+	      }      
+	   }
+	
+	
+	
 
 }
