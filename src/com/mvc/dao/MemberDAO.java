@@ -238,7 +238,7 @@ public class MemberDAO {
 				dto.setHits(hits);
 				dto.setItem(item);
 				dto.setRecipePrice(recipePrice);
-				dto.setnickName(nickName);
+				dto.setNickName(nickName);
 				likeList.add(dto);
 			}
 			System.out.println("마지막줄 postId/like/title/hits/item/recipePrice/nickname : " + postId + "/" + like + "/"
@@ -288,7 +288,7 @@ public class MemberDAO {
 				dto.setHits(hits);
 				dto.setItem(item);
 				dto.setRecipePrice(recipePrice);
-				dto.setnickName(nickName);
+				dto.setNickName(nickName);
 				postList.add(dto);
 			}
 			System.out.println("마지막줄 postId/like/title/hits/item/recipePrice/nickname : " + postId + "/" + like + "/"

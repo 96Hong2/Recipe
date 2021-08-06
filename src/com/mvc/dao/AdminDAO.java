@@ -476,7 +476,7 @@ public class AdminDAO {
 			
 			while(rs.next()) {
 				MainDTO dto = new MainDTO();
-				dto.setUserid(rs.getString("userid"));
+				dto.setUserId(rs.getString("userid"));
 				dto.setBlindId(rs.getString("blindid"));
 				dto.setClassification(rs.getString("classification"));
 				dto.setFieldId(rs.getString("fieldid"));
@@ -504,7 +504,7 @@ public class AdminDAO {
 		  rs = ps.executeQuery(); 
 		  while(rs.next()) { 
 			MainDTO dto = new MainDTO();
-			dto.setUserid(rs.getString("userid"));
+			dto.setUserId(rs.getString("userid"));
 			dto.setBlindId(rs.getString("blindid"));
 			dto.setClassification(rs.getString("classification"));
 			dto.setFieldId(rs.getString("fieldid"));
@@ -523,7 +523,7 @@ public class AdminDAO {
 		  rs = ps.executeQuery(); 
 		  while(rs.next()) { 
 			  MainDTO dto = new MainDTO(); 
-			  	dto.setUserid(rs.getString("userid"));
+			  	dto.setUserId(rs.getString("userid"));
 				dto.setBlindId(rs.getString("blindid"));
 				dto.setClassification(rs.getString("classification"));
 				dto.setFieldId(rs.getString("fieldid"));
@@ -542,7 +542,7 @@ public class AdminDAO {
 			  rs = ps.executeQuery(); 
 			  while(rs.next()) { 
 				  MainDTO dto = new MainDTO(); 
-				  	dto.setUserid(rs.getString("userid"));
+				  	dto.setUserId(rs.getString("userid"));
 					dto.setBlindId(rs.getString("blindid"));
 					dto.setClassification(rs.getString("classification"));
 					dto.setFieldId(rs.getString("fieldid"));
