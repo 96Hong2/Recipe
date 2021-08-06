@@ -29,7 +29,6 @@ public class ShopService {
 	}
 
 	public ArrayList<MainDTO> shop() { // 의건
-
 		ShopDAO dao = new ShopDAO();
 		ArrayList<MainDTO> shopList = dao.shopList();
 		System.out.println("상품 개수 : " + shopList.size());
@@ -43,7 +42,7 @@ public class ShopService {
 		String productId = req.getParameter("productId");
 		ShopDAO dao = new ShopDAO();
 		dto = dao.shopDetail(productId);
-		System.out.println("shopDetail_dto : " + dto);
+		System.out.println("shopDetail_dto_check : " + dto);
 		System.out.println(productId + "_상품 상세보기");
 		dao.resClose();
 		System.out.println("-----------------------------");
@@ -68,20 +67,22 @@ public class ShopService {
 		String pPrice = (String) req.getSession().getAttribute("pPrice");
 		String pCnt = (String) req.getSession().getAttribute("pCnt");
 		String tPrice = (String) req.getSession().getAttribute("tPrice");
-		String uId = (String) req.getSession().getAttribute("userLoginId");
-		System.out.println(pId + "/" + pName + "/" + pPrice + "/" + pCnt + "/" + tPrice);
+		String uId = (String) req.getSession().getAttribute("loginId");
+		System.out.println("장바구니에 담을 회원 : " + uId);
+		System.out.println("장바구니에 담을 상품 : " + pId + "/" + pName + "/" + pPrice + "/" + pCnt + "/" + tPrice);
 
 		ShopDAO dao = new ShopDAO();
 		HashMap<String, Object> map = new HashMap<String, Object>();
 
 		int success = 0;
+		
 		MainDTO dto = dao.cartChk(pId, uId);
 		
-		System.out.println("addCart_dto : " + dto);
-		System.out.println(uId);
+		System.out.println("addCart_dto_check : " + dto);
 		System.out.println("이미 담긴 상품의 개수 : " + dto.getProductCount());
 		System.out.println("새로 담을 상품의 개수 : " + Integer.parseInt(pCnt));
 		System.out.println("상품 재고 : " + dto.getStock());
+		
 		if (dto.getProductCount() + Integer.parseInt(pCnt) > dto.getStock()) {
 			success = -1;
 			map.put("success", success);
@@ -90,6 +91,7 @@ public class ShopService {
 			success = dao.cartAdd(tPrice, pPrice, pId, uId, pCnt, pName);
 			map.put("success", success);
 		}
+		
 		System.out.println("장바구니 담기_1이면 성공 -1이면 실패 : " + success);
 		if (pId != null)
 			req.getSession().removeAttribute("pId");
@@ -110,15 +112,17 @@ public class ShopService {
 	}
 
 	public void cartDel() throws IOException { // 의건
+		String uId = (String) req.getSession().getAttribute("loginId");
 		String[] delList = req.getParameterValues("delList[]");
-		System.out.println("카트에서 삭제할 상품 개수" + delList.length);
+		System.out.println("장바구니 삭제할 회원 : " + uId);
+		System.out.println("장바구니에서 삭제할 상품 개수" + delList.length);
 
 		ShopDAO dao = new ShopDAO();
 		HashMap<String, Object> map = new HashMap<String, Object>();
 
 		try {
-			int cnt = dao.cartDel(delList);
-			System.out.println("삭제 개수 : " + delList.length + "개 중" + cnt + "개 삭제");
+			int cnt = dao.cartDel(uId, delList);
+			System.out.println("삭제 완료 개수 : " + delList.length + "개 중" + cnt + "개 삭제");
 			map.put("cnt", cnt);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -132,7 +136,7 @@ public class ShopService {
 
 	public void payment() {
 		String[] orderList = req.getParameterValues("orderList[]");
-		String uId = (String) req.getSession().getAttribute("userLoginId");
+		String uId = (String) req.getSession().getAttribute("loginId");
 		int size = orderList.length;
 		ShopDAO dao = new ShopDAO();
 		ArrayList<MainDTO> list = null;
@@ -142,7 +146,6 @@ public class ShopService {
 		int resultPrice = Integer.parseInt(orderList[size-3]);
 		int orderPrice = Integer.parseInt(orderList[size-2]);
 		int discount = Integer.parseInt(orderList[size-1]); 
-		int success = 0;
 		
 		for (int i = 0; i < orderList.length-3; i++) {
 			productList[i] = orderList[i];
@@ -166,26 +169,29 @@ public class ShopService {
 	public void cartModify() throws IOException {
 		String pId = (String) req.getSession().getAttribute("pId");
 		String pCnt = (String) req.getSession().getAttribute("pCnt");
-		String uId = (String) req.getSession().getAttribute("userLoginId");
+		String uId = (String) req.getSession().getAttribute("userId");
 
-		System.out.println(pId + "/" + pCnt + "/" + uId);
+		System.out.println("수정할 회원 : " + uId);
+		System.out.println("수정할 상품 : " + pId + "/" + pCnt);
 		ShopDAO dao = new ShopDAO();
 		MainDTO dto = dao.cartChk(pId);
+		
+		System.out.println("cartModify_dto_check : " + dto);
 
 		HashMap<String, Object> map = new HashMap<String, Object>();
 
 		int success = 0;
-
+		
+		
 		if (Integer.parseInt(pCnt) > dto.getStock()) {
 			success = -1;
-			System.out.println("수량체크" + success);
 			map.put("success", success);
 
 		} else {
 			success = dao.cartModify(pId, pCnt, uId);
 			map.put("success", success);
 		}
-		System.out.println("장바구니 수정_1이면 성공 -1이면 실패 : " + success);
+		System.out.println("장바구니 수량 수정_1이면 성공 -1이면 실패 : " + success);
 		if (pId != null)
 			req.getSession().removeAttribute("pId");
 		if (pCnt != null)
@@ -198,18 +204,20 @@ public class ShopService {
 
 	public void cartList() throws IOException { // 의건
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		String uId = (String) req.getSession().getAttribute("userLoginId");
+		String uId = (String) req.getSession().getAttribute("userId");
 		ShopDAO dao = new ShopDAO();
-		MainDTO dto = new MainDTO();
+		MainDTO dto = null;
 
+		System.out.println("장바구니 확인 회원 : " + uId);
 		ArrayList<MainDTO> cartList = dao.cartList(uId);
 		System.out.println("장바구니에 담긴 물건 개수: " + cartList.size());
 		dto = dao.memberDetail(uId);
+		System.out.println("회원 등급 할인 % : " + dto.getDiscount());
+		System.out.println("cartList_check_dto : " + dto);
 
 		dao.resClose();
 		map.put("cartList", cartList);
 		map.put("member", dto.getDiscount());
-		System.out.println(dto.getDiscount());
 
 		resp.setContentType("text/html; charset=UTF-8");
 		resp.getWriter().println(new Gson().toJson(map));
@@ -222,14 +230,21 @@ public class ShopService {
 		String pPrice = (String) req.getSession().getAttribute("pPrice");
 		String pCnt = (String) req.getSession().getAttribute("pCnt");
 		String tPrice = (String) req.getSession().getAttribute("tPrice");
-		String uId = (String) req.getSession().getAttribute("userLoginId");
-		System.out.println(pId + "/" + pName + "/" + pPrice + "/" + pCnt + "/" + tPrice);
-
+		
+		String uId = (String) req.getSession().getAttribute("userId");
+		System.out.println("주문한 회원 : " + uId);
+		if(pId != null) {
+			System.out.println("상품 페이지에서 주문 : " + pId + "/" + pName + "/" + pPrice + "/" + pCnt + "/" + tPrice);
+		
+		}
+		
 		MainDTO dto = null;
 		ShopDAO dao = new ShopDAO();
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		ArrayList<MainDTO> list = null;
+		
 		if (pId == null) { // 장바구니에서 주문할 때
+			System.out.println("장바구니에서 주문");
 			String[] orderList = req.getParameterValues("orderList[]");
 			System.out.println("앞에서__" + orderList.length);
 			list = dao.paymentList(uId, orderList);
@@ -255,14 +270,14 @@ public class ShopService {
 	}
 
 	public MainDTO memberDetail() {
-		String uId = (String) req.getSession().getAttribute("userLoginId");
+		String uId = (String) req.getSession().getAttribute("userId");
+		System.out.println("주문 페이지에 정보 넣을 회원 : " + uId);
 		MainDTO dto = null;
 
 		ShopDAO dao = new ShopDAO();
 
 		dto = dao.memberDetail(uId);
-		System.out.println("memberDetail : " + dto);
-		System.out.println(uId + "_정보 불러오기");
+		System.out.println("memberDetail_check_dto :" + dto );
 		dao.resClose();
 		System.out.println("-----------------------------");
 		return dto;

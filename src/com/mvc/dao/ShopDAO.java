@@ -124,7 +124,7 @@ public class ShopDAO {
 	}
 
 	public MainDTO cartChk(String pId, String uId) {
-		// 상품 상세페이지에서 장바구니에 담을 때
+		System.out.println("상품이 이미 장바구니에 있는지 체크");
 		MainDTO dto = null;
 
 		// 장바구니에 담긴 수량 체크
@@ -154,7 +154,7 @@ public class ShopDAO {
 	}
 
 	public MainDTO cartChk(String pId) {
-		// 장바구니에서 수량 수정할 때
+		System.out.println("재고보다 더 많은 수량을 선택하는지 확인");
 		MainDTO dto = null;
 
 		// 상품 재고 체크
@@ -202,7 +202,7 @@ public class ShopDAO {
 	}
 
 	public int cartAdd(String tPrice, String pPrice, String pId, String uId, String pCnt, String pName) {
-
+		System.out.println("장바구니에 담기");
 		// 장바구니 확인
 		String sql = "SELECT productId FROM cart WHERE productId = ? AND userId = ?";
 		// 장바구니에 같은 상품이 없을 때
@@ -212,12 +212,13 @@ public class ShopDAO {
 
 		int success = 0;
 		try {
-
+			System.out.println("장바구니에 이미 담겼는지 확인");
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, pId);
 			ps.setString(2, uId);
 			rs = ps.executeQuery();
 			if (rs.next()) {
+				System.out.println("이미 담겨 있으면 수량 수정");
 				ps = conn.prepareStatement(sql_update);
 				ps.setString(1, tPrice);
 				ps.setString(2, pCnt);
@@ -225,6 +226,7 @@ public class ShopDAO {
 				ps.setString(4, uId);
 				success = ps.executeUpdate();
 			} else {
+				System.out.println("담겨있지 않으면 장바구니에 추가");
 				ps = conn.prepareStatement(sql_insert);
 				ps.setString(1, tPrice);
 				ps.setString(2, pId);
@@ -251,7 +253,7 @@ public class ShopDAO {
 		int tPrice = 0;
 		String s_tPrice = "";
 		try {
-
+			System.out.println("장바구니에서 수량 수정");
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, pId);
 			rs = ps.executeQuery();
@@ -268,9 +270,6 @@ public class ShopDAO {
 				ps.setString(4, uId);
 				success = ps.executeUpdate();
 			}
-			System.out.println(pPrice);
-			System.out.println(tPrice);
-			System.out.println(s_tPrice);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -278,47 +277,20 @@ public class ShopDAO {
 		return success;
 	}
 
-	public int cartDel(String[] delList) throws SQLException {
-		String sql = "DELETE FROM cart WHERE productid = ?";
-		ArrayList<MainDTO> list = null;
-		MainDTO dto = null;
+	public int cartDel(String uId, String[] delList) throws SQLException {
+		String sql = "DELETE FROM cart WHERE productid = ? AND uId = ?";
 		int cnt = 0;
 		for (String productId : delList) {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, productId);
+			ps.setString(2,  uId);
 			cnt += ps.executeUpdate();
 		}
 		return cnt;
 	}
 
-	public int order(String[] orderList) {
-		String sql = "SELECT FROM member WHERE  =?";
-		return 0;
-	}
-
-	public MainDTO addOrder(String uId) {
-		MainDTO dto = null;
-		String sql = "SELECT name, address, tel FROM member WHERE userid = ?";
-
-		try {
-			ps = conn.prepareStatement(sql);
-			ps.setString(1, uId);
-			rs = ps.executeQuery();
-
-			if (rs.next()) {
-				dto = new MainDTO();
-				dto.setName(rs.getString("name"));
-				dto.setAddress(rs.getString("address"));
-				dto.setTel(rs.getString("tel"));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return dto;
-	}
-
 	public ArrayList<MainDTO> paymentList(String uId, String[] orderList) {
+		//장바구니에서 선택해서 주문
 		String sql = "SELECT productcount, totalprice, productId, userid, productname, price FROM cart WHERE productid = ? AND userId = ?";
 		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
 		MainDTO dto = null;

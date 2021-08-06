@@ -77,33 +77,6 @@ public class ShopController extends HttpServlet {
 			service.cartList();
 			break;
 
-		case "/order":
-			System.out.println("주문 버튼 클릭");
-			pId = req.getParameter("pId");
-			pName = req.getParameter("pName");
-			pPrice = req.getParameter("pPrice");
-			pCnt = req.getParameter("pCnt");
-			tPrice = req.getParameter("tPrice");
-			
-			req.getSession().setAttribute("pId", pId);
-			req.getSession().setAttribute("pName", pName);
-			req.getSession().setAttribute("pPrice", pPrice);
-			req.getSession().setAttribute("pCnt", pCnt);
-			req.getSession().setAttribute("tPrice", tPrice);
-			System.out.println(req.getSession().getAttribute("pName"));
-			req.getSession().setAttribute("paymentList", service.order());
-			// dis = req.getRequestDispatcher("orderList.jsp");
-			// dis.forward(req, resp);
-			break;
-
-		case "/orderList":
-			System.out.println("주문 페이지로 이동");
-			req.setAttribute("member", service.memberDetail());
-			req.setAttribute("list", req.getSession().getAttribute("paymentList"));
-			dis = req.getRequestDispatcher("orderList.jsp");
-			dis.forward(req, resp);
-			break;
-
 		case "/cartDel":
 			System.out.println("장바구니 삭제 요청");
 			service.cartDel();
@@ -133,6 +106,32 @@ public class ShopController extends HttpServlet {
 			service.cartModify();
 			break;
 			
+		case "/order":
+			System.out.println("주문 버튼 클릭");
+			pId = req.getParameter("pId");
+			pName = req.getParameter("pName");
+			pPrice = req.getParameter("pPrice");
+			pCnt = req.getParameter("pCnt");
+			tPrice = req.getParameter("tPrice");
+			
+			req.getSession().setAttribute("pId", pId);
+			req.getSession().setAttribute("pName", pName);
+			req.getSession().setAttribute("pPrice", pPrice);
+			req.getSession().setAttribute("pCnt", pCnt);
+			req.getSession().setAttribute("tPrice", tPrice);
+			req.getSession().setAttribute("paymentList", service.order());
+			// dis = req.getRequestDispatcher("orderList.jsp");
+			// dis.forward(req, resp);
+			break;
+
+		case "/orderList":
+			System.out.println("주문 페이지로 이동");
+			req.setAttribute("member", service.memberDetail());
+			req.setAttribute("list", req.getSession().getAttribute("paymentList"));
+			dis = req.getRequestDispatcher("orderList.jsp");
+			dis.forward(req, resp);
+			break;
+
 		case "/payment":
 			System.out.println("결제");
 			service.payment();

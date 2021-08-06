@@ -9,8 +9,13 @@
 <title>알다시피</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" type="text/css" href="css/common.css" media="all" />
-
 </head>
+<script>
+if("${sessionScope.userId}"==""){
+	alert("로그인이 필요한 서비스입니다.");
+	location.href = "login.jsp";
+}
+</script>
 <body>
 	<div class="wrap">
 		<header>
@@ -93,34 +98,10 @@
 	</div>
 </body>
 <script>
-	loginCheck();
 	listCall();
 	var $dis = 0;
 	
-	function loginCheck() {
-		$.ajax({
-			type : 'get',
-			url : 'loginCheck',
-			data : {},
-			dataType : 'JSON',
-			success : function(data) {
-				console.log(data);
-				if (!data.loginYN) {
-					alert('로그인이 필요한 서비스 입니다.');
-					location.href = 'login.jsp';
-				} else {
-					if (data.list != null) {
-						drawList(data.list)
-						
-						
-					}
-				}
-			},
-			error : function(e) {
-				console.log(e);
-			}
-		});
-	}
+
 	function listCall() {
 		console.log("리스트");
 		$.ajax({

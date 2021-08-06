@@ -71,8 +71,8 @@
 							<hr />
 							총 가격 : <input type="text" name="totalPrice" value="0원" readonly>
 							<hr />
-							<button onclick="loginCheckCart()">장바구니</button>
-							<button onclick="loginCheckOrder()">바로주문</button>
+							<button onclick="cart()">장바구니</button>
+							<button onclick="order()">바로주문</button>
 						</c:if>
 
 
@@ -218,47 +218,6 @@
 		}
 	}
 	
-	function loginCheckCart() {
-		$.ajax({
-			type : 'get',
-			url : 'loginCheck',
-			data : {},
-			dataType : 'JSON',
-			success : function(data) {
-				console.log(data);
-				if (!data.loginYN) {
-					alert('로그인이 필요한 서비스 입니다.');
-					location.href = 'login.jsp';
-				} else {
-					cart();
-					
-				}
-			},
-			error : function(e) {
-				console.log(e);
-			}
-		});
-	}function loginCheckOrder() {
-		$.ajax({
-			type : 'get',
-			url : 'loginCheck',
-			data : {},
-			dataType : 'JSON',
-			success : function(data) {
-				console.log(data);
-				if (!data.loginYN) {
-					alert('로그인이 필요한 서비스 입니다.');
-					location.href = 'login.jsp';
-				} else {
-					order();
-					
-				}
-			},
-			error : function(e) {
-				console.log(e);
-			}
-		});
-	}
 	
 	
 </script>

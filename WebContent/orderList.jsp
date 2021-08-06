@@ -9,8 +9,13 @@
 <title>알다시피</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" type="text/css" href="css/common.css" media="all" />
-
 </head>
+<script>
+if("${sessionScope.userId}"==""){
+	alert("로그인이 필요한 서비스입니다.");
+	location.href = "login.jsp";
+}
+</script>
 <body>
 	<div class="wrap">
 		<header>
@@ -131,6 +136,7 @@
 	function order() {
 		var $product = $("input[name='pId']");
 		var $stock = $("input[name='stock']");
+
 		var $pppp = $product.length;
 		var proArr = [];
 
@@ -156,6 +162,9 @@
 		console.log($orderPrice);
 		console.log($discount);
 
+		if($stock.length == 1) {
+			proArr.push($stock);
+		}
 		proArr.push($resultPrice);
 		proArr.push($orderPrice);
 		proArr.push($discount);
