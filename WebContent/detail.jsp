@@ -6,7 +6,6 @@
 <head>
 <meta charset="utf-8" />
 <title>알다시피</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" type="text/css" href="css/common.css" media="all" />
 
 </head>
@@ -15,14 +14,15 @@
 		<header>
 			<div id="header">
 
-				<a href="./"> <img src="logo.png" alt="로고" width="150px" height="50px" /></a>
+				<a href="./"> <img src="logo.png" alt="로고" width="150px"
+					height="50px" /></a>
 
 				<div id="top_menu">
 					<ul>
-						<li><a href="./login.jsp">로그인</a></li>
-						<li><a href="./logout">로그아웃</a></li>
-						<li><a href="./cart.jsp">장바구니</a></li>
+						<li><a href="#">로그인</a></li>
+						<li><a href="#">회원가입</a></li>
 						<li><a href="./myPage">마이페이지</a></li>
+						<li><a href="#">공지사항</a></li>
 					</ul>
 				</div>
 
@@ -55,10 +55,9 @@
 
 					<div
 						style="height: 230px; margin: 15px; background-color: #bbb; color: white;">
-						<input type="hidden" name="productId" value="${product.productId}"/>
-						상품 이름 : ${product.productName}
+						상품 이름 : ${product.productname}
 						<hr />
-						상품 가격 :${product.price}원
+						상품 가격 : ${product.price}원
 						<hr />
 						<c:if test="${product.stock eq 0}">
 							품절
@@ -66,200 +65,23 @@
 						<c:if test="${product.stock ne 0}">
 							남은 수량 : ${product.stock}개
 							<hr />
-							선택 수량 : <input type='text' name='productCnt' value="0"/>
-							<input type="button" id="stockSelect" value="선택" />
+							선택 수량 : <input type="text">
 							<hr />
-							총 가격 : <input type="text" name="totalPrice" value="0원" readonly>
+							총 가격 : <input type="text" readonly>
 							<hr />
-							<button onclick="loginCheckCart()">장바구니</button>
-							<button onclick="loginCheckOrder()">바로주문</button>
+							<button onclick="location.href='./cart'">장바구니</button>
+							<button onclick="location.href='./order'">바로주문</button>
 						</c:if>
 
 
 					</div>
 					<div
 						style="height: 300px; margin: 15px; background-color: #bbb; color: white;">
-						${product.productDetail}</div>
+						${product.productdetail}</div>
 				</div>
 			</div>
 		</main>
 		<footer></footer>
 	</div>
 </body>
-<script>
-	
-	var $pCnt = "";
-	
-	function cartChk() {
-		$pCnt = $("input[name='productCnt']").val();
-		
-	}
-	
-	$("#stockSelect").click(function() {
-		$pCnt = $("input[name='productCnt']").val();
-		var $stock = ${product.stock};
-		var $price = ${product.price};
-		var $totalPrice = $pCnt * $price;
-		console.log($stock);
-		console.log($pCnt);
-		if($pCnt>$stock) {
-			alert("재고보다 많이 선택할 수 없습니다.\r\n 다시 선택해주세요");
-			$("input[name='productCnt']").val("0")
-			$("input[name='totalPrice']").val("0원");
-
-		} else {
-			$("input[name='totalPrice']").val($totalPrice + "원");
-		}
-	});
-	
-	function cart() {
-		var $pId = new String("${product.productId}");
-		//var $pId = ${product.productId};
-		var $pName = new String("${product.productName}");
-		var $pPrice = ${product.price};
-		var $pCnt = $("input[name='productCnt']").val();
-		var $tPrice = $pCnt * $pPrice;
-		var $stock = ${product.stock};
-		console.log("id_" + $pId);
-		console.log("name_" + $pName);
-		console.log("price_" + $pPrice);
-		console.log("cnt_" + $pCnt);
-		console.log("tprice_" + $tPrice);
-
-		var param = {};
-		param.pId = $pId;
-		param.pName = $pName;
-		param.pPrice = $pPrice;
-		param.pCnt = $pCnt;
-		param.tPrice = $tPrice;
-		
-		console.log(param);
-		
-		if($tPrice == 0) {
-			alert("수량 선택을 먼저 해주세요.");
-		} else { 
-		
-		
-			$.ajax({
-				type:'get',
-				url:'cartAdd',
-				data:param,
-				dataType:'JSON',
-				success:function(data){
-					console.log(data);
-					if(data.success){
-						if(data.success == -1) {
-							alert("이미 담긴 수량과 새로 담으려는 수량이 재고수량보다 많습니다. \r\n장바구니를 확인해주세요.");
-						} else {
-							console.log(data);
-							isAdd = confirm("장바구니에 담았습니다. 장바구니를 확인하시겠습니까?");
-							if(isAdd) {
-								location.href='cart.jsp';
-							}
-							
-						}
-					} else {
-						alert("장바구니에 담지 못했습니다.\r\n 다시 시도해주세요.")
-					}
-					
-				},
-				error:function(e){
-					console.log(e);
-				}
-			});
-		}
-	}
-	
-	function order() {
-		var $pId = new String("${product.productId}");
-		//var $pId = ${product.productId};
-		var $pName = new String("${product.productName}");
-		var $pPrice = ${product.price};
-		var $pCnt = $("input[name='productCnt']").val();
-		var $tPrice = $pCnt * $pPrice;
-		var $stock = ${product.stock};
-		
-		console.log("id_" + $pId);
-		console.log("name_" + $pName);
-		console.log("price_" + $pPrice);
-		console.log("cnt_" + $pCnt);
-		console.log("tprice_" + $tPrice);
-		
-		var param = {};
-		param.pId = $pId;
-		param.pName = $pName;
-		param.pPrice = $pPrice;
-		param.pCnt = $pCnt;
-		param.tPrice = $tPrice;
-		
-		console.log("??????????");
-		console.log(param);
-		
-		if($tPrice == 0) {
-			alert("수량 선택을 먼저 해주세요.");
-		} else { 
-			isOrder = confirm("상품을 주문하시겠습니까?");
-			if(isOrder) {
-				
-				$.ajax({
-					type:'get',
-					url:'./order',
-					data:param,
-					dataType:'JSON',
-					success:function(data){
-						location.href='./orderList';
-						
-					},
-					error:function(e){
-						console.log(e);
-					}
-				});
-			}
-		}
-	}
-	
-	function loginCheckCart() {
-		$.ajax({
-			type : 'get',
-			url : 'loginCheck',
-			data : {},
-			dataType : 'JSON',
-			success : function(data) {
-				console.log(data);
-				if (!data.loginYN) {
-					alert('로그인이 필요한 서비스 입니다.');
-					location.href = 'login.jsp';
-				} else {
-					cart();
-					
-				}
-			},
-			error : function(e) {
-				console.log(e);
-			}
-		});
-	}function loginCheckOrder() {
-		$.ajax({
-			type : 'get',
-			url : 'loginCheck',
-			data : {},
-			dataType : 'JSON',
-			success : function(data) {
-				console.log(data);
-				if (!data.loginYN) {
-					alert('로그인이 필요한 서비스 입니다.');
-					location.href = 'login.jsp';
-				} else {
-					order();
-					
-				}
-			},
-			error : function(e) {
-				console.log(e);
-			}
-		});
-	}
-	
-	
-</script>
 </html>

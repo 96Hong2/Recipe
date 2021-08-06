@@ -19,10 +19,10 @@
 
 				<div id="top_menu">
 					<ul>
-						<li><a href="./login.jsp">로그인</a></li>
-						<li><a href="./logout">로그아웃</a></li>
-						<li><a href="./cart.jsp">장바구니</a></li>
+						<li><a href="#">로그인</a></li>
+						<li><a href="#">회원가입</a></li>
 						<li><a href="./myPage">마이페이지</a></li>
+						<li><a href="#">공지사항</a></li>
 					</ul>
 				</div>
 
@@ -47,29 +47,28 @@
 
 		<main id="body">
 
-			<div class="searchShop">
-				<form action="shopSearch" method="get" id="searchShop">
-					<input type="text" name="shopKeyword" id="keyword" placeholder="상품입력" />
+			<div class="searchshop">
+				<form action="search" method="get" id="searchshop">
+					<input type="text" name="keyword" id="keyword" placeholder="상품입력" />
 					<button>검색</button>
 				</form>
 			</div>
 
-			<div class="container">
+			<div>
 				<c:if test="${shop eq null || shop eq '' || shop eq '[]'}">
-						
 						상품이 없습니다.
 				</c:if>
 				<c:forEach items="${shop}" var="product">
-					<div style="margin: 10px; width: 280px; height: 232px;">
-						<a href="shopDetail?productId=${product.productId}"	style="background-color: black">
-							<figure class="figure">
+					<div style="margin: 10px; background-color: #bbb; width: 280px; height: 232px;">
+						<a href="detail?productid=${product.productid}"	style="background-color: black">
+							<figure style="position: absolute; text-align: center; width: 200px; height: 200px; background-color: yellow;">
 								<c:if test="${product.stock eq 0}">
-									<label style="color: white !important; position: absolute; background: red; border-top-left-radius: 10px;">품절</label>
+									<label style="color: white !important; position: absolute; background: red;">품절</label>
 								</c:if>
 
-								<img class="img" src="logo.png" style="height: 100px; width: 180px; margin: 10px;">
+								<img src="logo.png" style="height: 100px; width: 180px; margin: 10px;">
 								<figcaption>
-									${product.productName}<br />
+									${product.productname}<br />
 									${product.price}원
 								</figcaption>
 
