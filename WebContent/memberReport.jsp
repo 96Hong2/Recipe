@@ -65,22 +65,22 @@ if("${sessionScope.isAdmin}"!="Y"){
 <body>
 <%
 	request.setCharacterEncoding("UTF-8");
-	String userId = request.getParameter("userId");
-	String nickname = request.getParameter("nickname");
+	String postId = request.getParameter("postId");
+	String nickName = request.getParameter("nickName");
 %>
 <table>
 <caption>신고하기 - 알다시피</caption>
 		<tr>
 			<th>글번호</th>
-			<td><input type="hidden" name="userId" value="">9999999</td>
+			<td><input type="hidden" name="userId" value="<%=postId %>"><%=postId %></td>
 		</tr>
 		<tr>
 			<th>신고자</th>
-			<td><input type="hidden" name="reporter" value="">신고하는자</td>
+			<td><input type="hidden" name="reporter" value="${sessionScope.nickName}">${sessionScope.nickName}</td>
 		</tr>
 		<tr>
 			<th>작성자</th>
-			<td><input type="hidden" name="writer" value="임시">신고당하는자</td>
+			<td><input type="hidden" name="writer" value="<%=nickName %>"><%=nickName %></td>
 		</tr>
 		<tr>
 			<th>신고사유</th>
@@ -145,15 +145,6 @@ $("#submitBtn").click(function(event){
 		return false;
 	}
 	});
-
-	
-	var msg = "${msg}";
-	
-	if(msg != ""){
-		alert(msg);
-		//window.opener.reloadPage();
-		//window.close();
-	}
 	
 </script>
 </html>

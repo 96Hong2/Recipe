@@ -15,7 +15,8 @@ import com.mvc.service.AdminService;
 
 @WebServlet({"/memberList","/memberSearch","/memberInfo","/memberUpdate","/memberUpdateForm",
 	"/memberSusPopUp", "/memberSuspend","/memberSusNot","/nickOverlay","/memberBlind",
-	"/report/reportList","/report/reportSearch","/report/reportNotYet","/report/reportChk","/blindList","/blindSearch","/blindNot"})
+	"/report/reportList","/report/reportSearch","/report/reportNotYet","/report/reportChk","/blindList","/blindSearch","/blindNot",
+	"/susMemberList","/susMemberSearch"})
 public class AdminController extends HttpServlet {
 
 	@Override
@@ -130,12 +131,7 @@ public class AdminController extends HttpServlet {
 			
 		case "/memberSusNot": //지현
 			System.out.println("관리자가 회원 정지 해제 요청");
-			if(adService.memberSusNot() > 0) {
-				System.out.println("회원 정지 해제 성공!!");
-			}else {
-				System.out.println("회원 정지 해제 실패!!");
-			}
-			
+			adService.memberSusNot();
 			break;
 			
 		case "/nickOverlay": //지현
@@ -196,11 +192,15 @@ public class AdminController extends HttpServlet {
 			adService.blindNot();
 			break;
 		
-			/*
 		case "/susMemberList": //지현
 			System.out.println("정지된 회원 리스트 요청!");
 			adService.susMemberList();
-			break;  */
+			break;
+			
+		case "/susMemberSearch": //지현
+			System.out.println("정지된 회원 검색 요청!");
+			adService.susMemberSearch();
+			break;
 		}
 		
 	}

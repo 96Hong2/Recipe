@@ -252,12 +252,14 @@ public class AdminDAO {
 		String option = "";
 		String sql = "INSERT INTO suspend(suspendid, suspendreason, managerid, userid, categoryid) "
 				+ "values(SUSPEND_SEQ.nextval, ?, ?, ?, ?)";
-		if(opt == "blind") {
+		if(opt.equals("blind")) {
 			option = "s1";
-		}else if(opt == "inappropriate") {
+		}else if(opt.equals("inappropriate")) {
 			option = "s2";
-		}else {
+		}else if(opt.equals("else")){
 			option = "s3";
+		}else {
+			System.out.println("정지 사유 radio에서 오류 발생!");
 		}
 		
 		try {
@@ -561,13 +563,12 @@ public class AdminDAO {
 		return change;
 	}
 
-	/*
 	public ArrayList<MainDTO> susMemberList() throws SQLException {
-		sql = "SELECT userid, nickname, name, userdel FROM member WHERE userdel = ?";
+		sql = "SELECT u.userId, u.nickname, u.name , s.suspendid, s.suspendreason, s.suspenddate, s.managerid, s.categoryid FROM member u, suspend s "
+				+ "WHERE u.userDel ='N' AND u.userId=s.userId";
 		ArrayList<MainDTO> memberList = new ArrayList<MainDTO>();
 
 			ps = conn.prepareStatement(sql);
-			ps.setString(1, "Y");
 			rs = ps.executeQuery();
 			
 			while(rs.next()) {
@@ -575,13 +576,113 @@ public class AdminDAO {
 				dto.setUserId(rs.getString("userid"));
 				dto.setNickname(rs.getString("nickname"));
 				dto.setName(rs.getString("name"));
-				dto.setUserDel(rs.getString("userdel"));
+				dto.setSuspendId(rs.getString("suspendid"));
+				dto.setSuspendReason(rs.getString("suspendreason"));
+				dto.setSuspendDate(rs.getDate("suspenddate"));
+				dto.setManagerId(rs.getString("managerid"));
+				dto.setCategoryId(rs.getString("categoryid"));
 				memberList.add(dto);
 			}
 			
 		
 		return memberList;
-	}*/
+	}
+
+	public ArrayList<MainDTO> susMemberSearch(String options, String content) throws SQLException {
+		sql = "SELECT u.userId, u.nickname, u.name , s.suspendid, s.suspendreason, s.suspenddate, s.managerid, s.categoryid FROM member u, suspend s "
+				+ "WHERE u.userDel ='N' AND u.userId=s.userId AND ";
+
+		ArrayList<MainDTO> searchList = new ArrayList<MainDTO>();	
+		
+		String keywords = '%' + content + '%';
+		
+		  if(options.equals("userId") && !content.equals("")) {
+		  
+		  sql += "u.userId LIKE ?"; 
+		  
+		  ps = conn.prepareStatement(sql);
+		  ps.setString(1, keywords);
+		  rs = ps.executeQuery(); 
+		  while(rs.next()) {
+				MainDTO dto = new MainDTO();
+				dto.setUserId(rs.getString("userid"));
+				dto.setNickname(rs.getString("nickname"));
+				dto.setName(rs.getString("name"));
+				dto.setSuspendId(rs.getString("suspendid"));
+				dto.setSuspendReason(rs.getString("suspendreason"));
+				dto.setSuspendDate(rs.getDate("suspenddate"));
+				dto.setManagerId(rs.getString("managerid"));
+				dto.setCategoryId(rs.getString("categoryid"));
+				searchList.add(dto);
+			}
+		  
+		  }else if(options.equals("nickname") && !content.equals("")) {
+		  
+		  sql += "u.nickname LIKE ?"; 
+		  ps = conn.prepareStatement(sql);
+		  
+		  ps.setString(1, keywords); 
+		  rs = ps.executeQuery(); 
+		  while(rs.next()) {
+				MainDTO dto = new MainDTO();
+				dto.setUserId(rs.getString("userid"));
+				dto.setNickname(rs.getString("nickname"));
+				dto.setName(rs.getString("name"));
+				dto.setSuspendId(rs.getString("suspendid"));
+				dto.setSuspendReason(rs.getString("suspendreason"));
+				dto.setSuspendDate(rs.getDate("suspenddate"));
+				dto.setManagerId(rs.getString("managerid"));
+				dto.setCategoryId(rs.getString("categoryid"));
+				searchList.add(dto);
+			}
+		  
+		  }else if(options.equals("name") && !content.equals("")) {
+			  
+			  sql += "u.name LIKE ?"; 
+			  ps = conn.prepareStatement(sql);
+			  
+			  ps.setString(1, keywords); 
+			  rs = ps.executeQuery(); 
+			  while(rs.next()) {
+					MainDTO dto = new MainDTO();
+					dto.setUserId(rs.getString("userid"));
+					dto.setNickname(rs.getString("nickname"));
+					dto.setName(rs.getString("name"));
+					dto.setSuspendId(rs.getString("suspendid"));
+					dto.setSuspendReason(rs.getString("suspendreason"));
+					dto.setSuspendDate(rs.getDate("suspenddate"));
+					dto.setManagerId(rs.getString("managerid"));
+					dto.setCategoryId(rs.getString("categoryid"));
+					searchList.add(dto);
+				}
+			  
+			  }else if(options.equals("admin") && !content.equals("")) {
+				  sql += "s.managerid LIKE ?"; 
+				  ps = conn.prepareStatement(sql);
+				  
+				  ps.setString(1, keywords); 
+				  rs = ps.executeQuery(); 
+				  while(rs.next()) {
+						MainDTO dto = new MainDTO();
+						dto.setUserId(rs.getString("userid"));
+						dto.setNickname(rs.getString("nickname"));
+						dto.setName(rs.getString("name"));
+						dto.setSuspendId(rs.getString("suspendid"));
+						dto.setSuspendReason(rs.getString("suspendreason"));
+						dto.setSuspendDate(rs.getDate("suspenddate"));
+						dto.setManagerId(rs.getString("managerid"));
+						dto.setCategoryId(rs.getString("categoryid"));
+						searchList.add(dto);
+					}
+				  
+				  }else {
+					  System.out.println("오류 발생! options 값은 "+options);
+					  System.out.println("오류 발생! content 값은 "+content); 
+		  }
+		 
+		//System.out.println("DAO에서 searchList에 담긴 값 : "+searchList);
+		return searchList;
+	}
 
 
 }

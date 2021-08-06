@@ -91,7 +91,7 @@ if("${sessionScope.isAdmin}"!="Y"){
 		</tr>
 		<tr>
 			<th>관리자</th>
-			<td><input type="hidden" name="adminName" value="임시">임시!!!!!!!!!!!!!!!!!!</td>
+			<td><input type="hidden" name="adminName" value="${sessionScope.nickName}">${sessionScope.nickName}</td>
 		</tr>
 		<tr>
 			<th>정지사유</th>

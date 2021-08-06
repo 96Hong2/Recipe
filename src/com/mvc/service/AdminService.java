@@ -72,7 +72,7 @@ public class AdminService {
 			adDao.resClose();
 			map.put("searchList", searchList);
 		}
-		System.out.println("map : "+map);
+		//System.out.println("map : "+map);
 		resp.setContentType("text/html; charset=UTF-8");
 		resp.getWriter().println(new Gson().toJson(map));
 		
@@ -149,32 +149,25 @@ public class AdminService {
 
 	}
 
-	public int memberSusNot() throws IOException {//지현
+	public void memberSusNot() throws IOException {//지현
 		String userId = req.getParameter("userId");
-		String userSus = req.getParameter("userSus");
 		int change = 0;
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		System.out.println("아이디 : "+userId+" /정지여부 : "+userSus);
+		System.out.println("아이디 : "+userId);
 		
-		if(userSus.equals("Y")) {
 			AdminDAO adDao = new AdminDAO();
 			change = adDao.memberSusNot(userId);
 			if(change > 0) {
 				System.out.println("정지 해제 성공 : "+change);
-				userSus = "N";
-			}else {
-				System.out.println("정지 해제 실패");
-			}
 			adDao.resClose();
-			map.put("newUserSus", userSus);
+			map.put("msg", "성공");
 		}else {
-			System.out.println("정지여부가 이상합니다...");
+			System.out.println("정지 해제 실패!");
+			adDao.resClose();
+			map.put("msg", "실패");
 		}
-		
-		resp.setContentType("text/html; charset=UTF-8");
-		resp.getWriter().println(new Gson().toJson(map));
-		
-		return change;
+			resp.setContentType("text/html; charset=UTF-8");
+			resp.getWriter().println(new Gson().toJson(map));
 
 	}
 
@@ -398,7 +391,7 @@ public class AdminService {
 		
 	}
 
-	/*public void susMemberList() {
+	public void susMemberList() throws IOException {
 		AdminDAO adDao = new AdminDAO();
 		ArrayList<MainDTO> list = null;
 		HashMap<String, Object> map = new HashMap<String, Object>();
@@ -415,7 +408,42 @@ public class AdminService {
 		resp.setContentType("text/html; charset=UTF-8");
 		resp.getWriter().println(new Gson().toJson(map));
 		
-	}*/
+	}
+
+	public void susMemberSearch() throws IOException {
+		AdminDAO adDao = new AdminDAO();
+		ArrayList<MainDTO> searchList = null;
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		String[] searchOpt = req.getParameterValues("searchOpt");
+		String options = "";
+		for(String opt : searchOpt) {
+			options = opt;
+			System.out.println("susMemberList에서 넘긴 옵션 값 : "+options);
+		}
+		
+		String[] cnt = req.getParameterValues("cnt");
+		String content = "";
+		for(String cont : cnt) {
+			content = cont;
+			System.out.println("susMemberList에서 검색창에 입력된 값 : "+content);
+		}
+		
+		try {
+			searchList = adDao.susMemberSearch(options, content);
+			System.out.println("Service에서 반환하는 list : "+searchList);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			adDao.resClose();
+			map.put("searchList", searchList);
+		}
+		//System.out.println("map : "+map);
+		resp.setContentType("text/html; charset=UTF-8");
+		resp.getWriter().println(new Gson().toJson(map));
+		
+		
+	}
 
 
 }

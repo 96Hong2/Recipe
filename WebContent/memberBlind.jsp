@@ -66,23 +66,23 @@ if("${sessionScope.isAdmin}"!="Y"){
 <body>
 <%
 	request.setCharacterEncoding("UTF-8");
-	String userId = request.getParameter("userId");
-	String nickname = request.getParameter("nickname");
+	String postId = request.getParameter("postId");
+	String nickName = request.getParameter("nickName");
 %>
 <form action="./memberBlind" method="get">
 <table>
 <caption>블라인드 - 알다시피-</caption>
 		<tr>
 			<th>글번호</th>
-			<td><input type="hidden" name="userId" value="<%=userId %>"><%=userId %></td>
+			<td><input type="hidden" name="userId" value="<%=postId %>"><%=postId %></td>
 		</tr>
 		<tr>
 			<th>작성자</th>
-			<td><input type="hidden" name="nickname" value="<%=nickname %>"><%=nickname %></td>
+			<td><input type="hidden" name="nickname" value="<%=nickName %>"><%=nickName %></td>
 		</tr>
 		<tr>
 			<th>관리자</th>
-			<td><input type="hidden" name="adminName" value="임시">임시!!!!!!!!!!!!!!!!!!</td>
+			<td><input type="hidden" name="adminName" value="${sessionScope.nickName}">${sessionScope.nickName}</td>
 		</tr>
 		<tr>
 			<td style="color:#aaa;" id="counter" colspan="2">0/100</td>
@@ -129,14 +129,6 @@ $("#submitBtn").click(function(event){
 		return false;
 	});
 
-	
-	var msg = "${msg}";
-	
-	if(msg != ""){
-		alert(msg);
-		window.opener.reloadPage();
-		window.close();
-	}
 	
 </script>
 </html>
