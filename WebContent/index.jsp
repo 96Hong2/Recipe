@@ -20,9 +20,9 @@
 					<ul>
 						<!-- 이미지테스트 임시로 넣어뒀음 -->
 						<li><a href="./login.jsp">로그인</a></li>
-						<li><a href="./joinForm.jsp">회원가입</a></li>
+						<li><a href="./logout">로그아웃</a></li>
+						<li><a href="./cart.jsp">장바구니</a></li>
 						<li><a href="./myPage">마이페이지</a></li>
-						<li><a href="#">공지사항</a></li>
 					</ul>
 				</div>
 
@@ -46,15 +46,15 @@
 		</header>
 
 		<main id="body">
-			<div id="banner">배너 넣자</div>
+			<div id="banner"><img src="banner.png"></div>
 			<p id="week">
 				<a href="#">이 주의 레시피</a>
 			</p>
-			<div id="weekbest"></div>
+			<div id="weeklyBest"></div>
 			<p id="month">
 				<a href="#">이 달의 레시피</a>
 			</p>
-			<div id="monthbest"></div>
+			<div id="monthlyBest"></div>
 		</main>
 		<footer>푸터</footer>
 	</div>
