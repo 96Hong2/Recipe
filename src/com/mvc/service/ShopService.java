@@ -67,7 +67,7 @@ public class ShopService {
 		String pPrice = (String) req.getSession().getAttribute("pPrice");
 		String pCnt = (String) req.getSession().getAttribute("pCnt");
 		String tPrice = (String) req.getSession().getAttribute("tPrice");
-		String uId = (String) req.getSession().getAttribute("loginId");
+		String uId = (String) req.getSession().getAttribute("userId");
 		System.out.println("장바구니에 담을 회원 : " + uId);
 		System.out.println("장바구니에 담을 상품 : " + pId + "/" + pName + "/" + pPrice + "/" + pCnt + "/" + tPrice);
 
@@ -75,14 +75,14 @@ public class ShopService {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 
 		int success = 0;
-		
+
 		MainDTO dto = dao.cartChk(pId, uId);
-		
+
 		System.out.println("addCart_dto_check : " + dto);
 		System.out.println("이미 담긴 상품의 개수 : " + dto.getProductCount());
 		System.out.println("새로 담을 상품의 개수 : " + Integer.parseInt(pCnt));
 		System.out.println("상품 재고 : " + dto.getStock());
-		
+
 		if (dto.getProductCount() + Integer.parseInt(pCnt) > dto.getStock()) {
 			success = -1;
 			map.put("success", success);
@@ -91,7 +91,7 @@ public class ShopService {
 			success = dao.cartAdd(tPrice, pPrice, pId, uId, pCnt, pName);
 			map.put("success", success);
 		}
-		
+
 		System.out.println("장바구니 담기_1이면 성공 -1이면 실패 : " + success);
 		if (pId != null)
 			req.getSession().removeAttribute("pId");
@@ -103,8 +103,6 @@ public class ShopService {
 			req.getSession().removeAttribute("tPrice");
 		if (pCnt != null)
 			req.getSession().removeAttribute("pCnt");
-		if (pPrice != null)
-			req.getSession().removeAttribute("pCnt");
 
 		dao.resClose();
 		resp.getWriter().print(new Gson().toJson(map));
@@ -112,7 +110,7 @@ public class ShopService {
 	}
 
 	public void cartDel() throws IOException { // 의건
-		String uId = (String) req.getSession().getAttribute("loginId");
+		String uId = (String) req.getSession().getAttribute("userId");
 		String[] delList = req.getParameterValues("delList[]");
 		System.out.println("장바구니 삭제할 회원 : " + uId);
 		System.out.println("장바구니에서 삭제할 상품 개수" + delList.length);
@@ -134,38 +132,6 @@ public class ShopService {
 		System.out.println("-----------------------------");
 	}
 
-	public void payment() {
-		String[] orderList = req.getParameterValues("orderList[]");
-		String uId = (String) req.getSession().getAttribute("loginId");
-		int size = orderList.length;
-		ShopDAO dao = new ShopDAO();
-		ArrayList<MainDTO> list = null;
-		String[] productList = new String[size-3];
-		MainDTO dto = null;
-		
-		int resultPrice = Integer.parseInt(orderList[size-3]);
-		int orderPrice = Integer.parseInt(orderList[size-2]);
-		int discount = Integer.parseInt(orderList[size-1]); 
-		
-		for (int i = 0; i < orderList.length-3; i++) {
-			productList[i] = orderList[i];
-			System.out.println("productList : " + productList[i]);
-		}
-		System.out.println(resultPrice);
-		System.out.println(orderPrice);
-		System.out.println(discount);
-		dto = dao.payment(uId, resultPrice, orderPrice, discount);
-		
-		
-		String paymentId = dto.getPaymentId();
-		System.out.println("생성된 paymentId : " + paymentId);
-		
-		list = dao.payCart(uId, productList, paymentId);
-		
-		System.out.println(list.size());
-		
-	}
-
 	public void cartModify() throws IOException {
 		String pId = (String) req.getSession().getAttribute("pId");
 		String pCnt = (String) req.getSession().getAttribute("pCnt");
@@ -175,14 +141,13 @@ public class ShopService {
 		System.out.println("수정할 상품 : " + pId + "/" + pCnt);
 		ShopDAO dao = new ShopDAO();
 		MainDTO dto = dao.cartChk(pId);
-		
+
 		System.out.println("cartModify_dto_check : " + dto);
 
 		HashMap<String, Object> map = new HashMap<String, Object>();
 
 		int success = 0;
-		
-		
+
 		if (Integer.parseInt(pCnt) > dto.getStock()) {
 			success = -1;
 			map.put("success", success);
@@ -225,48 +190,109 @@ public class ShopService {
 	}
 
 	public ArrayList<MainDTO> order() throws IOException { // 의건
-		String pId = (String) req.getSession().getAttribute("pId");
-		String pName = (String) req.getSession().getAttribute("pName");
-		String pPrice = (String) req.getSession().getAttribute("pPrice");
-		String pCnt = (String) req.getSession().getAttribute("pCnt");
-		String tPrice = (String) req.getSession().getAttribute("tPrice");
-		
 		String uId = (String) req.getSession().getAttribute("userId");
 		System.out.println("주문한 회원 : " + uId);
-		if(pId != null) {
-			System.out.println("상품 페이지에서 주문 : " + pId + "/" + pName + "/" + pPrice + "/" + pCnt + "/" + tPrice);
-		
-		}
-		
+
 		MainDTO dto = null;
 		ShopDAO dao = new ShopDAO();
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		ArrayList<MainDTO> list = null;
-		
-		if (pId == null) { // 장바구니에서 주문할 때
-			System.out.println("장바구니에서 주문");
-			String[] orderList = req.getParameterValues("orderList[]");
-			System.out.println("앞에서__" + orderList.length);
-			list = dao.paymentList(uId, orderList);
-			System.out.println("주문 개수 : " + orderList.length);
-			System.out.println(list);
-			System.out.println(list.size());
-			map.put("cnt", list.size());
-		} else { // 상품 페이지에서 주문할 때
-			dto = new MainDTO();
-			list = new ArrayList<MainDTO>();
-			dto.setProductId(pId);
-			dto.setProductName(pName);
-			dto.setPrice(Integer.parseInt(pPrice));
-			dto.setProductCount(Integer.parseInt(pCnt));
-			dto.setTotalPrice(Integer.parseInt(tPrice));
-			list.add(dto);
-		}
+
+		System.out.println("장바구니에서 주문");
+		String[] orderList = req.getParameterValues("orderList[]");
+		System.out.println("앞에서__" + orderList.length);
+		list = dao.paymentList(uId, orderList);
+		System.out.println("주문 개수 : " + list.size());
+		map.put("cnt", list.size());
 
 		resp.getWriter().println(new Gson().toJson(map));
 		dao.resClose();
 		System.out.println("-----------------------------");
 		return list;
+	}
+
+	public ArrayList<MainDTO> order(String pId, String pName, String pPrice, String pCnt, String tPrice)
+			throws IOException {
+
+		String uId = (String) req.getSession().getAttribute("userId");
+		System.out.println("주문한 회원 : " + uId);
+
+		MainDTO dto = null;
+		ShopDAO dao = new ShopDAO();
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		ArrayList<MainDTO> list = null;
+
+		System.out.println("상품 페이지에서 주문");
+		dto = new MainDTO();
+		list = new ArrayList<MainDTO>();
+		dto.setProductId(pId);
+		dto.setProductName(pName);
+		dto.setPrice(Integer.parseInt(pPrice));
+		dto.setProductCount(Integer.parseInt(pCnt));
+		dto.setTotalPrice(Integer.parseInt(tPrice));
+		System.out.println(dto.getProductId() + "/" + dto.getProductName() + "/" + dto.getPrice() + "/"
+				+ dto.getProductCount() + "/" + dto.getPrice());
+		list.add(dto);
+
+		resp.getWriter().println(new Gson().toJson(map));
+		dao.resClose();
+		System.out.println("-----------------------------");
+		return list;
+	}
+
+	public void payment() throws IOException {
+		String[] orderList = req.getParameterValues("orderList[]");
+		String uId = (String) req.getSession().getAttribute("userId");
+		int size = orderList.length;
+		ShopDAO dao = new ShopDAO();
+		ArrayList<MainDTO> list = null;
+		String[] productList = new String[(size - 3) / 3];
+		String[] stockList = new String[(size - 3) / 3];
+		String[] priceList = new String[(size - 3) / 3];
+		MainDTO dto = null;
+		String paymentId = "";
+		boolean success = false;
+		HashMap<String, Object> map = new HashMap<String, Object>();
+
+		int resultPrice = Integer.parseInt(orderList[size - 3]);
+		int orderPrice = Integer.parseInt(orderList[size - 2]);
+		int discount = Integer.parseInt(orderList[size - 1]);
+
+		System.out.println("여기" + size);
+		for (int i = 0; i < size - 3; i++) {
+			// 0 1 2 3 4 5 6 7 8
+			// size 9
+			if (i < (size - 3) / 3) { // i<3
+				productList[i] = orderList[i];
+				System.out.println("productList : " + productList[i]);
+
+			} else if ((size - 3) / 3 <= i && i <((size-3)/3)*2) { // 3 <= i, i<6 
+				stockList[i - (size - 3) / 3] = orderList[i];
+				System.out.println("stockList : " + stockList[i - (size - 3) / 3]);
+			} else {
+				priceList[i - ((size-3)/3)*2] = orderList[i];
+				System.out.println("priceList : " + priceList[i - ((size-3)/3)*2]);
+			}
+		}
+
+		System.out.println(resultPrice);
+		System.out.println(orderPrice);
+		System.out.println(discount);
+		paymentId = dao.payment(uId, resultPrice, orderPrice, discount);
+
+		System.out.println("생성된 paymentId : " + paymentId);
+
+		list = dao.payCart(uId, productList, stockList, paymentId);
+
+		if(list.size() > 0) {
+			success = true;
+		}
+		
+		map.put("success", success);
+		dao.resClose();
+		resp.getWriter().print(new Gson().toJson(map));
+		System.out.println("-----------------------------");
+
 	}
 
 	public MainDTO memberDetail() {
@@ -277,7 +303,7 @@ public class ShopService {
 		ShopDAO dao = new ShopDAO();
 
 		dto = dao.memberDetail(uId);
-		System.out.println("memberDetail_check_dto :" + dto );
+		System.out.println("memberDetail_check_dto :" + dto);
 		dao.resClose();
 		System.out.println("-----------------------------");
 		return dto;

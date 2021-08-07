@@ -128,21 +128,41 @@ if("${sessionScope.userId}"==""){
 </body>
 <script>
 	function cancel() {
-		isCancel = confirm("장바구니로 돌아가시겠습니까?");
+		isCancel = confirm("주문을 취소하시겠습니까?");
 		if (isCancel) {
-			location.href = './cart.jsp';
+			location.href = './';
 		}
 	}
 	function order() {
 		var $product = $("input[name='pId']");
 		var $stock = $("input[name='stock']");
-
+		var $price = $("input[name='price']");
+		
 		var $pppp = $product.length;
 		var proArr = [];
 
 		var param = {};
 		$product.each(function(idx, item) {//item 은 자바스크립트 객체
-			var $productid = "procudtid" + idx;
+			//console.log(item);
+			//console.log($(item));
+			//console.log(item.value);
+			//console.log(productid);
+			console.log($(this).val());
+			proArr.push($(this).val());
+			
+			//param.productId+"idx" = $(this).val();
+		});
+		$stock.each(function(idx, item) {//item 은 자바스크립트 객체
+			//console.log(item);
+			//console.log($(item));
+			//console.log(item.value);
+			//console.log(productid);
+			console.log($(this).val());
+			proArr.push($(this).val());
+			
+			//param.productId+"idx" = $(this).val();
+		});
+		$price.each(function(idx, item) {//item 은 자바스크립트 객체
 			//console.log(item);
 			//console.log($(item));
 			//console.log(item.value);
@@ -162,16 +182,14 @@ if("${sessionScope.userId}"==""){
 		console.log($orderPrice);
 		console.log($discount);
 
-		if($stock.length == 1) {
-			proArr.push($stock);
-		}
+	
 		proArr.push($resultPrice);
 		proArr.push($orderPrice);
 		proArr.push($discount);
 		
-		//param.resultPrice = $resultPrice;
-		//param.orderPrice = $orderPrice;
-		//param.discount = $discount;
+		param.resultPrice = $resultPrice;
+		param.orderPrice = $orderPrice;
+		param.discount = $discount;
 		//console.log(proArr);
 		console.log(proArr);
 		
@@ -183,7 +201,10 @@ if("${sessionScope.userId}"==""){
 			},
 			dataType : 'JSON',
 			success : function(data) {
-				console.log("주문성공");
+				if(data.success) {
+					alert("주문 완료");
+					location.href='./';
+				}
 			},
 			error : function(e) {
 				console.log("주문실패");

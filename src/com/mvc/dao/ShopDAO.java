@@ -123,7 +123,7 @@ public class ShopDAO {
 		return dto;
 	}
 
-	public MainDTO cartChk(String pId, String uId) {
+	public MainDTO cartChk(String pId, String uId) { // 의건
 		System.out.println("상품이 이미 장바구니에 있는지 체크");
 		MainDTO dto = null;
 
@@ -153,7 +153,7 @@ public class ShopDAO {
 		return dto;
 	}
 
-	public MainDTO cartChk(String pId) {
+	public MainDTO cartChk(String pId) { // 의건
 		System.out.println("재고보다 더 많은 수량을 선택하는지 확인");
 		MainDTO dto = null;
 
@@ -174,7 +174,7 @@ public class ShopDAO {
 		return dto;
 	}
 
-	public ArrayList<MainDTO> cartList(String uId) {
+	public ArrayList<MainDTO> cartList(String uId) { // 의건
 		String sql = "SELECT productcount, totalprice, productid, userid, productName, price FROM cart where userid = ?";
 		ArrayList<MainDTO> list = null;
 		MainDTO dto = null;
@@ -201,7 +201,7 @@ public class ShopDAO {
 		return list;
 	}
 
-	public int cartAdd(String tPrice, String pPrice, String pId, String uId, String pCnt, String pName) {
+	public int cartAdd(String tPrice, String pPrice, String pId, String uId, String pCnt, String pName) { // 의건
 		System.out.println("장바구니에 담기");
 		// 장바구니 확인
 		String sql = "SELECT productId FROM cart WHERE productId = ? AND userId = ?";
@@ -243,7 +243,7 @@ public class ShopDAO {
 		return success;
 	}
 
-	public int cartModify(String pId, String pCnt, String uId) {
+	public int cartModify(String pId, String pCnt, String uId) { // 의건
 		String sql = "SELECT price FROM product WHERE productId = ?";
 		String sql_update = "UPDATE cart SET totalPrice = ?, productCount = ? WHERE productId = ? AND userId = ?";
 
@@ -277,20 +277,21 @@ public class ShopDAO {
 		return success;
 	}
 
-	public int cartDel(String uId, String[] delList) throws SQLException {
-		String sql = "DELETE FROM cart WHERE productid = ? AND uId = ?";
+	public int cartDel(String uId, String[] delList) throws SQLException { // 의건
+		String sql = "DELETE FROM cart WHERE productid = ? AND userId = ?";
 		int cnt = 0;
 		for (String productId : delList) {
 			ps = conn.prepareStatement(sql);
+			System.out.println("pId/uId : " + productId +"/"+uId);
 			ps.setString(1, productId);
-			ps.setString(2,  uId);
+			ps.setString(2, uId);
 			cnt += ps.executeUpdate();
 		}
 		return cnt;
 	}
 
-	public ArrayList<MainDTO> paymentList(String uId, String[] orderList) {
-		//장바구니에서 선택해서 주문
+	public ArrayList<MainDTO> paymentList(String uId, String[] orderList) { // 의건
+		// 장바구니에서 선택해서 주문
 		String sql = "SELECT productcount, totalprice, productId, userid, productname, price FROM cart WHERE productid = ? AND userId = ?";
 		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
 		MainDTO dto = null;
@@ -321,7 +322,7 @@ public class ShopDAO {
 		return list;
 	}
 
-	public MainDTO memberDetail(String uId) {
+	public MainDTO memberDetail(String uId) { // 의건
 		MainDTO dto = null;
 
 		String sql = "SELECT m.name name, m.address address , m.tel tel, r.discount discount FROM rank r, member m WHERE r.rankid = m.rankid and m.userid = ?";
@@ -344,117 +345,105 @@ public class ShopDAO {
 		return dto;
 	}
 
-	public MainDTO payment(String uId, int resultPrice, int orderPrice, int discount) {
+	public String payment(String uId, int resultPrice, int orderPrice, int discount) { // 의건
 		String sql_insert = "INSERT INTO payment(paymentId, orderPrice, paymentPrice, userId, discount) VALUES (paymentId_seq.NEXTVAL,?,?,?,?)";
-		//payment에 주문한 상품 추가
-		String sql_paymentid = "SELECT paymentId FROM payment WHERE userId = ? AND orderPrice = ? AND paymentPrice = ?";
-		//생성된 paymentId 가져오기
+		// payment에 주문한 상품 추가
 
-		MainDTO dto = null;
+		String pk = "";
 
 		try {
-			ps = conn.prepareStatement(sql_insert);
+			ps = conn.prepareStatement(sql_insert, new String[] { "paymentId" });
 			ps.setInt(1, orderPrice);
 			ps.setInt(2, resultPrice);
 			ps.setString(3, uId);
 			ps.setInt(4, discount);
+			ps.executeUpdate();
+			rs = ps.getGeneratedKeys();
 
-			if (ps.executeUpdate() > 0) {
-				ps = conn.prepareStatement(sql_paymentid);
-				ps.setString(1, uId);
-				ps.setInt(2, orderPrice);
-				ps.setInt(3, resultPrice);
-
-				rs = ps.executeQuery();
-				if (rs.next()) {
-					dto = new MainDTO();
-					dto.setPaymentId((rs.getString("paymentId")));
-				}
+			if (rs.next()) {
+				pk = rs.getString(1);
 			}
 
-		} catch (SQLException e) {
+		} catch (
+
+		SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return dto;
+		return pk;
 	}
 
-	public ArrayList<MainDTO> payCart(String uId, String[] productList, String paymentId) {
-		String sql = "SELECT productName, productId, productCount, price FROM cart WHERE productId = ? AND userId = ?";
+	public ArrayList<MainDTO> payCart(String uId, String[] productList, String[] stockList, String paymentId) { // 의건
+
+
+		// String sql_order = "INSERT INTO orderHistory (productName, productCnt, price,
+		// paymentId, productId) VALUES (?,?,?,?,?)";
+
+		String sql = "SELECT productName, price FROM product WHERE productId = ?";
+		String sql_order = "INSERT INTO orderHistory (productName, price, productCnt, paymentId, productId) VALUES (?,?,?,?,?)";
+		String sql_del = "DELETE FROM cart WHERE userId = ? AND productId = ? AND productCount = ?";
+		String sql_product = "UPDATE product SET stock = stock - ? WHERE productId = ?";
 		
-		String sql_del = "DELETE FROM cart WHERE productId = ? AND userId = ?";
-		
-		String sql_order = "INSERT INTO orderHistory (productName, productCnt, price, paymentId, productId) VALUES (?,?,?,?,?)";
-		String sql_product = "UPDATE product SET stock = stock - ? WHERE productId = ?"; 
-		
+
 		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
 		MainDTO dto = null;
 		int del = 0;
 		int cnt = 0;
 		int stock = 0;
-
-		//주문해서 주문내역에 먼저 넣고 그다음에 카트 체크
-		for (String productId : productList) {
-			try {
-				ps = conn.prepareStatement(sql);//장바구니에서 주문했으면
-				ps.setString(1, productId);
-				ps.setString(2, uId);
-				rs = ps.executeQuery();
-				while (rs.next()) { //장바구니에서 주문한 상품들 정보 가져옴
-					dto = new MainDTO();
-					dto.setProductId(rs.getString("productId"));
-					dto.setProductCount(rs.getInt("productCount"));
-					dto.setPrice(rs.getInt("price"));
-					dto.setProductName(rs.getString("productName"));
-
-					list.add(dto);
-					
-					
-					ps = conn.prepareStatement(sql_order); //장바구니에서 주문한 상품들 정보   주문 내역에 추가
-					ps.setString(1, dto.getProductName());
-					ps.setInt(2, dto.getProductCount());
-					ps.setInt(3, dto.getPrice());
-					ps.setString(4, paymentId);
-					ps.setString(5,  dto.getProductId());
-					cnt += ps.executeUpdate();
-					
-					ps = conn.prepareStatement(sql_product);
-					ps.setInt(1, dto.getProductCount());
-					ps.setString(2,  dto.getProductId());
-					stock += ps.executeUpdate();
-					
-				}
-
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-
-		}
-		System.out.println("리스트사이즈 : " + list.size());
-		System.out.println("오더리스트 크기 : " + productList.length);
-		if (list.size() == productList.length) {//장바구니에서 주문했으면 장바구니에서 해당 내용 삭제
-			System.out.println("삭제");
-			for (String productId : productList) {
+		int pListLen = productList.length;
+		int sListLen = stockList.length;
+		System.out.println();
+		if(pListLen == sListLen) {
+			for(int i = 0 ; i<pListLen; i++) {
 				try {
-					ps = conn.prepareStatement(sql_del);
-					ps.setString(1, productId);
-					ps.setString(2, uId);
-					del += ps.executeUpdate();
-
+					//String sql = "SELECT productName, price FROM product WHERE productId = ?";
+					ps = conn.prepareStatement(sql); //product 테이블에서 name, price 가져오기
+					ps.setString(1, productList[i]);
+					System.out.println("productId : " + productList[i]);
+					rs = ps.executeQuery();
+					
+					if (rs.next()) { //가져온 정보를
+						dto = new MainDTO();
+						dto.setProductName(rs.getString("productName"));
+						dto.setPrice(rs.getInt("price"));
+						
+						list.add(dto);
+						
+						//String sql_order = "INSERT INTO orderHistory (productName, price, productCount, paymentId, productId) VALUES (?,?,?,?,?)";
+						ps = conn.prepareStatement(sql_order); // 주문한 상품들 정보 orderHistory(주문내역)에 추가
+						ps.setString(1, dto.getProductName());
+						ps.setInt(2, dto.getPrice());
+						ps.setInt(3, Integer.parseInt(stockList[i]));
+						ps.setString(4, paymentId);
+						ps.setString(5, productList[i]);
+						cnt += ps.executeUpdate();
+						System.out.println("productId/productCount " + productList[i] +"/" + stockList[i]);
+						
+						//String sql_product = "UPDATE product SET stock = stock - ? WHERE productId = ?";
+						ps = conn.prepareStatement(sql_product);
+						ps.setInt(1, Integer.parseInt(stockList[i]));
+						ps.setString(2, productList[i]);
+						System.out.println("productCount/productId " +"/" + stockList[i]+ productList[i] );
+						stock += ps.executeUpdate();
+						
+						
+						//String sql_del = "DELETE FROM cart WHERE userId = ? AND productId = ? AND productCount = ?";
+						ps = conn.prepareStatement(sql_del);
+						ps.setString(1, uId);
+						ps.setString(2, productList[i]);
+						ps.setInt(3, Integer.parseInt(stockList[i]));
+						del += ps.executeUpdate();
+					}
 				} catch (SQLException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-
+				}// 주문내역에 넣을 상품명, 상품가격
 			}
-			System.out.println("삭제된 개수 : " + del);
-
+			
 		}
-		System.out.println("오더 : " + cnt);
-		System.out.println("수량수정 : " + stock);
+		System.out.println("주문내역 추가_" + cnt + "/" + "상품재고수정_" + stock +"/" + "장바구니에서 시켰으면 삭제" + del);
 		
 		return list;
 	}
-
-	
 
 }

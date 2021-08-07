@@ -63,12 +63,16 @@ if("${sessionScope.userId}"==""){
 								name="selectall" id="checkAll" onclick="selectAll(this);" /></th>
 							<th class="table-select">전체 선택/해제</th>
 							<th colspan="3" class="table-info">상품정보</th>
-							<!-- <th class="table-name">상품이름</th> -->
 							<th class="table-price">상품가격</th>
-							<!-- <th class="table-stock">상품수량</th> -->
 							<th class="table-total">상품총가격</th>
 						</tr>
+						<c:if test="${list eq null || list eq ''}">
+							<tr>
+								<td colspan="7">장바구니가 비었습니다.</td>
+							</tr>
+						</c:if>
 					</thead>
+
 					<tbody></tbody>
 				</table>
 			</div>
@@ -254,7 +258,6 @@ if("${sessionScope.userId}"==""){
 							//location.href='main.jsp';
 							listCall();
 						} else {
-							
 							alert('삭제에 실패 했습니다.');
 						}
 	
@@ -353,8 +356,7 @@ if("${sessionScope.userId}"==""){
 		var tPrice = 0;
 		var id = 1;
 		list.forEach(function(item, idx) {
-			console.log(idx, item);
-			
+
 			content += "<tr><div style='border-bottom:1px solid black;'>";
 			content += "<td><input name='chkBox' type='checkbox' onclick='checkSelectAll()' value='"+ item.productId+","+ item.totalPrice +"'/></td>";
 			content += "<td><a href='shopDetail?productId=" + item.productId + "'><img src='logo.png' style='width: 100px; height: 80px;' /></a></td>";
