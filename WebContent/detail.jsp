@@ -139,10 +139,10 @@
 			
 			console.log(param);
 			
-			if($tPrice == 0) {
+			if($tPrice == 0 || $("input[name='totalPrice']").val() == "0원") {
 				alert("수량 선택을 먼저 해주세요.");
 			} else { 
-			
+				console.log("왜지왜지왜지"+$tPrice);
 			
 				$.ajax({
 					type:'get',
@@ -204,7 +204,7 @@
 			console.log("??????????");
 			console.log(param);
 			
-			if($tPrice == 0) {
+			if($tPrice == 0 || $("input[name='totalPrice']").val()) {
 				alert("수량 선택을 먼저 해주세요.");
 			} else { 
 				isOrder = confirm("상품을 주문하시겠습니까?");

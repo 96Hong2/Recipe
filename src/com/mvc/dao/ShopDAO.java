@@ -326,7 +326,7 @@ public class ShopDAO {
 		MainDTO dto = null;
 
 		String sql = "SELECT m.name name, m.address address , m.tel tel, r.discount discount FROM rank r, member m WHERE r.rankid = m.rankid and m.userid = ?";
-
+		int currCash = showCash(uId);
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, uId);
@@ -338,6 +338,7 @@ public class ShopDAO {
 				dto.setAddress(rs.getString("address"));
 				dto.setTel(rs.getString("tel"));
 				dto.setDiscount(rs.getInt("discount"));
+				dto.setCash(currCash);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -444,6 +445,45 @@ public class ShopDAO {
 		System.out.println("주문내역 추가_" + cnt + "/" + "상품재고수정_" + stock +"/" + "장바구니에서 시켰으면 삭제" + del);
 		
 		return list;
+	}
+	
+	public int showCash(String userId) { // 은홍
+		System.out.println("MemberDAO showCash() 들어옴");
+		sql = "SELECT total FROM (SELECT total FROM cash WHERE userId=? ORDER BY changedTime DESC) WHERE ROWNUM=1";
+		int cash = 0;
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, userId);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				cash = Integer.parseInt(rs.getString("total"));
+			}
+		} catch (Exception e) {
+			System.out.println("**에러 : MemberDAO showCash()");
+			e.printStackTrace();
+		}
+		return cash;
+	}
+	public int changeCash(int amount, String userId) { // 은홍
+		// 캐시 충전 또는 상품 구매로 캐시 히스토리를 추가하는 메소드, amount는 변동액
+		System.out.println("changeCash() 들어옴");
+		int success = 0; // 쿼리성공여부
+		int total = 0; // 변동으로 인한 캐시총합
+		int currCash = showCash(userId);
+		total = currCash - amount;
+		System.out.println("amount/currCash/total/userId : " + amount + "/" + currCash + "/" + total + "/" + userId);
+		sql = "INSERT INTO cash(changedPrice,total,userId) VALUES(?,?,?)";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, amount); // 변동액
+			ps.setInt(2, total); // 총합
+			ps.setString(3, userId); // 유저 아이디
+			success = ps.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("**에러 : changeCash()");
+			e.printStackTrace();
+		}
+		return success;
 	}
 
 }

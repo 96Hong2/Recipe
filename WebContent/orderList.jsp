@@ -59,6 +59,7 @@ if("${sessionScope.userId}"==""){
 				<h2>배송정보</h2>
 				이름 : ${member.name} <br /> 배송주소 : ${member.address}<br /> 연락처 :
 				${member.tel}
+				<input type="hidden" name="memberCash" value="${member.cash}"/>
 			</div>
 
 			<h2>주문상품</h2>
@@ -84,7 +85,7 @@ if("${sessionScope.userId}"==""){
 										value="${payment.productName}" />${payment.productName}</div>
 								<hr />
 								<div>
-									<input type="hidden" name="stock"
+									<input type="hidden" name="pCount"
 										value="${payment.productCount}" />${payment.productCount}개</div>
 							</div>
 						<td><input type="hidden" name="price"
@@ -135,8 +136,10 @@ if("${sessionScope.userId}"==""){
 	}
 	function order() {
 		var $product = $("input[name='pId']");
-		var $stock = $("input[name='stock']");
+		var $pCount = $("input[name='pCount']");
 		var $price = $("input[name='price']");
+		var $memberCash = $("input[name='memberCash']").val();
+		console.log($memberCash);
 		
 		var $pppp = $product.length;
 		var proArr = [];
@@ -152,7 +155,7 @@ if("${sessionScope.userId}"==""){
 			
 			//param.productId+"idx" = $(this).val();
 		});
-		$stock.each(function(idx, item) {//item 은 자바스크립트 객체
+		$pCount.each(function(idx, item) {//item 은 자바스크립트 객체
 			//console.log(item);
 			//console.log($(item));
 			//console.log(item.value);
@@ -176,13 +179,9 @@ if("${sessionScope.userId}"==""){
 		var $resultPrice = ${result_price};
 		var $orderPrice = ${total};
 		var $discount = ${discount};
-
-	
 		console.log($resultPrice);
 		console.log($orderPrice);
 		console.log($discount);
-
-	
 		proArr.push($resultPrice);
 		proArr.push($orderPrice);
 		proArr.push($discount);
@@ -192,25 +191,34 @@ if("${sessionScope.userId}"==""){
 		param.discount = $discount;
 		//console.log(proArr);
 		console.log(proArr);
-		
-		$.ajax({
-			type : 'post',
-			url : 'payment',
-			data : {
-				'orderList' : proArr
-			},
-			dataType : 'JSON',
-			success : function(data) {
-				if(data.success) {
-					alert("주문 완료");
-					location.href='./';
-				}
-			},
-			error : function(e) {
-				console.log("주문실패");
-			}
-		});
 
+		console.log($memberCash);
+		if($memberCash < $resultPrice) {
+			isCharge = confirm("캐시가 부족합니다. 충전 페이지로 이동하시겠습니까?");
+			if(isCharge) {
+				location.href='myPage_chargeCash.jsp';
+			}
+			
+		} else {
+			$.ajax({
+				type : 'post',
+				url : 'payment',
+				data : {
+					'orderList' : proArr
+				},
+				dataType : 'JSON',
+				success : function(data) {
+					if(data.success) {
+						alert("주문 완료");
+						location.href='./';
+					}
+				},
+				error : function(e) {
+					console.log("주문실패");
+				}
+			});
+
+		}
 	}
 </script>
 </html>

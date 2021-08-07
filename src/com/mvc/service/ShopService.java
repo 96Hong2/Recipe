@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -193,7 +192,6 @@ public class ShopService {
 		String uId = (String) req.getSession().getAttribute("userId");
 		System.out.println("주문한 회원 : " + uId);
 
-		MainDTO dto = null;
 		ShopDAO dao = new ShopDAO();
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		ArrayList<MainDTO> list = null;
@@ -247,9 +245,8 @@ public class ShopService {
 		ShopDAO dao = new ShopDAO();
 		ArrayList<MainDTO> list = null;
 		String[] productList = new String[(size - 3) / 3];
-		String[] stockList = new String[(size - 3) / 3];
+		String[] countList = new String[(size - 3) / 3];
 		String[] priceList = new String[(size - 3) / 3];
-		MainDTO dto = null;
 		String paymentId = "";
 		boolean success = false;
 		HashMap<String, Object> map = new HashMap<String, Object>();
@@ -267,8 +264,8 @@ public class ShopService {
 				System.out.println("productList : " + productList[i]);
 
 			} else if ((size - 3) / 3 <= i && i <((size-3)/3)*2) { // 3 <= i, i<6 
-				stockList[i - (size - 3) / 3] = orderList[i];
-				System.out.println("stockList : " + stockList[i - (size - 3) / 3]);
+				countList[i - (size - 3) / 3] = orderList[i];
+				System.out.println("stockList : " + countList[i - (size - 3) / 3]);
 			} else {
 				priceList[i - ((size-3)/3)*2] = orderList[i];
 				System.out.println("priceList : " + priceList[i - ((size-3)/3)*2]);
@@ -279,12 +276,17 @@ public class ShopService {
 		System.out.println(orderPrice);
 		System.out.println(discount);
 		paymentId = dao.payment(uId, resultPrice, orderPrice, discount);
-
 		System.out.println("생성된 paymentId : " + paymentId);
+		
+		int use = orderPrice;
+		
+		System.out.println("사용금액 : "+use+" 원, userId : "+uId);
+		int result = dao.changeCash(use, uId); 
+		System.out.println("???__"+result);
+		
+		list = dao.payCart(uId, productList, countList, paymentId);
 
-		list = dao.payCart(uId, productList, stockList, paymentId);
-
-		if(list.size() > 0) {
+		if(result * list.size() > 0) {
 			success = true;
 		}
 		
