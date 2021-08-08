@@ -64,7 +64,7 @@
 						<a href="shopDetail?productId=${product.productId}"	style="background-color: black">
 							<figure class="figure">
 								<c:if test="${product.stock eq 0}">
-									<label style="color: white !important; position: absolute; background: red; border-top-left-radius: 10px;">품절</label>
+									<label style="color: white !important; position: absolute; background: red; ">품절</label>
 								</c:if>
 
 								<img class="img" src="logo.png" style="height: 100px; width: 180px; margin: 10px;">
