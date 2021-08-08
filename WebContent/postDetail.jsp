@@ -9,6 +9,12 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" type="text/css" href="css/board.css" media="all" />
 </head>
+<script>
+	if("${sessionScope.userId}"==""){
+  		 location.href = "./postList";
+  		 alert("로그인이 필요한 서비스입니다.");
+	}
+</script>
 <body>
 	<h2>게시글 상세보기</h2>	
 	<table>
@@ -46,9 +52,19 @@
 		</tr>
 		<tr>
 			<td colspan="14">
-				<button onclick="location.href='./신고폼?postId=${post.postId}'">신고</button>
-				<button onclick="location.href='./블라인드폼?postId=${post.postId}'">블라인드</button>
+				<%-- <c:if test="${sessionScope.userId != null}"><button onclick="reportPopUp(${post.postId},'${post.nickName}')">신고</button></c:if> --%>
+				<!-- 신고버튼 교체 -->
+				<button onclick="reportPopUp('${post.postId}','${post.nickName}')">신고</button>
+				
+				<%-- <c:if test="${sessionScope.isAdmin != null}"><button onclick="blindPopUp(${post.postId},'${post.nickName}')">블라인드</button></c:if> --%>
+				<!-- 블라인드 버튼 교체 -->
+				<button onclick="blindPopUp('${post.postId}','${post.nickName}')">블라인드</button>
+				
+				<%-- <c:if test="${sessionScope.userId == post.userId}"><button onclick="location.href='./postUpdateForm?postId=${post.postId}'">수정</button></c:if> --%>
+				<!-- 수정 버튼 교체 -->
 				<button onclick="location.href='./postUpdateForm?postId=${post.postId}'">수정</button>
+				
+				<%-- <c:if test="${sessionScope.userId == post.userId}"><input type="button" value="삭제" onclick="button_evert()"/></c:if> --%>
 				<input type="button" value="삭제" onclick="button_evert()"/>
 				<button onclick="location.href='./postList'">리스트</button>
 			</td>
@@ -65,5 +81,17 @@
 		}
 	}
 	
+	function reportPopUp(postId, nickName){
+		   var url = "./memberReport?postId="+postId+"&&nickname="+nickName;
+		   var option = "width=650, height=500, top=500, location = no, resizable = no";
+		   window.open(url, "reportPopUp", option);
+		          
+		}	
+	function blindPopUp(postId, nickName){
+		   var url = "./memberBlind?postId="+postId+"&&nickname="+nickName;
+		   var option = "width=650, height=500, top=500, location = no, resizable = no";
+		   window.open(url, "blindPopUp", option);
+		          
+		}	
 </script>
 </html>

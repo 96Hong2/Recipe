@@ -9,6 +9,16 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" type="text/css" href="css/board.css" media="all" />
 </head>
+<script>
+if("${sessionScope.userId}"==""){
+	   alert("로그인이 필요한 서비스입니다.");
+	   location.href = "./";
+	};
+	if("${sessionScope.userId}" != "${post.userId}"){
+		alert("자신의 글만 수정할 수 있습니다.");
+		   location.href = "./postDetail?postId=${post.postId}";
+	}
+</script>
 <body>
 	<form action="postUpdate" method="post">
 	<input type="hidden" name="userId" value="${sessionScope.userId}" readonly="readonly"/>
@@ -72,5 +82,4 @@
 <script>
 $('[name=categoryId]:radio[value="'+'${post.categoryId}'+'"]').prop('checked', true );
 </script>
-
 </html>

@@ -61,20 +61,11 @@ div .fileUpload_wrap {
 			</tr>
 		</table>
 	</div>
-	
-	<!-- 기존 form이나 ajax에 전송한 이미지의 imgId를 추가해서 전달 -->
-	
-	<form action="./test" method="POST">
-		<p>썸네일 PK : <input type='text' id='thImg' name='thImg'/></p>
-		<p>첨부이미지 PK : <input type='text' id='img' name='img'/></p>
-	</form>
-	<button id='submitBtn' type='button' onclick='javascript:submit()'>저장</button>
-	
 </body>
 <script>
 
 	//submit - 파일업로드 후 form을 제출한다
-	function submit(){
+	function save(){
 		
 		var form = new FormData();
 		form.append("thumbnail", $("#thumbnail")[0].files[0]);

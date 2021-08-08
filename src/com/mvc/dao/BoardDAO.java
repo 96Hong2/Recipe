@@ -41,10 +41,6 @@ public class BoardDAO {
 		}
 	}
 	
-	public void method1() { //은홍
-		System.out.println("BoardDAO method1() 들어옴");
-	}
-
 	public String write(MainDTO dto) { //영환
 		System.out.println("BoardDAO write() 실행");
 		String postId = "";
@@ -253,7 +249,6 @@ public class BoardDAO {
 				dto.setHits(rs.getInt("hits"));
 				dto.setLikes(rs.getInt("likes"));
 				dto.setImgNewName(rs.getString("imgNewName"));
-				//dto.setImgPath(rs.getString("imgPath"));
 				dto.setNickName(rs.getString("nickName"));
 				dto.setCategoryId(rs.getString("categoryId"));
 				list.add(dto);
@@ -283,7 +278,7 @@ public class BoardDAO {
 		return total;
 	}
 
-	public ArrayList<MainDTO> categoryList(int end, int start, int categoryId) {
+	public ArrayList<MainDTO> categoryList(int end, int start, int categoryId) { //영환
 		System.out.println("BoardDAO categoryList() 실행 : 게시글 리스트");
 		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
 		MainDTO dto = null;
@@ -308,7 +303,6 @@ public class BoardDAO {
 				dto.setHits(rs.getInt("hits"));
 				dto.setLikes(rs.getInt("likes"));
 				dto.setImgNewName(rs.getString("imgNewName"));
-				//dto.setImgPath(rs.getString("imgPath"));
 				dto.setNickName(rs.getString("nickName"));
 				dto.setCategoryId(rs.getString("categoryId"));
 				list.add(dto);
@@ -319,7 +313,7 @@ public class BoardDAO {
 		return list;
 	}
 
-	public int categoryCount(int categoryId) {
+	public int categoryCount(int categoryId) { //영환
 		System.out.println("BoardDAO categoryCount() 실행");
 		String sql = "SELECT COUNT(postId) FROM post WHERE categoryId=?";
 		int total = 0;
@@ -336,6 +330,201 @@ public class BoardDAO {
 			e.printStackTrace();
 		}
 		
+		return total;
+	}
+
+	public ArrayList<MainDTO> postSearch(String keyword, String keywordMin, String keywordMax, int categoryId,
+			String postSearchOpt, int start, int end) {
+		System.out.println("BoardDAO postSearch() 실행");
+		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
+		MainDTO dto = null;
+		String sql = "SELECT rnum,postid, title,recipePrice, item, hits, likes, imgNewName, nickname,categoryId,contents "+ 
+					"FROM(SELECT ROW_NUMBER() OVER(PARTITION BY categoryId ORDER BY p.postDate DESC)AS RNUM "+ 
+					",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName,p.categoryId,p.contents "+ 
+					",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
+					"FROM post p LEFT OUTER JOIN image i ON p.postId=i.fieldId AND i.imgField='post_th' "+ 
+					"ORDER BY p.postDate DESC) ";
+					
+		String keywords = '%' + keyword + '%';
+		
+		if(postSearchOpt.equals("title_contentsSearch") && categoryId != 0) {
+			System.out.println("title_contentsSearch\") && categoryId != 0  실행");
+		sql += "WHERE rnum between ? AND ? AND categoryId=? AND (title like ? OR contents like ?) ";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, start);
+			ps.setInt(2, end);
+			ps.setInt(3, categoryId);
+			ps.setString(4, keywords);
+			ps.setString(5, keywords);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				dto = new MainDTO();
+				dto.setPostId(rs.getString("postId"));
+				dto.setTitle(rs.getString("title"));
+				dto.setRecipePrice(rs.getInt("recipePrice"));
+				dto.setItem(rs.getString("item"));
+				dto.setHits(rs.getInt("hits"));
+				dto.setLikes(rs.getInt("likes"));
+				dto.setImgNewName(rs.getString("imgNewName"));
+				dto.setNickName(rs.getString("nickName"));
+				dto.setCategoryId(rs.getString("categoryId"));
+				dto.setContents(rs.getString("contents"));
+				list.add(dto);
+				}
+			} catch (SQLException e) {
+			e.printStackTrace();
+			}
+		}else if(postSearchOpt.equals("recipePriceSearch") && categoryId != 0) {
+			System.out.println("postSearchOpt.equals(\"recipePriceSearch\") && categoryId != 0  실행");
+				sql += "WHERE rnum between ? AND ? AND categoryId=? AND recipePrice between ? AND ? ";
+				try {
+					ps = conn.prepareStatement(sql);
+					ps.setInt(1, start);
+					ps.setInt(2, end);
+					ps.setInt(3, categoryId);
+					ps.setString(4, keywordMin);
+					ps.setString(5, keywordMax);
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						dto = new MainDTO();
+						dto.setPostId(rs.getString("postId"));
+						dto.setTitle(rs.getString("title"));
+						dto.setRecipePrice(rs.getInt("recipePrice"));
+						dto.setItem(rs.getString("item"));
+						dto.setHits(rs.getInt("hits"));
+						dto.setLikes(rs.getInt("likes"));
+						dto.setImgNewName(rs.getString("imgNewName"));
+						dto.setNickName(rs.getString("nickName"));
+						dto.setCategoryId(rs.getString("categoryId"));
+						dto.setContents(rs.getString("contents"));
+						list.add(dto);
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}else if(categoryId == 0 && postSearchOpt.equals("title_contentsSearch")) {
+				System.out.println("categoryId == 0 && postSearchOpt.equals(\"title_contentsSearch\")  실행");
+				sql += "WHERE rnum between ? AND ? AND (title like ? OR contents like ?)";
+				try {
+					ps = conn.prepareStatement(sql);
+					ps.setInt(1, start);
+					ps.setInt(2, end);
+					ps.setString(3, keywords);
+					ps.setString(4, keywords);
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						dto = new MainDTO();
+						dto.setPostId(rs.getString("postId"));
+						dto.setTitle(rs.getString("title"));
+						dto.setRecipePrice(rs.getInt("recipePrice"));
+						dto.setItem(rs.getString("item"));
+						dto.setHits(rs.getInt("hits"));
+						dto.setLikes(rs.getInt("likes"));
+						dto.setImgNewName(rs.getString("imgNewName"));
+						dto.setNickName(rs.getString("nickName"));
+						dto.setCategoryId(rs.getString("categoryId"));
+						dto.setContents(rs.getString("contents"));
+						list.add(dto);
+						}
+					} catch (SQLException e) {
+					e.printStackTrace();
+					}
+			}else if(categoryId == 0 && postSearchOpt.equals("recipePriceSearch")) {
+				System.out.println("categoryId == 0 && postSearchOpt.equals(\"recipePriceSearch\")  실행");
+				sql += "WHERE rnum between ? AND ? AND recipePrice between ? AND ? ";
+				try {
+					ps = conn.prepareStatement(sql);
+					ps.setInt(1, start);
+					ps.setInt(2, end);
+					ps.setString(3, keywordMin);
+					ps.setString(4, keywordMax);
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						dto = new MainDTO();
+						dto.setPostId(rs.getString("postId"));
+						dto.setTitle(rs.getString("title"));
+						dto.setRecipePrice(rs.getInt("recipePrice"));
+						dto.setItem(rs.getString("item"));
+						dto.setHits(rs.getInt("hits"));
+						dto.setLikes(rs.getInt("likes"));
+						dto.setImgNewName(rs.getString("imgNewName"));
+						dto.setNickName(rs.getString("nickName"));
+						dto.setCategoryId(rs.getString("categoryId"));
+						dto.setContents(rs.getString("contents"));
+						list.add(dto);
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		return list;
+	}
+
+	public int searchCount(int categoryId, String keyword, String keywordMin, String keywordMax, String postSearchOpt) {
+		System.out.println("BoardDAO searchCount() 실행");
+		int total = 0;
+		String keywords = '%' + keyword + '%';
+		if(postSearchOpt.equals("title_contentsSearch") && categoryId != 0 ) {
+			try {
+				String sql = "SELECT COUNT(postId) FROM post WHERE categoryId=? AND title like ? OR contents like ? ";
+				ps = conn.prepareStatement(sql);
+				ps.setInt(1, categoryId);
+				ps.setString(2, keywords);
+				ps.setString(3, keywords);
+				rs = ps.executeQuery();
+				
+				if(rs.next()) {
+					total = rs.getInt(1);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}else if(postSearchOpt.equals("recipePriceSearch") && categoryId != 0) {
+			try {
+				String sql = "SELECT COUNT(postId) FROM post WHERE categoryId=? AND recipePrice between ? AND ?";
+				ps = conn.prepareStatement(sql);
+				ps.setInt(1, categoryId);
+				ps.setString(2, keywordMin);
+				ps.setString(3, keywordMax);
+				rs = ps.executeQuery();
+
+				if(rs.next()) {
+					total = rs.getInt(1);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}else if(categoryId == 0 && postSearchOpt.equals("title_contentsSearch")) {
+			try {
+				String sql = "SELECT COUNT(postId) FROM post WHERE title like ? OR contents like ?  ";
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, keywords);
+				ps.setString(2, keywords);
+				rs = ps.executeQuery();
+				
+				if(rs.next()) {
+					total = rs.getInt(1);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}else if(categoryId == 0 && postSearchOpt.equals("recipePriceSearch")) {
+			try {
+				String sql = "SELECT COUNT(postId) FROM post WHERE recipePrice between ? AND ? ";
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, keywords);
+				ps.setString(2, keywords);
+				rs = ps.executeQuery();
+				
+				if(rs.next()) {
+					total = rs.getInt(1);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("total : "+total);
 		return total;
 	}
 }

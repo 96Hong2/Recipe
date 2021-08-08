@@ -1,11 +1,14 @@
 package com.mvc.service;
 
+import java.awt.print.Printable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.jasper.tagplugins.jstl.core.Out;
 
 import com.mvc.dao.BoardDAO;
 import com.mvc.dao.MemberDAO;
@@ -24,13 +27,8 @@ public class BoardService {
 		}
 	}
 	
-	public void method1() { //은홍
-		System.out.println("BoardService method1() 들어옴");
-	}
-
 	public String write() { //영환
-		String userId = "chanho@naver.com";  //테스트용 
-		req.getSession().setAttribute("userId", userId); //테스트용 세션 저장
+		String userId = (String) req.getSession().getAttribute("userId");  //테스트용 
 		System.out.println("BoardService write() 실행");
 		
 		MemberDAO memberdao = new MemberDAO();
@@ -39,9 +37,9 @@ public class BoardService {
 		BoardDAO dao = new BoardDAO();
 		MainDTO dto = new MainDTO();
 		
-		String th_imgid = req.getParameter("thImg");
-		String imgid = req.getParameter("img");
-		System.out.println("th_imgid :"+th_imgid+"/"+"imgid: "+imgid);
+		String thImg = req.getParameter("thImg");
+		String img = req.getParameter("img");
+		System.out.println("th_imgid :"+thImg+"/"+"imgid: "+img);
 		
 		String title = req.getParameter("title");
 		String categoryId = req.getParameter("categoryId");
@@ -55,19 +53,19 @@ public class BoardService {
 		dto.setRecipePrice(Integer.parseInt(recipePrice));
 		dto.setItem(item);
 		dto.setContents(contents);
-		dto.setUserId((String)req.getSession().getAttribute("userId"));
+		dto.setUserId(userId);
 		System.out.println("write dto : "+dto);
 
 		postId = dao.write(dto); 
 		
 		
-		if(th_imgid != null) { //썸네일이 있으면,
-			memberdao.setImgField(postId, th_imgid);
+		if(thImg != null) { //썸네일이 있으면,
+			memberdao.setImgField(postId, thImg);
 		}
-		if(imgid != null) {// 첨부가 있으면,
-			memberdao.setImgField(postId, imgid);
+		if(img != null) {// 첨부가 있으면,
+			memberdao.setImgField(postId, img);
 		}
-		
+		memberdao.getPoint(userId, "새 레시피 작성", 10);
 
 		dao.resClose(); //자원닫기
 		return postId;
@@ -145,6 +143,7 @@ public class BoardService {
 		System.out.println("삭제 요청 postId : "+postId);
 		MainDTO dto = dao.del(postId);
 		System.out.println("삭제하기 DTO : "+dto);
+		
 		dao.resClose();
 		System.out.println("삭제완료");
 		 return dto;
@@ -169,18 +168,16 @@ public class BoardService {
 		map.put("currPage", postPage);
 		
 		dao.resClose();
-		
-		
 		return map;
 	}
 
-	public HashMap<String, Object> categoryList(int postPage) {
+	public HashMap<String, Object> categoryList(int postPage) { //영환
 		System.out.println("BoardService categoryList() 실행");
 		BoardDAO dao = new BoardDAO();
 		ArrayList<MainDTO> list = null;
-		int categoryId = Integer.parseInt(req.getParameter("categoryId"));
-		System.out.println(categoryId);
 		HashMap<String, Object> map1 = new HashMap<String, Object>();
+		int categoryId = Integer.parseInt(req.getParameter("categoryId"));
+		System.out.println("검색된 카테고리ID"+categoryId);
 		//한 페이지당 게시글 수
 		int pagePerCnt = 9;
 		int end = postPage * pagePerCnt;
@@ -198,15 +195,34 @@ public class BoardService {
 		return map1;
 	}
 
-	public HashMap<String, Object> postSearch(int parseInt) {
+	public HashMap<String, Object> postSearch(int postPage) { //영환
 		System.out.println("BoardServic postSearch() 실행 ");
+		ArrayList<MainDTO> list = null;
+		HashMap<String, Object> map2 = new HashMap<String, Object>();
+		BoardDAO dao = new BoardDAO();
+		
+		int pagePerCnt = 9;
+		int end = postPage * pagePerCnt;
+		int start=(end-pagePerCnt);
 		
 		String keyword = req.getParameter("keyword");
 		String keywordMin = req.getParameter("keywordMin");
 		String keywordMax = req.getParameter("keywordMax");
-		String categoryId = req.getParameter("categoryId");
-		System.out.println("키워드 :"+keyword+"/"+"예산최소 :"+keywordMin+"/"+"예산최대 :"+keywordMax+"/"+categoryId);
-		return null;
+		System.out.println("키워드 :"+keyword+" / "+"예산최소 :"+keywordMin+" / "+"예산최대 :"+keywordMax);
+		
+		int categoryId = Integer.parseInt(req.getParameter("categoryId"));
+		String postSearchOpt = req.getParameter("postSearchOpt");
+		System.out.println("categoryId : "+categoryId+" / "+"postSearchOpt : "+postSearchOpt);
+		
+		list = dao.postSearch(keyword,keywordMin,keywordMax,categoryId,postSearchOpt,start,end);
+		int total = dao.searchCount(categoryId,keyword,keywordMin,keywordMax,postSearchOpt);
+		int postPages = (total/pagePerCnt)+1;
+		map2.put("list", list);
+		map2.put("totalPage", postPages);
+		map2.put("currPage", postPage);
+		map2.put("total", total);
+		dao.resClose();
+		return map2;
 	}
 	
 

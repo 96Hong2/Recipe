@@ -14,7 +14,7 @@ import com.mvc.dto.MainDTO;
 import com.mvc.service.BoardService;
 import com.mvc.service.MemberService;
 
-@WebServlet({"/postWriteForm","/postDetail","/postUpdateForm","/postUpdate","/postDel","/postList","/category","/postSearch"})
+@WebServlet({"/postWriteForm","/postWrite","/postDetail","/postUpdateForm","/postUpdate","/postDel","/postList","/category","/postSearch"})
 public class BoardController extends HttpServlet {
 
 	@Override
@@ -43,12 +43,8 @@ public class BoardController extends HttpServlet {
 		boolean success = false;
 		int result = 0;
 		String postPage = null;
+		
 		switch(addr) {
-		case "/": //은홍
-			System.out.println("-- 메인 페이지 보기 요청 --");
-			
-			
-		break;
 		
 		case "/postWrite" : //영환
 			System.out.println("게시물 글쓰기 요청");
@@ -99,6 +95,7 @@ public class BoardController extends HttpServlet {
 		case "/postList" : //영환
 			System.out.println("게시글 리스트 요청");
 			postPage = req.getParameter("postPage");
+			String all = "all";
 			if(postPage == null) {
 				postPage = "1";
 			}
@@ -106,6 +103,7 @@ public class BoardController extends HttpServlet {
 			req.setAttribute("list", map.get("list"));
 			req.setAttribute("currPage", map.get("currPage"));
 			req.setAttribute("totalPage", map.get("totalPage"));
+			req.setAttribute("all",all);
 			dis = req.getRequestDispatcher("postList.jsp");
 			dis.forward(req, resp);
 			break;
@@ -113,6 +111,7 @@ public class BoardController extends HttpServlet {
 		case "/category" : //영환
 			System.out.println("카테고리별 리스트 요청");
 			postPage = req.getParameter("postPage");
+			String category = "category";
 			if(postPage == null) {
 				postPage = "1";
 			}
@@ -120,6 +119,7 @@ public class BoardController extends HttpServlet {
 			req.setAttribute("list", map1.get("list"));
 			req.setAttribute("currPage", map1.get("currPage"));
 			req.setAttribute("totalPage", map1.get("totalPage"));
+			req.setAttribute("category", category);
 			dis = req.getRequestDispatcher("postList.jsp");
 			dis.forward(req, resp);
 			break;
@@ -127,11 +127,18 @@ public class BoardController extends HttpServlet {
 		case "/postSearch" : //영환
 			System.out.println("게시글 검색 요청");
 			postPage = req.getParameter("postPage");
+			category = "category";
 			if(postPage == null) {
 				postPage = "1";
 			}
 			HashMap<String, Object> map2 = service.postSearch(Integer.parseInt(postPage));
-			
+			req.setAttribute("list", map2.get("list"));
+			req.setAttribute("currPage", map2.get("currPage"));
+			req.setAttribute("totalPage", map2.get("totalPage"));
+			req.setAttribute("category", category);
+			req.setAttribute("total", map2.get("total"));
+			dis = req.getRequestDispatcher("postList.jsp");
+			dis.forward(req, resp);
 			break;
 		}
 	}

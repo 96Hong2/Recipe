@@ -9,8 +9,13 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" type="text/css" href="css/board.css" media="all" />
 </head>
+<script>
+if("${sessionScope.userId}"==""){
+   alert("로그인이 필요한 서비스입니다.");
+   location.href = "./";
+}
+</script>
 <body>
-
 
 	<form action="postWrite" method="post">
 	<input type='hidden' id='thImg' name='thImg'/>
@@ -67,7 +72,6 @@
 			<td colspan="2">
 				<input type="button" onclick="location.href='./postList'" value="취소"/> 
 				<button id='submitBtn' type='button' onclick='javascript:save()'>저장</button> 
-				<!-- <input type="button" onclick='javascript:submit()'  id='submitBtn' value="저장"/>  -->
 			</td>
 		</tr>
 	</table>
