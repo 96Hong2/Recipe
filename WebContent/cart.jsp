@@ -66,11 +66,6 @@ if("${sessionScope.userId}"==""){
 							<th class="table-price">상품가격</th>
 							<th class="table-total">상품총가격</th>
 						</tr>
-						<c:if test="${list eq null || list eq ''}">
-							<tr>
-								<td colspan="7">장바구니가 비었습니다.</td>
-							</tr>
-						</c:if>
 					</thead>
 
 					<tbody></tbody>
@@ -114,14 +109,18 @@ if("${sessionScope.userId}"==""){
 			data : {},
 			dataType : 'JSON',
 			success : function(data) {
-				if (data.cartList != null) {
+				console.log(data.cartList);
+				if (data.cartList.length == 0){
+					drawEmptyList();
+					console.log("빈거");
+					$dis = data.member;
+					$("#dis").text($dis);
+
+				} else{
 					drawList(data.cartList)
 					console.log("!!!!!!!");
 					$dis = data.member;
 					$("#dis").text($dis);
-					console.log($dis);
-				} else {
-					console.log("엘스");
 				}
 			},
 			error : function(e) {
@@ -348,6 +347,16 @@ if("${sessionScope.userId}"==""){
 			}
 		});
 		
+	}
+	function drawEmptyList() {
+		var content = "";
+		content += "<tr><td colspan='7'>" +"　"+ "</td></tr>";
+		content += "<tr>";
+		content += "<td colspan='7'>장바구니가 비었습니다.</td>";
+		content += "</tr>";
+		
+		$("tbody").empty();
+		$("tbody").append(content);
 	}
 
 	function drawList(list) {

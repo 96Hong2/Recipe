@@ -52,7 +52,7 @@ a {
 }
 
 a:hover, a:focus {
-	color: white;
+	color: #bbb;
 }
 
 #menu {
@@ -130,12 +130,13 @@ td.info {
 	text-align: center;
 	width: 200px;
 	height: 200px;
-	background-color: #bbb;
+	background-color: #D5D5D5;
 	border-radius: 10px;
 }
 
 .figure:hover, .figure:focus {
 	opacity: 0.5;
+	color: white;
 }
 
 .img {
