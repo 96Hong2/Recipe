@@ -49,15 +49,33 @@ public class MemberService {
 		return currCash;
 	}
 
-	public ArrayList<MainDTO> cashHistory() { //은홍
+	public HashMap<String, Object> cashHistory() { //은홍
 		System.out.println("MemberService cashHistory() 들어옴");
-		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
+		
 		String userId = (String) req.getSession().getAttribute("userId");
 		System.out.println("cashHistory() 세션에 저장된 userId : "+userId);
+		String req_page = req.getParameter("page");
+		String button_str = req.getParameter("button");
+		if(button_str != null) {
+			int button = Integer.parseInt(button_str);
+			System.out.println("button 클릭됨(1이면 이전, 2이면 다음) : "+button);
+			if(button == 1) {
+				req_page = String.valueOf(Integer.parseInt(req_page)-1);
+			}else if(button == 2) {
+				req_page = String.valueOf(Integer.parseInt(req_page)+1);
+			}				
+		}
+		
+		if(req_page == null || Integer.parseInt(req_page) <= 0 || req_page.equals("")) {
+			System.out.println("controller 처음 요청 받은 페이지 : "+req_page);
+			req_page = "1";
+		}
+		System.out.println("controller 요청 받은 페이지 : "+req_page);
+		
 		MemberDAO dao = new MemberDAO();
-		list = dao.cashHistory(userId);
+		HashMap<String, Object> map = dao.cashHistory(userId, Integer.parseInt(req_page));
 		dao.resClose();
-		return list;
+		return map;
 	}
 
 	public int chargeCash() { //은홍
@@ -98,15 +116,33 @@ public class MemberService {
 		return map;
 	}
 	
-	public ArrayList<MainDTO> pointHistory() {
+	public HashMap<String, Object> pointHistory() {
 		System.out.println("MemberService pointHistory() 들어옴");
-		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
+		
 		String userId = (String) req.getSession().getAttribute("userId");
 		System.out.println("pointHistory() 세션에 저장된 userId : "+userId);
+		String req_page = req.getParameter("page");
+		String button_str = req.getParameter("button");
+		if(button_str != null) {
+			int button = Integer.parseInt(button_str);
+			System.out.println("button 클릭됨(1이면 이전, 2이면 다음) : "+button);
+			if(button == 1) {
+				req_page = String.valueOf(Integer.parseInt(req_page)-1);
+			}else if(button == 2) {
+				req_page = String.valueOf(Integer.parseInt(req_page)+1);
+			}				
+		}
+		
+		if(req_page == null || Integer.parseInt(req_page) <= 0 || req_page.equals("")) {
+			System.out.println("service 처음 요청 받은 페이지 : "+req_page);
+			req_page = "1";
+		}
+		System.out.println("service 요청 받은 페이지 : "+req_page);
+		
 		MemberDAO dao = new MemberDAO();
-		list = dao.pointHistory(userId);
+		HashMap<String, Object> map = dao.pointHistory(userId, Integer.parseInt(req_page));
 		dao.resClose();
-		return list;
+		return map;
 	}
 	
 	public MainDTO clientInfo() throws IOException { // 찬호

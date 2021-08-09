@@ -126,23 +126,26 @@ public class MemberController extends HttpServlet {
 
 		case "/cashHistory": //은홍
 			System.out.println("캐시 내역 조회 요청");
-			ArrayList<MainDTO> list = new ArrayList<MainDTO>();
+			HashMap<String, Object> map = new HashMap<String, Object>();
 			try {
-				list = service.cashHistory();
-				req.setAttribute("cashList", list);
+				map = service.cashHistory();
+				req.setAttribute("cashList", map.get("list"));
+				req.setAttribute("currPage", map.get("currPage"));
+				req.setAttribute("totalPage", map.get("totalPage"));
+				req.setAttribute("start", map.get("start"));
+				req.setAttribute("end", map.get("end"));
 				
 				msg = req.getParameter("msg");
 				if(msg != null && msg != "") {
 					req.setAttribute("msg", msg);
 				}
-				
 				dis = req.getRequestDispatcher("myPage_myCash.jsp");
 				dis.forward(req, resp);
 			} catch (Exception e) {
 				System.out.println("**에러 : MemberController /cashHistory");
 				e.printStackTrace();
 			}
-			break;
+		break;
 		
 		case "/chargeCash": //은홍
 			System.out.println("캐시 충전 요청");
@@ -166,16 +169,18 @@ public class MemberController extends HttpServlet {
 		
 		case "/pointHistory": //은홍
 			System.out.println("명예 획득 내역 조회 요청");
-			list = new ArrayList<MainDTO>();
 			try {
-				list = service.pointHistory();
-				req.setAttribute("pointList", list);
+				map = service.pointHistory();
+				req.setAttribute("pointList", map.get("list"));
+				req.setAttribute("currPage", map.get("currPage"));
+				req.setAttribute("totalPage", map.get("totalPage"));
+				req.setAttribute("start", map.get("start"));
+				req.setAttribute("end", map.get("end"));
 				
 				msg = req.getParameter("msg");
 				if(msg != null && msg != "") {
 					req.setAttribute("msg", msg);
 				}
-				
 				dis = req.getRequestDispatcher("myPage_myPoint.jsp");
 				dis.forward(req, resp);
 			} catch (Exception e) {
@@ -246,7 +251,7 @@ public class MemberController extends HttpServlet {
 			if (page == null) {
 				page = "1";
 			}
-			HashMap<String, Object> map = service.myWrite(Integer.parseInt(page), userId);
+			map = service.myWrite(Integer.parseInt(page), userId);
 
 			req.setAttribute("myWrite", map.get("myWrite"));
 			req.setAttribute("currPage", map.get("currPage"));

@@ -47,7 +47,29 @@
 			</table>
 		</div>
 		
-		<button>더보기</button>
+		<div class = "pageArea">
+		<button type='button' onclick='location.href="./pointHistory?page=${start}&button=1"'>이전</button>
+		<c:choose>
+			<c:when test="${totalPage < end}">
+				<c:forEach var="i" begin="${start}" end="${totalPage}" step="1">
+					<span class="page">
+					<c:if test="${i ne currPage}"><a href="./pointHistory?page=${i}">${i}</a></c:if>
+					<c:if test="${i eq currPage}"><b>${i}</b></c:if>
+					</span>
+				</c:forEach>
+			</c:when>
+			<c:otherwise>
+				<c:forEach var="i" begin="${start}" end="${end}" step="1">
+					<span class="page">
+					<c:if test="${i ne currPage}"><a href="./pointHistory?page=${i}">${i}</a></c:if>
+					<c:if test="${i eq currPage}"><b>${i}</b></c:if>
+					</span>
+				</c:forEach>
+			</c:otherwise>
+		</c:choose>
+		<button type='button' onclick='location.href="./pointHistory?page=${end}&button=2"'>다음</button>
+		<div style='height:50px'>&nbsp;</div>
+	</div>
 
 	</div>
 </body>

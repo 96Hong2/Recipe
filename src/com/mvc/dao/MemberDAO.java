@@ -116,19 +116,52 @@ public class MemberDAO {
 		return cash;
 	}
 
-	public ArrayList<MainDTO> cashHistory(String userId) { // 은홍
+	public HashMap<String, Object> cashHistory(String userId, int page) { // 은홍
 		System.out.println("MemberDAO cashHistory() 들어옴");
 		MainDTO dto = null;
 		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
+		int start = 0;
+		int end = 0;
+		int startPage = 0;
+		int endPage = 0;
+		int pagePerCnt = 10; //한 페이지당 보여줄 게시글 수
+		int pagePerPage = 5; //한 페이지당 보여줄 페이지 수
+		
+		int total = 0;
+		try {
+			total = totalCashCount(userId);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		} //총 게시글 수
+		int pages = total/pagePerCnt; //만들 수 있는 페이지 수
+		if(pages == 0) {
+			pages = 1;
+		}
+		System.out.println("DAO 총 데이터 수 : "+total+" / 페이지 수 : "+pages);
+		
+		if(page > pages) {
+			page = pages;
+		}
+		System.out.println("DAO 요청 받은 페이지 : "+page);
+		
+		end = page*pagePerCnt; //1p:1~10 2p:11~20 3p:21~30
+		start = end-(pagePerCnt-1);
+		endPage = pagePerPage*((int)((page-1)/pagePerPage)+1);
+		startPage = endPage-pagePerPage+1;
+		System.out.println("DAO startPage/endPage : "+startPage+"/"+endPage);
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
 		int cash_amount = 0;
 		String cash_time = "로드실패";
 		int cash_total = 0;
 		String cash_details = "로드실패";
 		try {
-			sql = "SELECT changedPrice, to_char(changedTime,'yyyy-mm-dd hh24:mi') time,"
-					+ " total FROM cash WHERE userId=? ORDER BY time DESC";
+			sql = "SELECT * FROM (SELECT ROWNUM rnum, changedPrice, to_char(changedTime,'yyyy-mm-dd hh24:mi') time, total FROM cash WHERE userId=? ORDER BY time DESC) WHERE rnum BETWEEN ? AND ?";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, userId);
+			ps.setInt(2, start);
+			ps.setInt(3, end);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				dto = new MainDTO();
@@ -153,7 +186,26 @@ public class MemberDAO {
 			System.out.println("**에러 : MemberDAO cashHistory()");
 			e.printStackTrace();
 		}
-		return list;
+		map.put("list", list);
+		map.put("totalPage", pages);
+		map.put("currPage", page);
+		map.put("start", startPage);
+		map.put("end", endPage);
+		return map;
+	}
+	
+	private int totalCashCount(String userId) throws Exception { //은홍
+		String sql = "SELECT COUNT(*) FROM cash WHERE userId=?";
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, userId);
+		rs = ps.executeQuery();
+		
+		int total = 0;
+		
+		if(rs.next()) {
+			total = rs.getInt(1);
+		}
+		return total;
 	}
 
 	public int changeCash(int amount, String userId) { // 은홍
@@ -164,6 +216,10 @@ public class MemberDAO {
 		int currCash = showCash(userId);
 		total = currCash + amount;
 		System.out.println("amount/currCash/total/userId : " + amount + "/" + currCash + "/" + total + "/" + userId);
+		if(total < 0) {
+			System.out.println("DAO 캐시 부족으로 상품 구매 불가 ");
+			return success;
+		}
 		sql = "INSERT INTO cash(changedPrice,total,userId) VALUES(?,?,?)";
 		try {
 			ps = conn.prepareStatement(sql);
@@ -513,21 +569,55 @@ public class MemberDAO {
 		return success;
 	}
 	
-	public ArrayList<MainDTO> pointHistory(String userId) { //은홍
+	public HashMap<String, Object> pointHistory(String userId, int page) { //은홍
 		//명예 획득 내역 리스트 조회
 		System.out.println("MemberDAO pointHistory() 들어옴");
 		MainDTO dto = null;
 		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
+		int start = 0;
+		int end = 0;
+		int startPage = 0;
+		int endPage = 0;
+		int pagePerCnt = 10; //한 페이지당 보여줄 데이터 수
+		int pagePerPage = 5; //한 페이지당 보여줄 페이지 수
+		
+		int total = 0;
+		try {
+			total = totalPointCount(userId);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		} //총 게시글 수
+		int pages = total/pagePerCnt; //만들 수 있는 페이지 수
+		if(pages == 0) {
+			pages = 1;
+		}
+		System.out.println("DAO 총 데이터 수 : "+total+" / 페이지 수 : "+pages);
+		
+		if(page > pages) {
+			page = pages;
+		}
+		System.out.println("DAO 요청 받은 페이지 : "+page);
+		
+		end = page*pagePerCnt; //1p:1~10 2p:11~20 3p:21~30
+		start = end-(pagePerCnt-1);
+		endPage = pagePerPage*((int)((page-1)/pagePerPage)+1);
+		startPage = endPage-pagePerPage+1;
+		System.out.println("DAO startPage/endPage : "+startPage+"/"+endPage);
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
 		String pointDate = "로드실패";
 		String pointField = "로드실패";
 		int getPoint = 0;
 		int totalPoint = 0;
 		try {
-			sql = "SELECT * FROM (SELECT to_char(pointDate,'yyyy-mm-dd hh24:mi') pointDate, "
-					+ "pointField, getPoint, totalPoint FROM point WHERE userId=? ORDER BY pointDate DESC) "
-					+ "WHERE ROWNUM <= 10";
+			sql = "SELECT * FROM (SELECT ROWNUM rnum, p.* FROM (SELECT to_char(pointDate,'yyyy-mm-dd hh24:mi') pointDate, "
+					+ "pointField, getPoint, totalPoint FROM point WHERE userId=? ORDER BY pointDate DESC) p) "
+					+ "WHERE rnum BETWEEN ? AND ?";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, userId);
+			ps.setInt(2, start);
+			ps.setInt(3, end);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				dto = new MainDTO();
@@ -548,7 +638,26 @@ public class MemberDAO {
 			System.out.println("**에러 : MemberDAO pointHistory()");
 			e.printStackTrace();
 		}
-		return list;
+		map.put("list", list);
+		map.put("totalPage", pages);
+		map.put("currPage", page);
+		map.put("start", startPage);
+		map.put("end", endPage);
+		return map;
+	}
+	
+	private int totalPointCount(String userId) throws Exception { //은홍
+		String sql = "SELECT COUNT(*) FROM point WHERE userId=?";
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, userId);
+		rs = ps.executeQuery();
+		
+		int total = 0;
+		
+		if(rs.next()) {
+			total = rs.getInt(1);
+		}
+		return total;
 	}
 	
 	public boolean getPoint(String userId, String pointField, int getPoint) { // 은홍
