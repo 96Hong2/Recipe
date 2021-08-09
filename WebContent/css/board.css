@@ -1,10 +1,9 @@
-table, th, td {
+#board, #board th, #board td {
 	border: 1px solid;
 	border-collapse: collapse;
 	padding: 5px 10px;
 }
 
-td {
-	
+#board td {
 	text-align: center;
 }

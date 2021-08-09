@@ -10,11 +10,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
 import com.mvc.dto.MainDTO;
 import com.mvc.service.BoardService;
 import com.mvc.service.MemberService;
 
-@WebServlet({"/postWriteForm","/postWrite","/postDetail","/postUpdateForm","/postUpdate","/postDel","/postList","/category","/postSearch"})
+@WebServlet({"/postWriteForm","/postWrite","/postDetail","/postUpdateForm","/postUpdate","/postDel","/postList","/category","/postSearch","/writeComment", "/loadComments", "/updateComment", "/writeRecomment", "/deleteComment"})
 public class BoardController extends HttpServlet {
 
 	@Override
@@ -33,6 +34,7 @@ public class BoardController extends HttpServlet {
 		String uri = req.getRequestURI();
 		String context = req.getContextPath();
 		String addr = uri.substring(context.length());
+		System.out.println("-------------------------");
 		System.out.println("URI : "+addr);
 		
 		BoardService service = new BoardService(req, resp);
@@ -43,6 +45,7 @@ public class BoardController extends HttpServlet {
 		boolean success = false;
 		int result = 0;
 		String postPage = null;
+		HashMap<String, Object> map = null;
 		
 		switch(addr) {
 		
@@ -100,7 +103,7 @@ public class BoardController extends HttpServlet {
 			if(postPage == null) {
 				postPage = "1";
 			}
-			HashMap<String, Object> map = service.postList(Integer.parseInt(postPage));
+			map = service.postList(Integer.parseInt(postPage));
 			req.setAttribute("list", map.get("list"));
 			req.setAttribute("currPage", map.get("currPage"));
 			req.setAttribute("totalPage", map.get("totalPage"));
@@ -153,6 +156,82 @@ public class BoardController extends HttpServlet {
 			dis = req.getRequestDispatcher("postList.jsp");
 			dis.forward(req, resp);
 			break;
+			
+		case "/loadComments": //은홍
+			System.out.println("댓글 불러오기 요청");
+			try {
+				map = new HashMap<String, Object>();
+				map = service.loadComments();
+				
+				//가져온 댓글 정보를 ajax success의 data로 넘기기
+				Gson gson = new Gson();
+				String obj = gson.toJson(map);
+				resp.setContentType("text/html; charset=UTF-8");
+				resp.getWriter().println(obj);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		break;
+
+		case "/writeComment": // 은홍
+			System.out.println("댓글 작성 요청");
+			try {
+				success = service.writeComment();
+
+				map = new HashMap<String, Object>();
+				map.put("success", success);
+				Gson gson = new Gson();
+				String obj = gson.toJson(map);
+				resp.getWriter().println(obj);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		break;
+		
+		case "/writeRecomment": // 은홍
+			System.out.println("대댓글 작성 요청");
+			try {
+				success = service.writeRecomment();
+
+				map = new HashMap<String, Object>();
+				map.put("success", success);
+				Gson gson = new Gson();
+				String obj = gson.toJson(map);
+				resp.getWriter().println(obj);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		break;
+		
+		case "/updateComment": // 은홍
+			System.out.println("댓글 수정 요청");
+			try {
+				success = service.updateComment();
+
+				map = new HashMap<String, Object>();
+				map.put("success", success);
+				Gson gson = new Gson();
+				String obj = gson.toJson(map);
+				resp.getWriter().println(obj);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		break;
+		
+		case "/deleteComment": // 은홍
+			System.out.println("댓글 삭제 요청");
+			try {
+				success = service.deleteComment();
+
+				map = new HashMap<String, Object>();
+				map.put("success", success);
+				Gson gson = new Gson();
+				String obj = gson.toJson(map);
+				resp.getWriter().println(obj);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		break;
 		}
 	}
 	

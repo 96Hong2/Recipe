@@ -538,4 +538,157 @@ public class BoardDAO {
 		System.out.println("total : "+total);
 		return total;
 	}
+	
+	public int writeComment(String postId, String content, String userId) { // 은홍
+		System.out.println("BoardDAO writeComment() 들어옴");
+		int success = 0;
+		sql = "INSERT INTO postComment(commentid, comment_content, userId, postId) VALUES(postComment_seq.NEXTVAL, ?,?,?)";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, content);
+			ps.setString(2, userId);
+			ps.setString(3, postId);
+			success = ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return success;
+	}
+
+	public ArrayList<MainDTO> loadComments(String postId) { // 은홍
+		System.out.println("DAO loadComments() 들어옴");
+		// 댓글 및 대댓글 최신순으로 해당 페이지에 보여줄 리스트를 로드한다
+		// DTO로 가져올 데이터 : 댓글ID, 대댓글ID, 내용, 작성날짜, 작성자아이디, 작성자닉네임, 작성자등급, 부모id, 댓글/대댓글여부, 삭제여부, 블라인드여부
+		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
+		sql = "SELECT * FROM(SELECT * FROM (SELECT * FROM ((SELECT a.*, (SELECT blindId FROM blind WHERE classification='C' AND fieldId=a.commentid) isblind FROM (SELECT * FROM (SELECT commentid, null recomid, comment_content, to_char(comment_date,'yyyy-mm-dd hh24:mi') comment_date, userid, (SELECT nickName FROM member WHERE userId=c.userId) nickName,(SELECT rankName FROM rank WHERE rankId=(SELECT rankId FROM member WHERE userId=c.userId)) rankName, null parentid, isdel, postid, 'comment' lev FROM postcomment c ORDER BY comment_date desc)) a) UNION (SELECT b.*, (SELECT blindId FROM blind WHERE classification='R' AND fieldId=b.recomid) isblind FROM (SELECT * FROM (SELECT null commentid, recomid, comment_content, to_char(comment_date,'yyyy-mm-dd hh24:mi') comment_date, userid, (SELECT nickName FROM member WHERE userId=r.userId) nickName,(SELECT rankName FROM rank WHERE rankId=(SELECT rankId FROM member WHERE userId=r.userId)) rankName, commentid parentid, isdel, (SELECT postid FROM postcomment WHERE commentid=r.commentid) postid, 'recomment' lev FROM recomment r ORDER BY comment_date desc)) b)) WHERE postId = ? ORDER BY comment_date DESC) START WITH lev='comment' CONNECT BY PRIOR commentid=parentid ORDER siblings BY comment_date DESC) WHERE ROWNUM <=10";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, postId);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				String commentId = rs.getString("commentId");
+				String recomId = rs.getString("recomId");
+				String content = rs.getString("comment_content");
+				String date = rs.getString("comment_date");
+				String userId = rs.getString("userId");
+				String nickName = rs.getString("nickName");
+				String rankName = rs.getString("rankName");
+				String parentId = rs.getString("parentId");
+				String isDel = rs.getString("isDel");
+				String lev = rs.getString("lev");
+				String isBlind = rs.getString("isBlind");
+				// System.out.println("commentId,recomId,content,date,userId,nickName,rankName,parentId,isDel,lev,isBlind");
+				// System.out.println(commentId+"/"+recomId+"/"+content+"/"+date+"/"+userId+"/"+nickName+"/"+rankName+"/"+parentId+"/"+isDel+"/"+lev+"/"+isBlind);
+
+				MainDTO dto = new MainDTO();
+				dto.setCommentId(commentId);
+				dto.setRecomId(recomId);
+				dto.setComment_content(content);
+				dto.setComment_date(date);
+				dto.setUserId(userId);
+				dto.setNickName(nickName);
+				dto.setRankName(rankName);
+				dto.setParentId(parentId);
+				dto.setIsDel(isDel);
+				dto.setLev(lev);
+				dto.setIsBlind(isBlind);
+				list.add(dto);
+			}
+			System.out.println("BoardDAO loadComments() list size : " + list.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public int getCommentCount(String postId) { // 은홍
+		System.out.println("BoardDAO getCommentCount() 들어옴");
+		// 해당 게시글에 달린 코멘트 개수를 가져옴
+		int cmtNum = 0;
+		sql = "SELECT count(*) cmtCount FROM" + "(SELECT * FROM"
+				+ "((SELECT commentid, null recomid, postId FROM postcomment)" + "UNION"
+				+ "(SELECT null commentid, recomid commentid, (SELECT postid FROM postcomment WHERE commentid=r.commentid) postid FROM recomment r)"
+				+ ") WHERE postId=?)";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, postId);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				cmtNum = rs.getInt("cmtCount");
+				System.out.println("댓글 및 대댓글 개수 : " + cmtNum);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return cmtNum;
+	}
+
+	public int updateComment(String commentId, String lev, String content) { // 은홍
+		int success = 0;
+		if (lev.equals("comment")) {
+			System.out.println("BoardDAO updateComment() 들어옴 - 댓글 수정");
+			sql = "UPDATE postcomment SET comment_content=? WHERE commentid=?";
+			try {
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, content);
+				ps.setString(2, commentId);
+				success = ps.executeUpdate();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("BoardDAO updateComment() 들어옴 - 대댓글 수정");
+			sql = "UPDATE recomment SET comment_content=? WHERE recomid=?";
+			try {
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, content);
+				ps.setString(2, commentId);
+				success = ps.executeUpdate();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return success;
+	}
+
+	public int writeRecomment(String commentId, String content, String userId) {// 은홍
+		System.out.println("BoardDAO writeRecomment() 들어옴");
+		int success = 0;
+		sql = "INSERT INTO recomment(recomid, comment_content, userId, commentId) VALUES(recomment_seq.NEXTVAL, ?,?,?)";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, content);
+			ps.setString(2, userId);
+			ps.setString(3, commentId);
+			success = ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return success;
+	}
+
+	public int deleteComment(String lev, String commentId) { //은홍
+		System.out.println("BoardDAO deleteComment() 들어옴");
+		int success = 0;
+		if (lev.equals("comment")) { //댓글 삭제의 경우
+			sql = "UPDATE postcomment SET isDel='Y' WHERE commentId=?";
+			try {
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, commentId);
+				success = ps.executeUpdate();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else { //대댓글 삭제의 경우
+			sql = "UPDATE recomment SET isDel='Y' WHERE recomId=?";
+			try {
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, commentId);
+				success = ps.executeUpdate();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return success;
+	}
 }

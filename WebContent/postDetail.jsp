@@ -17,7 +17,7 @@
 </script>
 <body>
 	<h2>게시글 상세보기</h2>	
-	<table>
+	<table id="board">
 		<tr>
 			<th>글번호</th>
 			<td>${post.postId}</td>
@@ -71,9 +71,10 @@
 		</tr>
 	</table>
 	
-	
-	
 	<!-- 댓글창 -->
+	<c:import url="./postComment.jsp" charEncoding="utf-8">
+		<c:param name="postId" value="${post.postId}"/>
+	</c:import>
 	
 	
 </body>

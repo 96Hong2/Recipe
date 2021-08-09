@@ -242,7 +242,94 @@ public class BoardService {
 		return map2;
 	}
 	
+	public boolean writeComment() { //은홍
+		System.out.println("BoardService writeComment() 들어옴");
+		boolean success = false;
+		String postId = req.getParameter("postId");
+		String content = req.getParameter("content");
+		String userId = (String) req.getSession().getAttribute("userId");
+		System.out.println("댓글달기 postId/userId/content : "+postId+"/"+userId+"/"+content);
+		
+		BoardDAO dao = new BoardDAO(); 
+		if(dao.writeComment(postId, content, userId) > 0) {
+			success = true;
+		}
+		dao.resClose();
+		System.out.println("댓글 추가 성공 여부 : " + success);
+		return success;
+	}
 
+	public HashMap<String, Object> loadComments() { //은홍
+		System.out.println("BoardService loadComments() 들어옴");
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		BoardDAO dao = new BoardDAO();
+		ArrayList<MainDTO> list = null;
+		String postId = req.getParameter("postId");
+		int cmtNum = 0;
+		
+		try {
+			list = dao.loadComments(postId); //댓글리스트
+			cmtNum = dao.getCommentCount(postId); //댓글개수
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			dao.resClose();
+			map.put("list", list);
+			map.put("cmtNum", cmtNum);
+		}
+		return map;
+	}
+
+	public boolean updateComment() { //은홍
+		System.out.println("BoardService updateComment() 들어옴");
+		boolean success = false;
+		String commentId = req.getParameter("commentId");
+		String lev = req.getParameter("lev");
+		String content = req.getParameter("content");
+		System.out.println("댓글수정 commentId/lev/content : "+commentId+"/"+lev+"/"+content);
+		
+		BoardDAO dao = new BoardDAO(); 
+		if(dao.updateComment(commentId, lev, content) > 0) {
+			success = true;
+		}
+		dao.resClose();
+		System.out.println("댓글 수정 성공 여부 : " + success);
+		return success;
+	}
+
+	public boolean writeRecomment() { //은홍
+		System.out.println("BoardService writeRecomment() 들어옴");
+		boolean success = false;
+		String commentId = req.getParameter("commentId");
+		String content = req.getParameter("content");
+		String userId = (String) req.getSession().getAttribute("userId");
+		System.out.println("대댓글달기 commentId/userId/content : "+commentId+"/"+userId+"/"+content);
+		
+		BoardDAO dao = new BoardDAO(); 
+		if(dao.writeRecomment(commentId, content, userId) > 0) {
+			success = true;
+		}
+		dao.resClose();
+		System.out.println("대댓글 추가 성공 여부 : " + success);
+		return success;
+	}
+
+	public boolean deleteComment() { //은홍
+		System.out.println("BoardService deleteComment() 들어옴");
+		boolean success = false;
+		String commentId = req.getParameter("commentId");
+		String lev = req.getParameter("lev");
+		System.out.println("댓글 삭제 lev/commentId : "+lev+"/"+commentId);
+		
+		BoardDAO dao = new BoardDAO(); 
+		if(dao.deleteComment(lev, commentId) > 0) {
+			success = true;
+		}
+		dao.resClose();
+		System.out.println("댓글 삭제 성공 여부 : " + success);
+		return success;
+	}
 	
 
 	
