@@ -405,7 +405,13 @@ public class BoardDAO {
 				}
 			}else if(categoryId == 0 && postSearchOpt.equals("title_contentsSearch")) {
 				System.out.println("categoryId == 0 && postSearchOpt.equals(\"title_contentsSearch\")  실행");
-				sql += "WHERE rnum between ? AND ? AND (title like ? OR contents like ?)";
+				sql = "SELECT rnum,postid, title,recipePrice, item, hits, likes, imgNewName, nickname,categoryId,contents "+ 
+						"FROM(SELECT ROW_NUMBER() OVER(ORDER BY p.postDate DESC)AS RNUM "+ 
+						",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName,p.categoryId,p.contents "+ 
+						",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
+						"FROM post p LEFT OUTER JOIN image i ON p.postId=i.fieldId AND i.imgField='post_th' "+ 
+						"ORDER BY p.postDate DESC) WHERE rnum between ? AND ? AND (title like ? OR contents like ?)";
+			
 				try {
 					ps = conn.prepareStatement(sql);
 					ps.setInt(1, start);
@@ -432,7 +438,12 @@ public class BoardDAO {
 					}
 			}else if(categoryId == 0 && postSearchOpt.equals("recipePriceSearch")) {
 				System.out.println("categoryId == 0 && postSearchOpt.equals(\"recipePriceSearch\")  실행");
-				sql += "WHERE rnum between ? AND ? AND recipePrice between ? AND ? ";
+				sql = "SELECT rnum,postid, title,recipePrice, item, hits, likes, imgNewName, nickname,categoryId,contents "+ 
+						"FROM(SELECT ROW_NUMBER() OVER(ORDER BY p.postDate DESC)AS RNUM "+ 
+						",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName,p.categoryId,p.contents "+ 
+						",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
+						"FROM post p LEFT OUTER JOIN image i ON p.postId=i.fieldId AND i.imgField='post_th' "+ 
+						"ORDER BY p.postDate DESC) WHERE rnum between ? AND ? AND recipePrice between ? AND ? ";
 				try {
 					ps = conn.prepareStatement(sql);
 					ps.setInt(1, start);
@@ -513,8 +524,8 @@ public class BoardDAO {
 			try {
 				String sql = "SELECT COUNT(postId) FROM post WHERE recipePrice between ? AND ? ";
 				ps = conn.prepareStatement(sql);
-				ps.setString(1, keywords);
-				ps.setString(2, keywords);
+				ps.setString(1, keywordMin);
+				ps.setString(2, keywordMax);
 				rs = ps.executeQuery();
 				
 				if(rs.next()) {

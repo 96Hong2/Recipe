@@ -70,6 +70,12 @@
 			</td>
 		</tr>
 	</table>
+	
+	
+	
+	<!-- 댓글창 -->
+	
+	
 </body>
 <script>	
 	function button_evert(){
@@ -82,16 +88,19 @@
 	}
 	
 	function reportPopUp(postId, nickName){
-		   var url = "./memberReport?postId="+postId+"&&nickname="+nickName;
+		   var url = "./memberReport?classification=P&&postId="+postId+"&&nickName="+nickName;
 		   var option = "width=650, height=500, top=500, location = no, resizable = no";
 		   window.open(url, "reportPopUp", option);
 		          
 		}	
 	function blindPopUp(postId, nickName){
-		   var url = "./memberBlind?postId="+postId+"&&nickname="+nickName;
+		   var url = "./memberBlind?classification=P&&postId="+postId+"&&nickName="+nickName;
 		   var option = "width=650, height=500, top=500, location = no, resizable = no";
-		   window.open(url, "blindPopUp", option);
-		          
+		   window.open(url, "blindPopUp", option);         
 		}	
+	function reloadPage(){
+	       console.log("새로고침");
+	       location.reload();
+	    }
 </script>
 </html>

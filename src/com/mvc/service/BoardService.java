@@ -182,6 +182,8 @@ public class BoardService {
 		int pagePerCnt = 9;
 		int end = postPage * pagePerCnt;
 		int start=(end-pagePerCnt);
+		String notAll = "notAll";
+		
 		
 		list = dao.categoryList(end,start,categoryId);
 		int total = dao.categoryCount(categoryId);
@@ -190,7 +192,7 @@ public class BoardService {
 		map1.put("list", list);
 		map1.put("totalPage", postPages);
 		map1.put("currPage", postPage);
-		
+		map1.put("notAll", notAll);
 		dao.resClose();
 		return map1;
 	}
@@ -201,6 +203,9 @@ public class BoardService {
 		HashMap<String, Object> map2 = new HashMap<String, Object>();
 		BoardDAO dao = new BoardDAO();
 		
+		String notAll = "notAll";
+		String all = "all";
+		String searchPage = "searchPage";
 		int pagePerCnt = 9;
 		int end = postPage * pagePerCnt;
 		int start=(end-pagePerCnt);
@@ -217,10 +222,22 @@ public class BoardService {
 		list = dao.postSearch(keyword,keywordMin,keywordMax,categoryId,postSearchOpt,start,end);
 		int total = dao.searchCount(categoryId,keyword,keywordMin,keywordMax,postSearchOpt);
 		int postPages = (total/pagePerCnt)+1;
+		System.out.println("총 게시글 수: "+total+"/"+"페이지 수: "+postPages);
+		if(categoryId != 0) {
+			map2.put("notAll", notAll);
+		}else {
+			map2.put("all", all);
+		}
 		map2.put("list", list);
 		map2.put("totalPage", postPages);
 		map2.put("currPage", postPage);
 		map2.put("total", total);
+		map2.put("searchPage", searchPage);
+		map2.put("keyword", keyword);
+		map2.put("keywordMin", keywordMin);
+		map2.put("keywordMax", keywordMax);
+		map2.put("postSearchOpt", postSearchOpt);
+		map2.put("categoryId", categoryId);
 		dao.resClose();
 		return map2;
 	}

@@ -84,6 +84,7 @@ public class MainDTO {
    private String fieldId;
    private String imgPath;
    private String field;
+   private String searchResult;
    public Date getRegDate() {
       return regDate;
    }
@@ -569,6 +570,12 @@ public int getGetPoint() {
 }
 public void setGetPoint(int getPoint) {
 	this.getPoint = getPoint;
+}
+public String getSearchResult() {
+	return searchResult;
+}
+public void setSearchResult(String searchResult) {
+	this.searchResult = searchResult;
 }
    
 }

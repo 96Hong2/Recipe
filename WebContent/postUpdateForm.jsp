@@ -60,7 +60,7 @@ if("${sessionScope.userId}"==""){
 			</tr>
 		<tr>
 			<th>예산</th>
-			<td><input type="number" name="recipePrice" max="10000000" value="${post.recipePrice}"/>￦</td>
+			<td><input type="number" name="recipePrice"  max="10000000" value="${post.recipePrice}"/>￦</td>
 		</tr>
 		<tr>
 			<th>재료</th>

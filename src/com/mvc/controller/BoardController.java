@@ -96,6 +96,7 @@ public class BoardController extends HttpServlet {
 			System.out.println("게시글 리스트 요청");
 			postPage = req.getParameter("postPage");
 			String all = "all";
+			String postList = "postList";
 			if(postPage == null) {
 				postPage = "1";
 			}
@@ -104,6 +105,7 @@ public class BoardController extends HttpServlet {
 			req.setAttribute("currPage", map.get("currPage"));
 			req.setAttribute("totalPage", map.get("totalPage"));
 			req.setAttribute("all",all);
+			req.setAttribute("postList",postList);
 			dis = req.getRequestDispatcher("postList.jsp");
 			dis.forward(req, resp);
 			break;
@@ -111,6 +113,7 @@ public class BoardController extends HttpServlet {
 		case "/category" : //영환
 			System.out.println("카테고리별 리스트 요청");
 			postPage = req.getParameter("postPage");
+			String categoryPage = "categoryPage";
 			String category = "category";
 			if(postPage == null) {
 				postPage = "1";
@@ -120,6 +123,8 @@ public class BoardController extends HttpServlet {
 			req.setAttribute("currPage", map1.get("currPage"));
 			req.setAttribute("totalPage", map1.get("totalPage"));
 			req.setAttribute("category", category);
+			req.setAttribute("notAll", map1.get("notAll"));
+			req.setAttribute("categoryPage", categoryPage);
 			dis = req.getRequestDispatcher("postList.jsp");
 			dis.forward(req, resp);
 			break;
@@ -135,8 +140,16 @@ public class BoardController extends HttpServlet {
 			req.setAttribute("list", map2.get("list"));
 			req.setAttribute("currPage", map2.get("currPage"));
 			req.setAttribute("totalPage", map2.get("totalPage"));
-			req.setAttribute("category", category);
 			req.setAttribute("total", map2.get("total"));
+			req.setAttribute("category", category);
+			req.setAttribute("notAll", map2.get("notAll"));
+			req.setAttribute("all", map2.get("all"));
+			req.setAttribute("searchPage", map2.get("searchPage"));
+			req.setAttribute("keyword", map2.get("keyword"));
+			req.setAttribute("keywordMin", map2.get("keywordMin"));
+			req.setAttribute("keywordMax", map2.get("keywordMax"));
+			req.setAttribute("postSearchOpt", map2.get("postSearchOpt"));
+			req.setAttribute("categoryId", map2.get("categoryId"));
 			dis = req.getRequestDispatcher("postList.jsp");
 			dis.forward(req, resp);
 			break;
