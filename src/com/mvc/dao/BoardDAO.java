@@ -334,7 +334,7 @@ public class BoardDAO {
 	}
 
 	public ArrayList<MainDTO> postSearch(String keyword, String keywordMin, String keywordMax, int categoryId,
-			String postSearchOpt, int start, int end) {
+			String postSearchOpt, String keywordNickName, String keywordItem, int start, int end) {
 		System.out.println("BoardDAO postSearch() 실행");
 		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
 		MainDTO dto = null;
@@ -346,6 +346,8 @@ public class BoardDAO {
 					"ORDER BY p.postDate DESC) ";
 					
 		String keywords = '%' + keyword + '%';
+		String keywordNickNames = '%' + keywordNickName + '%';
+		String keywordItems = '%' + keywordItem + '%';
 		
 		if(postSearchOpt.equals("title_contentsSearch") && categoryId != 0) {
 			System.out.println("title_contentsSearch\") && categoryId != 0  실행");
@@ -468,7 +470,61 @@ public class BoardDAO {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-			}
+			}else if(postSearchOpt.equals("nickNameSearch") && categoryId != 0) {
+				System.out.println("nickNameSearch\") && categoryId != 0  실행");
+				sql += "WHERE rnum between ? AND ? AND categoryId=? AND nickName like ?  ";
+				try {
+					ps = conn.prepareStatement(sql);
+					ps.setInt(1, start);
+					ps.setInt(2, end);
+					ps.setInt(3, categoryId);
+					ps.setString(4, keywordNickNames);
+					rs = ps.executeQuery();
+					while(rs.next()) {
+						dto = new MainDTO();
+						dto.setPostId(rs.getString("postId"));
+						dto.setTitle(rs.getString("title"));
+						dto.setRecipePrice(rs.getInt("recipePrice"));
+						dto.setItem(rs.getString("item"));
+						dto.setHits(rs.getInt("hits"));
+						dto.setLikes(rs.getInt("likes"));
+						dto.setImgNewName(rs.getString("imgNewName"));
+						dto.setNickName(rs.getString("nickName"));
+						dto.setCategoryId(rs.getString("categoryId"));
+						dto.setContents(rs.getString("contents"));
+						list.add(dto);
+						}
+					} catch (SQLException e) {
+					e.printStackTrace();
+					}
+				}else if(postSearchOpt.equals("itemSearch") && categoryId != 0) {
+					System.out.println("postSearchOpt.equals(\"itemSearch\") && categoryId != 0  실행");
+						sql += "WHERE rnum between ? AND ? AND categoryId=? AND item ? ";
+						try {
+							ps = conn.prepareStatement(sql);
+							ps.setInt(1, start);
+							ps.setInt(2, end);
+							ps.setInt(3, categoryId);
+							ps.setString(4, keywordItems);
+							rs = ps.executeQuery();
+							while(rs.next()) {
+								dto = new MainDTO();
+								dto.setPostId(rs.getString("postId"));
+								dto.setTitle(rs.getString("title"));
+								dto.setRecipePrice(rs.getInt("recipePrice"));
+								dto.setItem(rs.getString("item"));
+								dto.setHits(rs.getInt("hits"));
+								dto.setLikes(rs.getInt("likes"));
+								dto.setImgNewName(rs.getString("imgNewName"));
+								dto.setNickName(rs.getString("nickName"));
+								dto.setCategoryId(rs.getString("categoryId"));
+								dto.setContents(rs.getString("contents"));
+								list.add(dto);
+							}
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+				}
 		return list;
 	}
 

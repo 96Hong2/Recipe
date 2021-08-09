@@ -213,13 +213,15 @@ public class BoardService {
 		String keyword = req.getParameter("keyword");
 		String keywordMin = req.getParameter("keywordMin");
 		String keywordMax = req.getParameter("keywordMax");
-		System.out.println("키워드 :"+keyword+" / "+"예산최소 :"+keywordMin+" / "+"예산최대 :"+keywordMax);
+		String keywordNickName = req.getParameter("keywordNickName");
+		String keywordItem = req.getParameter("keywordItem");
+		System.out.println("키워드 :"+keyword+" / "+"예산최소 :"+keywordMin+" / "+"예산최대 :"+keywordMax+"닉네임 :"+keywordNickName+" / "+"재료 :"+keywordItem);
 		
 		int categoryId = Integer.parseInt(req.getParameter("categoryId"));
 		String postSearchOpt = req.getParameter("postSearchOpt");
 		System.out.println("categoryId : "+categoryId+" / "+"postSearchOpt : "+postSearchOpt);
 		
-		list = dao.postSearch(keyword,keywordMin,keywordMax,categoryId,postSearchOpt,start,end);
+		list = dao.postSearch(keyword,keywordMin,keywordMax,categoryId,postSearchOpt,keywordNickName,keywordItem,start,end);
 		int total = dao.searchCount(categoryId,keyword,keywordMin,keywordMax,postSearchOpt);
 		int postPages = (total/pagePerCnt)+1;
 		System.out.println("총 게시글 수: "+total+"/"+"페이지 수: "+postPages);
