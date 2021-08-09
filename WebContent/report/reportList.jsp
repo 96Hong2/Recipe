@@ -121,7 +121,7 @@ p {
 				},
 				dataType : 'JSON',
 				success : function(data) {
-					console.log(data);
+					//console.log(data);
 					searchOption(data.searchList);
 					$('.statBtnY').attr('value','처리');
 					$('.statBtnN').attr('value','미처리');
@@ -138,7 +138,7 @@ p {
 				data : {},
 				dataType : 'JSON',
 				success : function(data) {
-					console.log(data);
+					//console.log(data);
 					searchOption(data.searchList);
 					$('.statBtnY').attr('value','처리');
 					$('.statBtnN').attr('value','미처리');
@@ -164,7 +164,7 @@ p {
 	
 		
 	function toggleBtn(idx){
-		console.log("상세사유 보기 버튼 클릭"+idx);
+		//console.log("상세사유 보기 버튼 클릭"+idx);
 		if(!$("#detailToggle"+idx).is(":visible")){
 			$(".toggleBox").hide();
 			$(".toggleBtn").attr("value", "보기");
@@ -182,12 +182,12 @@ p {
 	}
 	 
 	 function reloadPage(){
-		 console.log("새로고침");
+		 //console.log("새로고침");
 		 location.reload();
 	 }
 	 
 	 function reportChk(reportid){
-		 console.log("신고 처리상태 변경 요청");
+		 //console.log("신고 처리상태 변경 요청");
 		 if($("#statBtn"+reportid).attr('value') == "미처리"){
 		 	if(confirm("해당 신고를 처리하시겠습니까?")){
 		 		
@@ -199,7 +199,7 @@ p {
 					data : {"reportId" : reportid, "adminWho" : adminWho},
 					dataType : 'JSON',
 					success : function(data) {
-						console.log(data);
+						//console.log(data);
 						$("#statBtn"+reportid).attr('value','처리');
 					},
 					error : function(e) {
@@ -216,14 +216,14 @@ p {
 		 
 	
 	function drawList(reportList) {
-		console.log(reportList);
+		//console.log(reportList);
 		var content = "";
 
 		if (reportList.length == 0) {
-			console.log("들어온 신고가 없을 때");
+			//console.log("들어온 신고가 없을 때");
 			alert("신고가 존재하지 않습니다.");
 		} else {
-			console.log("들어온 신고가 있을 때");
+			//console.log("들어온 신고가 있을 때");
 
 			reportList.forEach(function(item, idx) {
 						console.log(idx, item);
@@ -251,7 +251,7 @@ p {
 						content += "<tr>";
 						content += "<td>" + reportIdx + "</td>";
 						content += "<td>" + item.userId + "</td>";
-						content += '<td><a href="../postDetail?postId='+item.fieldId+'\'">' + item.classification + item.fieldId + '</a></td>';
+						content += '<td><a href="../postDetail?postId='+item.fieldId+'" target="_blank">' + item.classification + item.fieldId + '</a></td>';
 						content += "<td>" + reportReason + "</td>";
 						content += "<td>" + item.reportDate + "</td>";			
 						content += '<td><input type="button" id="toggleBtn'+idx+'" class="toggleBtn" value="보기" onclick="toggleBtn('+idx+')"/></td>';
@@ -273,16 +273,16 @@ p {
 		var content = "";
 
 		if (searchList.length == 0) {
-			console.log("검색 결과가 없을 때");
+			//console.log("검색 결과가 없을 때");
 			content += "<tr>";
-			content += "<td><p>검색 결과가 없습니다.</p></td>";
+			content += "<td colspan='8'><p>검색 결과가 없습니다.</p></td>";
 			content += "</tr>";
 
 			$("tbody").empty();
 			$("tbody").append(content);
 		} else {
-			console.log("값이 있을 때");
-			console.log("searchList : " + searchList);
+			//console.log("값이 있을 때");
+			//console.log("searchList : " + searchList);
 			searchList.forEach(function(item, idx) {
 						console.log(idx, item);
 						
@@ -307,7 +307,7 @@ p {
 						content += "<tr>";
 						content += "<td>" + reportIdx + "</td>";
 						content += "<td>" + item.userId + "</td>";
-						content += '<td><a href="../postDetail?postId='+item.fieldId+'\'">' + item.classification + item.fieldId + '</a></td>';
+						content += '<td><a href="../postDetail?postId='+item.fieldId+'" target="_blank">' + item.classification + item.fieldId + '</a></td>';
 						content += "<td>" + reportReason + "</td>";
 						content += "<td>" + item.reportDate + "</td>";
 						content += '<td><input type="button" id="toggleBtn'+idx+'" class="toggleBtn" value="보기" onclick="toggleBtn('+idx+')"/></td>';

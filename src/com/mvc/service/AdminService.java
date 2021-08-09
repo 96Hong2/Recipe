@@ -198,16 +198,20 @@ public class AdminService {
 	public int memberBlind() {//지현
 		
 		int change = 0;
-		String userId = req.getParameter("userId");
-		String fieldId = req.getParameter("fieldId");
+		String nickName = req.getParameter("nickName");
+		String postId = req.getParameter("postId");
 		String adminName = req.getParameter("adminName");
 		String blindReason = req.getParameter("textArea");
 		String classification = req.getParameter("classification");
 		
-		System.out.println("글 아이디 : "+fieldId+" /작성자 아이디 : "+userId+" /어드민 : "+adminName+" /블라인드 이유 : "+blindReason+" /분류 : "+classification);
+		System.out.println("글 아이디 : "+postId+" /작성자 닉 : "+nickName+" /어드민 : "+adminName+" /블라인드 이유 : "+blindReason+" /분류 : "+classification);
 		
 		AdminDAO adDao = new AdminDAO();
-		change = adDao.memberBlind(userId, fieldId, adminName, blindReason, classification);
+		try {
+			change = adDao.memberBlind(nickName, postId, adminName, blindReason, classification);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		if(change > 0) {
 			System.out.println("블라인드 성공 : "+change);
 		}else {
@@ -443,6 +447,32 @@ public class AdminService {
 		resp.getWriter().println(new Gson().toJson(map));
 		
 		
+	}
+
+	public int memberReport() {
+		int change = 0;
+		String nickName = req.getParameter("nickName");
+		String postId = req.getParameter("postId");
+		String reportReason = req.getParameter("textArea");
+		String classification = req.getParameter("classification");
+		String opt = req.getParameter("opt");
+		
+		System.out.println("글 아이디 : "+postId+" /작성자 닉 : "+nickName+" /블라인드 이유 : "+reportReason+" /분류 : "+classification+" /옵션 : "+opt);
+		
+		AdminDAO adDao = new AdminDAO();
+		try {
+			change = adDao.memberReport(nickName, postId, reportReason, classification, opt);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if(change > 0) {
+			System.out.println("신고 성공 : "+change);
+		}else {
+			System.out.println("신고 실패");
+		}
+		
+		adDao.resClose();
+		return change;
 	}
 
 

@@ -68,17 +68,18 @@ if("${sessionScope.isAdmin}"!="Y"){
 	request.setCharacterEncoding("UTF-8");
 	String postId = request.getParameter("postId");
 	String nickName = request.getParameter("nickName");
+	String classification = request.getParameter("classification");
 %>
-<form action="./memberBlind" method="get">
+<form action="./blindSth" method="get">
 <table>
 <caption>블라인드 - 알다시피-</caption>
 		<tr>
 			<th>글번호</th>
-			<td><input type="hidden" name="userId" value="<%=postId %>"><%=postId %></td>
+			<td><input type="hidden" name="classification" value="<%=classification%>"><input type="hidden" name="postId" value="<%=postId %>"><%=postId %></td>
 		</tr>
 		<tr>
 			<th>작성자</th>
-			<td><input type="hidden" name="nickname" value="<%=nickName %>"><%=nickName %></td>
+			<td><input type="hidden" name="nickName" value="<%=nickName %>"><%=nickName %></td>
 		</tr>
 		<tr>
 			<th>관리자</th>
@@ -129,6 +130,13 @@ $("#submitBtn").click(function(event){
 		return false;
 	});
 
+var msg = "${msg}";
+
+if(msg != ""){
+	alert(msg);
+	window.opener.reloadPage();
+	window.close();
+}
 	
 </script>
 </html>

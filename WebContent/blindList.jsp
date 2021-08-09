@@ -130,7 +130,7 @@ p {
 	}
 		
 	function toggleBtn(idx){
-		console.log("상세사유 보기 버튼 클릭"+idx);
+		//console.log("상세사유 보기 버튼 클릭"+idx);
 		if(!$("#detailToggle"+idx).is(":visible")){
 			$(".toggleBox").hide();
 			$(".toggleBtn").attr("value", "보기");
@@ -149,12 +149,12 @@ p {
 
 	 
 	 function reloadPage(){
-		 console.log("새로고침");
+		// console.log("새로고침");
 		 location.reload();
 	 }
 	 
 	 function blindNot(blindId){
-		 console.log("블라인드 해제 요청");
+		 //console.log("블라인드 해제 요청");
 		 	if(confirm("해당 글/댓글의 블라인드 상태를 해제하시겠습니까?")){
 		 		
 		 		//var adminWho = "${sessionScope.nickName}";
@@ -183,17 +183,17 @@ p {
 		 
 	
 	function drawList(blindList) {
-		console.log(blindList);
+		//console.log(blindList);
 		var content = "";
 
 		if (blindList.length == 0) {
-			console.log("블라인드가 없을 때");
+			//console.log("블라인드가 없을 때");
 			alert("블라인드가 존재하지 않습니다.");
 		} else {
-			console.log("블라인드가 있을 때");
+			//console.log("블라인드가 있을 때");
 
 			blindList.forEach(function(item, idx) {
-						console.log(idx, item);
+						//console.log(idx, item);
 						
 						var admin = item.managerId;
 						var blindIdx = item.blindId;
@@ -202,8 +202,8 @@ p {
 						
 						content += "<tr>";
 						content += "<td>" + blindIdx + "</td>";
-						content += "<td>" + item.userid + "</td>";
-						content += '<td><a href="../postDetail?postId='+item.fieldId+'\'">' + item.classification + item.fieldId + '</a></td>';
+						content += "<td>" + item.userId + "</td>";
+						content += '<td><a href="./postDetail?postId='+item.fieldId+'" target="_blank">' + item.classification + item.fieldId + '</a></td>';
 						content += "<td>" + item.blindDate + "</td>";			
 						content += '<td><input type="button" id="toggleBtn'+idx+'" class="toggleBtn" value="보기" onclick="toggleBtn('+idx+')"/></td>';
 						content += '<td><input type="button" value="해제" id="statBtn'+blindIdx+'" onclick="blindNot('+blindIdx+')"/></td>';
@@ -224,18 +224,18 @@ p {
 		var content = "";
 
 		if (searchList.length == 0) {
-			console.log("검색 결과가 없을 때");
+			//console.log("검색 결과가 없을 때");
 			content += "<tr>";
-			content += "<td><p>검색 결과가 없습니다.</p></td>";
+			content += "<td colspan='7'><p>검색 결과가 없습니다.</p></td>";
 			content += "</tr>";
 
 			$("tbody").empty();
 			$("tbody").append(content);
 		} else {
-			console.log("값이 있을 때");
-			console.log("searchList : " + searchList);
+			//console.log("값이 있을 때");
+			//console.log("searchList : " + searchList);
 			searchList.forEach(function(item, idx) {
-						console.log(idx, item);
+						//console.log(idx, item);
 						
 						var admin = item.managerId;
 						var blindIdx = item.blindId;
@@ -244,8 +244,8 @@ p {
 						
 						content += "<tr>";
 						content += "<td>" + blindIdx + "</td>";
-						content += "<td>" + item.userid + "</td>";
-						content += '<td><a href="../postDetail?postId='+item.fieldId+'\'">' + item.classification + item.fieldId + '</a></td>';
+						content += "<td>" + item.userId + "</td>";
+						content += '<td><a href="./postDetail?postId='+item.fieldId+'" target="_blank">' + item.classification + item.fieldId + '</a></td>';
 						content += "<td>" + item.blindDate + "</td>";			
 						content += '<td><input type="button" id="toggleBtn'+idx+'" class="toggleBtn" value="보기" onclick="toggleBtn('+idx+')"/></td>';
 						content += '<td><input type="button" value="해제" id="statBtn'+blindIdx+'" onclick="blindNot('+blindIdx+')"/></td>';

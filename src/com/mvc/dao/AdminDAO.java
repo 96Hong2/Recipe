@@ -301,32 +301,35 @@ public class AdminDAO {
 		return rs.next();
 	}
 
-	public int memberBlind(String userId, String classification, String adminName, String blindReason, String fieldId) {//지현
+	public int memberBlind(String nickName, String postId, String adminName, String blindReason, String classification) throws SQLException {//지현
 
 		int change = 0;
-		//int change2 = 0;
 		
 		String sql = "INSERT INTO blind (blindid, userid, classification, fieldid, blindreason, managerid) "
 				+ "VALUES(blind_seq.NEXTVAL, ?, ?, ?, ?, ?)";
+		String sql2 = "SELECT userid FROM member WHERE nickname = ?";
 		
-		try {
-			ps = conn.prepareStatement(sql);
-			ps.setString(1, userId);
-			ps.setString(2, classification);
-			ps.setString(3, fieldId);
-			ps.setString(4, blindReason);
-			ps.setString(5, adminName);
-			change = ps.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+			ps = conn.prepareStatement(sql2);
+			ps.setString(1, nickName);
+			rs = ps.executeQuery();
 		
+			if(rs.next()) {
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, rs.getString("userid"));
+				ps.setString(2, classification);
+				ps.setString(3, postId);
+				ps.setString(4, blindReason);
+				ps.setString(5, adminName);
+				change = ps.executeUpdate();
+			}else {
+				System.out.println("닉네임 오류 발생!");
+			}
 		
 		return change;
 	}
 
 	public ArrayList<MainDTO> reportList() throws SQLException {//지현
-		sql = "SELECT userid, reportid, classification, fieldid, categoryid, reportdate, details, reportstatus, managerid FROM report";
+		sql = "SELECT userid, reportid, classification, fieldid, categoryid, reportdate, details, reportstatus, managerid FROM report ORDER BY reportdate DESC";
 		ArrayList<MainDTO> reportList = new ArrayList<MainDTO>();
 
 			ps = conn.prepareStatement(sql);
@@ -357,7 +360,7 @@ public class AdminDAO {
 		
 		  if(options.equals("관리자") && !content.equals("")) {
 		  
-		  sql += "managerid LIKE ?"; 
+		  sql += "managerid LIKE ? ORDER BY reportdate DESC"; 
 		  
 		  ps = conn.prepareStatement(sql);
 		  ps.setString(1, keywords);
@@ -378,7 +381,7 @@ public class AdminDAO {
 		  
 		  }else if(options.equals("신고자") && !content.equals("")) {
 		  
-		  sql += "userid LIKE ?"; 
+		  sql += "userid LIKE ? ORDER BY reportdate DESC"; 
 		  ps = conn.prepareStatement(sql);
 		  
 		  ps.setString(1, keywords); 
@@ -408,7 +411,7 @@ public class AdminDAO {
 	}
 
 	public ArrayList<MainDTO> reportNotYet() throws SQLException {//지현
-		sql = "SELECT userid, fieldid, classification, reportid, categoryid, reportdate, details, reportstatus, managerid FROM report where reportstatus = ?";
+		sql = "SELECT userid, fieldid, classification, reportid, categoryid, reportdate, details, reportstatus, managerid FROM report WHERE reportstatus = ? ORDER BY reportdate DESC";
 		ArrayList<MainDTO> reportList = new ArrayList<MainDTO>();
 
 			ps = conn.prepareStatement(sql);
@@ -454,7 +457,7 @@ public class AdminDAO {
 	}
 
 	public ArrayList<MainDTO> blindList() throws SQLException {//지현
-		sql = "SELECT userid, blindid, classification, fieldid, blinddate, blindreason, managerid FROM blind";
+		sql = "SELECT userid, blindid, classification, fieldid, blinddate, blindreason, managerid FROM blind ORDER BY blinddate DESC";
 		ArrayList<MainDTO> blindList = new ArrayList<MainDTO>();
 
 			ps = conn.prepareStatement(sql);
@@ -483,7 +486,7 @@ public class AdminDAO {
 		
 		  if(options.equals("관리자") && !content.equals("")) {
 		  
-		  sql += "managerid LIKE ?"; 
+		  sql += "managerid LIKE ? ORDER BY blinddate DESC"; 
 		  
 		  ps = conn.prepareStatement(sql);
 		  ps.setString(1, keywords);
@@ -502,7 +505,7 @@ public class AdminDAO {
 		  
 		  }else if(options.equals("회원아이디") && !content.equals("")) {
 		  
-		  sql += "userid LIKE ?"; 
+		  sql += "userid LIKE ? ORDER BY blinddate DESC"; 
 		  ps = conn.prepareStatement(sql);
 		  
 		  ps.setString(1, keywords); 
@@ -521,7 +524,7 @@ public class AdminDAO {
 		  
 		  }else if(options.equals("블라인드사유") && !content.equals("")) {
 			  
-			  sql += "blindreason LIKE ?"; 
+			  sql += "blindreason LIKE ? ORDER BY blinddate DESC"; 
 			  ps = conn.prepareStatement(sql);
 			  
 			  ps.setString(1, keywords); 
@@ -682,6 +685,32 @@ public class AdminDAO {
 		 
 		//System.out.println("DAO에서 searchList에 담긴 값 : "+searchList);
 		return searchList;
+	}
+
+	public int memberReport(String nickName, String postId, String reportReason, String classification, String opt) throws SQLException {
+	int change = 0;
+		
+		String sql = "INSERT INTO report (reportid, userid, classification, fieldid, details, categoryid) "
+				+ "VALUES(blind_seq.NEXTVAL, ?, ?, ?, ?, ?)";
+		String sql2 = "SELECT userid FROM member WHERE nickname = ?";
+		
+			ps = conn.prepareStatement(sql2);
+			ps.setString(1, nickName);
+			rs = ps.executeQuery();
+		
+			if(rs.next()) {
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, rs.getString("userid"));
+				ps.setString(2, classification);
+				ps.setString(3, postId);
+				ps.setString(4, reportReason);
+				ps.setString(5, opt);
+				change = ps.executeUpdate();
+			}else {
+				System.out.println("닉네임 오류 발생!");
+			}
+		
+		return change;
 	}
 
 

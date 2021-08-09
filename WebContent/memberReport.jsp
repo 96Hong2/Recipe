@@ -67,16 +67,18 @@ if("${sessionScope.isAdmin}"!="Y"){
 	request.setCharacterEncoding("UTF-8");
 	String postId = request.getParameter("postId");
 	String nickName = request.getParameter("nickName");
+	String classification = request.getParameter("classification");
 %>
+<form action="./reportSth" method="get">
 <table>
 <caption>신고하기 - 알다시피</caption>
 		<tr>
 			<th>글번호</th>
-			<td><input type="hidden" name="userId" value="<%=postId %>"><%=postId %></td>
+			<td><input type="hidden" name="classification" value="<%=classification%>"><input type="hidden" name="postId" value="<%=postId %>"><%=postId %></td>
 		</tr>
 		<tr>
 			<th>신고자</th>
-			<td><input type="hidden" name="reporter" value="${sessionScope.nickName}">${sessionScope.nickName}</td>
+			<td><input type="hidden" name="nickName" value="${sessionScope.nickName}">${sessionScope.nickName}</td>
 		</tr>
 		<tr>
 			<th>작성자</th>
@@ -85,12 +87,12 @@ if("${sessionScope.isAdmin}"!="Y"){
 		<tr>
 			<th>신고사유</th>
 			<td>
-				<input type="radio" name="opt" value="inappropriate" checked="checked">부적절한 글
-				<input type="radio" name="opt" value="advertisement">광고성 글
-				<input type="radio" name="opt" value="curse">욕설
-				<input type="radio" name="opt" value="spam">도배 글
-				<input type="radio" name="opt" value="contentNull">무의미한 글
-				<input type="radio" name="opt" value="else">기타
+				<input type="radio" name="opt" value="r1" checked="checked">부적절한 글
+				<input type="radio" name="opt" value="r2">광고성 글
+				<input type="radio" name="opt" value="r3">욕설
+				<input type="radio" name="opt" value="r4">도배 글
+				<input type="radio" name="opt" value="r5">무의미한 글
+				<input type="radio" name="opt" value="r6">기타
 			</td>
 		</tr>
 		<tr>
@@ -108,6 +110,7 @@ if("${sessionScope.isAdmin}"!="Y"){
 		</tr>
 	
 </table>
+</form>
 </body>
 <script>
 $('#textArea').keyup(function (e){
@@ -145,6 +148,14 @@ $("#submitBtn").click(function(event){
 		return false;
 	}
 	});
+	
+var msg = "${msg}";
+
+if(msg != ""){
+	alert(msg);
+	window.opener.reloadPage();
+	window.close();
+}
 	
 </script>
 </html>

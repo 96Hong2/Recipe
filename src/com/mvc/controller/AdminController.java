@@ -14,9 +14,9 @@ import com.mvc.dto.MainDTO;
 import com.mvc.service.AdminService;
 
 @WebServlet({"/memberList","/memberSearch","/memberInfo","/memberUpdate","/memberUpdateForm",
-	"/memberSusPopUp", "/memberSuspend","/memberSusNot","/nickOverlay","/memberBlind",
+	"/memberSusPopUp", "/memberSuspend","/memberSusNot","/nickOverlay","/memberBlind", "/blindSth",
 	"/report/reportList","/report/reportSearch","/report/reportNotYet","/report/reportChk","/blindList","/blindSearch","/blindNot",
-	"/susMemberList","/susMemberSearch"})
+	"/susMemberList","/susMemberSearch","/reportSth","/memberReport"})
 public class AdminController extends HttpServlet {
 
 	@Override
@@ -135,11 +135,24 @@ public class AdminController extends HttpServlet {
 			break;
 			
 		case "/nickOverlay": //지현
-			System.out.println();
+			System.out.println("닉네임 중복체크 요청");
 			adService.nickOverlay();
 			break;
 			
-		case "/memberBlind": //지현
+		case "/memberBlind"://지현
+			System.out.println("게시글 또는 댓글의 블라인드 버튼 누름");
+			String postId = req.getParameter("postId");
+			currNick = req.getParameter("nickName");
+			String classification = req.getParameter("classification");
+			
+			req.setAttribute("postId", postId);
+			req.setAttribute("nickName", currNick);
+			req.setAttribute("classification", classification);
+			dis = req.getRequestDispatcher("memberBlind.jsp");
+			dis.forward(req, resp);
+			break; 
+			
+		case "/blindSth": //지현
 			System.out.println("블라인드 요청");
 			msg = "블라인드 실패";
 			
@@ -200,6 +213,38 @@ public class AdminController extends HttpServlet {
 		case "/susMemberSearch": //지현
 			System.out.println("정지된 회원 검색 요청!");
 			adService.susMemberSearch();
+			break;
+			
+		case "/memberReport"://지현
+			System.out.println("게시글 또는 댓글의 블라인드 버튼 누름");
+			postId = req.getParameter("postId");
+			currNick = req.getParameter("nickName");
+			classification = req.getParameter("classification");
+			System.out.println(postId+"/"+currNick+"/"+classification);
+			
+			req.setAttribute("postId", postId);
+			req.setAttribute("nickName", currNick);
+			req.setAttribute("classification", classification);
+			dis = req.getRequestDispatcher("memberReport.jsp");
+			dis.forward(req, resp);
+			break; 
+			
+		case "/reportSth": //지현
+			System.out.println("신고 요청");
+			msg = "실패";
+			
+			if(adService.memberReport() > 0) {
+				System.out.println("신고 성공!!");
+				msg = "신고가 성공적으로 접수되었습니다.";
+			}else {
+				System.out.println("신고 실패!!");
+				msg = "신고가 접수되지 못했습니다.";
+			}
+			
+			req.setAttribute("msg", msg);
+			dis = req.getRequestDispatcher("memberReport.jsp");
+			dis.forward(req, resp);
+
 			break;
 		}
 		
