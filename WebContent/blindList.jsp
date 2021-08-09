@@ -10,7 +10,7 @@
 <script>
 if("${sessionScope.isAdmin}"!="Y"){
    alert("해당 서비스 접근 권한이 없습니다.");
-   location.href = "../";
+   location.href = "./login.jsp";
 }
 </script>
 <style>
@@ -50,6 +50,12 @@ p {
 #head {
 	background-color: lightblue;
 }
+
+#load{
+	text-decoration: none;
+	color: white;
+	background-color: lightblue;
+}
 </style>
 </head>
 <body>
@@ -78,6 +84,11 @@ p {
 			</tr>
 		</thead>
 		<tbody></tbody>
+		<tfoot>
+			<tr>
+				<td colspan="7" id="loading"><a href="#" id="load">더 보기</a></td>
+			</tr>
+		</tfoot>
 	</table>
 </body>
 <script>
@@ -200,7 +211,7 @@ p {
 						//해당 글 또는 댓글로 이동 - 되는지 확인하기!!
 						//'<td style="color: blue;" onclick="location.href=\'../postDetail?postId='+item.fieldId+'\'">' 
 						
-						content += "<tr>";
+						content += "<tr class='row' style='display:none;'>";
 						content += "<td>" + blindIdx + "</td>";
 						content += "<td>" + item.userId + "</td>";
 						content += '<td><a href="./postDetail?postId='+item.fieldId+'" target="_blank">' + item.classification + item.fieldId + '</a></td>';
@@ -216,6 +227,10 @@ p {
 			$("tbody").empty();
 			$("tbody").append(content);
 	});
+			$(".row").slice(0,10).show();
+			if($(".row:hidden").length == 0){
+				$("#load").css("background-color","grey");
+			}
 		}
 	}
 	
@@ -242,7 +257,7 @@ p {
 						//해당 글 또는 댓글로 이동 - 되는지 확인하기!!
 						//'<td style="color: blue;" onclick="location.href=\'../postDetail?postId='+item.fieldId+'\'">' 
 						
-						content += "<tr>";
+						content += "<tr class='row' style='display:none;'>";
 						content += "<td>" + blindIdx + "</td>";
 						content += "<td>" + item.userId + "</td>";
 						content += '<td><a href="./postDetail?postId='+item.fieldId+'" target="_blank">' + item.classification + item.fieldId + '</a></td>';
@@ -255,10 +270,23 @@ p {
 						content += "<td colspan='7' class='toggleBox' id='detailToggle"+idx+"' style='background-color: gray; color:white; padding:8px; text-align: left; display:none;'> 상세사유 : "+item.blindReason+"</td>";
 						content += "</tr>";
 
-					});
 			$("tbody").empty();
 			$("tbody").append(content);
+					});
+			$(".row").slice(0,10).show();
+			if($(".row:hidden").length == 0){
+				$("#load").css("background-color","grey");
+			}
 		}
 	}
+	
+	
+	$("#load").click(function(e){
+		e.preventDefault();
+		$(".row:hidden").slice(0,10).show();
+		if($(".row:hidden").length == 0){
+			$("#load").css("background-color","grey");
+		}
+	});
 </script>
 </html>

@@ -10,7 +10,7 @@
 <script>
 if("${sessionScope.isAdmin}"!="Y"){
    alert("해당 서비스 접근 권한이 없습니다.");
-   location.href = "../";
+   location.href = "./login.jsp";
 }
 </script>
 <style>
@@ -50,6 +50,12 @@ p {
 #head {
 	background-color: lightblue;
 }
+
+#load{
+	text-decoration: none;
+	color: white;
+	background-color: lightblue;
+}
 </style>
 </head>
 <body>
@@ -79,6 +85,11 @@ p {
 			</tr>
 		</thead>
 		<tbody></tbody>
+		<tfoot>
+			<tr>
+				<td colspan="7" id="loading"><a href="#" id="load">더 보기</a></td>
+			</tr>
+		</tfoot>
 	</table>
 </body>
 <script>
@@ -202,8 +213,7 @@ p {
 							rank = "VIP";
 						}
 
-						
-						content += "<tr>";
+						content += "<tr class='row' style='display:none;'>";
 						content += "<td>" + item.userId + "</td>";
 						content += "<td>" + item.nickname + "</td>";
 						content += "<td>" + item.name + "</td>";
@@ -213,12 +223,14 @@ p {
 						content += '<td><input type="button" value="공백" class="susBtn'+item.userSus+'" onclick="susPopUp(\''+item.userId+'\', \''+item.nickname+'\',\''+item.userSus+'\')"/></td>';
 						content += "</tr>";
 						
-						//console.log("Y버튼 값 : "+$('.susBtnY').val());
-						//console.log("N버튼 값 : "+$('.susBtnN').val());
 						
 			$("tbody").empty();
 			$("tbody").append(content);
 	});
+			$(".row").slice(0,10).show();
+			if($(".row:hidden").length < 1){
+				$("#load").css("background-color","grey");
+			}
 		}
 	}
 	
@@ -251,20 +263,32 @@ p {
 							rank = "VIP";
 						}
 
-						content += "<tr>";
+						content += "<tr class='row' style='display:none;'>";
 						content += "<td>" + item.userId + "</td>";
 						content += "<td>" + item.nickname + "</td>";
 						content += "<td>" + item.name + "</td>";
-						content += "<td>" + rank + "</td>";
-						content += "<td>" + item.userSus + "</td>";
+						content += "<td id='ranks'>" + rank + "</td>";
+						content += '<td id="del_'+idx+'">' + item.userSus + '</td>';
 						content += '<td><input type="button" value="상세보기" onclick="moveDetail(\''+item.userId+'\')"/></td>';
 						content += '<td><input type="button" value="공백" class="susBtn'+item.userSus+'" onclick="susPopUp(\''+item.userId+'\', \''+item.nickname+'\',\''+item.userSus+'\')"/></td>';
 						content += "</tr>";
 
-					});
 			$("tbody").empty();
 			$("tbody").append(content);
+					});
+			$(".row").slice(0,10).show();
+			if($(".row:hidden").length == 0){
+				$("#load").css("background-color","grey");
+			}
 		}
 	}
+		
+		$("#load").click(function(e){
+			e.preventDefault();
+			$(".row:hidden").slice(0,10).show();
+			if($(".row:hidden").length == 0){
+				$("#load").css("background-color","grey");
+			}
+		});
 </script>
 </html>

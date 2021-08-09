@@ -11,7 +11,7 @@
 <script>
 if("${sessionScope.isAdmin}"!="Y"){
    alert("해당 서비스 접근 권한이 없습니다.");
-   location.href = "./";
+   location.href = "./login.jsp";
 }
 </script>
 <style>
@@ -51,6 +51,12 @@ p {
 #head {
 	background-color: lightblue;
 }
+
+#load{
+	text-decoration: none;
+	color: white;
+	background-color: lightblue;
+}
 </style>
 </head>
 <body>
@@ -82,6 +88,11 @@ p {
 			</tr>
 		</thead>
 		<tbody></tbody>
+		<tfoot>
+			<tr>
+				<td colspan="7" id="loading"><a href="#" id="load">더 보기</a></td>
+			</tr>
+		</tfoot>
 	</table>
 </body>
 <script>
@@ -205,7 +216,7 @@ p {
 							susCategory = "";
 						}
 						
-						content += "<tr>";
+						content += "<tr class='row' style='display:none;'>";
 						content += "<td>" + item.userId + "</td>";
 						content += "<td>" + item.nickname + "</td>";
 						content += "<td>" + item.name + "</td>";
@@ -222,6 +233,10 @@ p {
 			$("tbody").empty();
 			$("tbody").append(content);
 	});
+			$(".row").slice(0,10).show();
+			if($(".row:hidden").length == 0){
+				$("#load").css("background-color","grey");
+			}
 		}
 	}
 	
@@ -255,7 +270,7 @@ p {
 							susCategory = "";
 						}
 
-						content += "<tr>";
+						content += "<tr class='row' style='display:none;'>";
 						content += "<td>" + item.userId + "</td>";
 						content += "<td>" + item.nickname + "</td>";
 						content += "<td>" + item.name + "</td>";
@@ -268,10 +283,22 @@ p {
 						content += "<tr>";
 						content += "<td colspan='8' class='toggleBox' id='detailToggle"+idx+"' style='background-color: gray; color:white; padding:8px; text-align: left; display:none;'> 상세사유 : "+item.suspendReason+"</td>";
 						content += "</tr>";
-					});
 			$("tbody").empty();
 			$("tbody").append(content);
+					});
+			$(".row").slice(0,10).show();
+			if($(".row:hidden").length == 0){
+				$("#load").css("background-color","grey");
+			}
 		}
 	}
+	
+	$("#load").click(function(e){
+		e.preventDefault();
+		$(".row:hidden").slice(0,10).show();
+		if($(".row:hidden").length == 0){
+			$("#load").css("background-color","grey");
+		}
+	});
 </script>
 </html>

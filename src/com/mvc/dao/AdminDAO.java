@@ -81,38 +81,18 @@ public class AdminDAO {
 				memberList.add(dto);
 			}
 			
-			/* while(rs.next()) {
-				MainDTO dto = new MainDTO();
-				String usersus = rs.getString("userid");
-				if(userid == usersus) {
-					dto.setUserSus("Y");
-					memberList.add(dto);
-				}else {
-					dto.setUserSus("N");
-					memberList.add(dto);
-				}
-			} */
-			
 			return memberList;
 	}
 
 	public ArrayList<MainDTO> memberSearch(String options, String content) throws SQLException{ //지현
 		sql = "SELECT userid, nickname, name, rankid FROM member WHERE ";
+		String sql2 = "SELECT userid FROM suspend WHERE userid= ?";
 
 		ArrayList<MainDTO> searchList = new ArrayList<MainDTO>();	
+		ResultSet rs2 = null;
+		PreparedStatement ps2 = null;
 		
 		String keywords = '%' + content + '%';
-
-		/*
-		 * ps = conn.prepareStatement(sql); ps.setString(1, "admin"); rs =
-		 * ps.executeQuery(); while(rs.next()) { System.out.println("while문 실행중...");
-		 * MainDTO dto = new MainDTO(); dto.setUserId(rs.getString("userid"));
-		 * dto.setNickname(rs.getString("nickname")); dto.setName(rs.getString("name"));
-		 * dto.setRankId(rs.getString("rankid"));
-		 * dto.setUserDel(rs.getString("userdel")); System.out.println("dto2에 담기 완료");
-		 * searchList.add(dto); System.out.println("DAO의 searchList : "+searchList); }
-		 */
-		
 		
 		  if(options.equals("userId") && !content.equals("")) {
 		  
@@ -124,12 +104,21 @@ public class AdminDAO {
 		  ps.setString(1, keywords);
 		  ps.setString(2, "N");
 		  rs = ps.executeQuery(); 
+		  
 		  while(rs.next()) { 
 		  MainDTO dto = new MainDTO();
 		  dto.setUserId(rs.getString("userid"));
 		  dto.setNickname(rs.getString("nickname")); 
 		  dto.setName(rs.getString("name"));
 		  dto.setRankId(rs.getString("rankid"));
+		  	ps2 = conn.prepareStatement(sql2);
+			ps2.setString(1, rs.getString("userid"));
+			rs2 = ps2.executeQuery();
+			if(rs2.next()) {
+				dto.setUserSus("Y");
+			}else {
+				dto.setUserSus("N");
+			}
 		  searchList.add(dto);
 		  }
 		  
@@ -147,6 +136,14 @@ public class AdminDAO {
 		  dto.setNickname(rs.getString("nickname")); 
 		  dto.setName(rs.getString("name"));
 		  dto.setRankId(rs.getString("rankid"));
+		  	ps2 = conn.prepareStatement(sql2);
+			ps2.setString(1, rs.getString("userid"));
+			rs2 = ps2.executeQuery();
+			if(rs2.next()) {
+				dto.setUserSus("Y");
+			}else {
+				dto.setUserSus("N");
+			}
 		  searchList.add(dto); 
 		  }
 		  
@@ -176,6 +173,14 @@ public class AdminDAO {
 		  dto.setNickname(rs.getString("nickname")); 
 		  dto.setName(rs.getString("name"));
 		  dto.setRankId(rs.getString("rankid"));
+		  	ps2 = conn.prepareStatement(sql2);
+			ps2.setString(1, rs.getString("userid"));
+			rs2 = ps2.executeQuery();
+			if(rs2.next()) {
+				dto.setUserSus("Y");
+			}else {
+				dto.setUserSus("N");
+			}
 		  searchList.add(dto); 
 		  } 
 		  }else {

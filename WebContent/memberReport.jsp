@@ -9,7 +9,7 @@
 <script>
 if("${sessionScope.isAdmin}"!="Y"){
    alert("해당 서비스 접근 권한이 없습니다.");
-   location.href = "../";
+   location.href = "./login.jsp";
 }
 </script>
 <style>
