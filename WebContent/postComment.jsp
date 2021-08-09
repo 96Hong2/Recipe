@@ -118,8 +118,7 @@ div.commentAreaBox {
 		console.log("drawComments() 들어옴");
 		var content = "";
 		var loginId = "${sessionScope.userId}";
-		//var loginIdIsAdmin = "${sessionScope.isAdmin}";
-		var loginIdIsAdmin = "Y";
+		var loginIdIsAdmin = "${sessionScope.isAdmin}";
 		var loginNickName = "${sessionScope.nickName}"
 
 		list.forEach(function(item, idx) {					
