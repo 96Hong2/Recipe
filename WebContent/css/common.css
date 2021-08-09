@@ -121,15 +121,26 @@ td.info {
 	width: 840px;
 	display: grid;
 	grid-template-columns: repeat(3, 280px);
-	grid-template-rows: 256px;
-	width: 840px;
 }
-
 .figure {
 	position: absolute;
 	text-align: center;
 	width: 200px;
 	height: 200px;
+	background-color: #D5D5D5;
+	border-radius: 10px;
+}
+.recipeContainer {
+	margin: auto;
+	width: 840px;
+	display: grid;
+	grid-template-columns: repeat(3, 280px);
+}
+.recipeFigure {
+	position: absolute;
+	text-align: center;
+	width: 200px;
+	height: 215px;
 	background-color: #D5D5D5;
 	border-radius: 10px;
 }

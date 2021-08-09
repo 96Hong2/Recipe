@@ -60,7 +60,7 @@
 						상품이 없습니다.
 				</c:if>
 				<c:forEach items="${shop}" var="product">
-					<div style="margin: 10px; width: 280px; height: 232px;">
+					<div style="width: 280px; height: 232px;">
 						<a href="shopDetail?productId=${product.productId}"	style="background-color: black">
 							<figure class="figure">
 								<c:if test="${product.stock eq 0}">
