@@ -51,7 +51,7 @@ public class ShopDAO {
 	}
 
 	public ArrayList<MainDTO> shopList() { // 의건
-		String sql = "SELECT productid, productname, price, stock, isdel FROM product ORDER BY productid DESC";
+		String sql = "SELECT productid, productname, price, stock FROM product WHERE isDel = 'N' ORDER BY productid DESC";
 		ArrayList<MainDTO> list = null;
 		MainDTO dto = null;
 
@@ -65,7 +65,6 @@ public class ShopDAO {
 				dto.setProductName(rs.getString("productname"));
 				dto.setPrice(rs.getInt("price"));
 				dto.setStock(rs.getInt("stock"));
-				dto.setIsDel(rs.getString("isdel"));
 				list.add(dto);
 			}
 		} catch (Exception e) {

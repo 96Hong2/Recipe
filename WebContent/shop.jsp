@@ -39,7 +39,7 @@
 				<ul>
 					<li><a href="#">알다시피란?</a></li>
 					<li><a href="#">베스트레시피</a></li>
-					<li><a href="#">레시피게시판</a></li>
+					<li><a href="./postList">레시피게시판</a></li>
 					<li><a href="./shop">쇼핑몰</a></li>
 				</ul>
 			</div>

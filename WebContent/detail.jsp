@@ -40,7 +40,7 @@
 				<ul>
 					<li><a href="#">알다시피란?</a></li>
 					<li><a href="#">베스트레시피</a></li>
-					<li><a href="#">레시피게시판</a></li>
+					<li><a href="./postList">레시피게시판</a></li>
 					<li><a href="./shop">쇼핑몰</a></li>
 				</ul>
 			</div>
@@ -99,16 +99,8 @@
 
 	$("#stockSelect").click(function() {
 		$pCnt = $("input[name='productCnt']").val();
-		var $stock = $
-		{
-			product.stock
-		}
-		;
-		var $price = $
-		{
-			product.price
-		}
-		;
+		var $stock = ${product.stock};
+		var $price = ${product.price};
 		var $totalPrice = $pCnt * $price;
 		console.log($stock);
 		console.log($pCnt);
@@ -130,18 +122,10 @@
 			var $pId = new String("${product.productId}");
 			//var $pId = ${product.productId};
 			var $pName = new String("${product.productName}");
-			var $pPrice = $
-			{
-				product.price
-			}
-			;
+			var $pPrice = ${product.price};
 			var $pCnt = $("input[name='productCnt']").val();
 			var $tPrice = $pCnt * $pPrice;
-			var $stock = $
-			{
-				product.stock
-			}
-			;
+			var $stock = ${product.stock};
 			console.log("id_" + $pId);
 			console.log("name_" + $pName);
 			console.log("price_" + $pPrice);
@@ -162,34 +146,33 @@
 			} else {
 				console.log("왜지왜지왜지" + $tPrice);
 
-				$
-						.ajax({
-							type : 'get',
-							url : 'cartAdd',
-							data : param,
-							dataType : 'JSON',
-							success : function(data) {
+				$.ajax({
+					type : 'get',
+					url : 'cartAdd',
+					data : param,
+					dataType : 'JSON',
+					success : function(data) {
+						console.log(data);
+						if (data.success) {
+							if (data.success == -1) {
+								alert("이미 담긴 수량과 새로 담으려는 수량이 재고수량보다 많습니다. \r\n장바구니를 확인해주세요.");
+							} else {
 								console.log(data);
-								if (data.success) {
-									if (data.success == -1) {
-										alert("이미 담긴 수량과 새로 담으려는 수량이 재고수량보다 많습니다. \r\n장바구니를 확인해주세요.");
-									} else {
-										console.log(data);
-										isAdd = confirm("장바구니에 담았습니다. 장바구니를 확인하시겠습니까?");
-										if (isAdd) {
-											location.href = 'cart.jsp';
-										}
-
-									}
-								} else {
-									alert("장바구니에 담지 못했습니다.\r\n 다시 시도해주세요.")
+								isAdd = confirm("장바구니에 담았습니다. 장바구니를 확인하시겠습니까?");
+								if (isAdd) {
+									location.href = 'cart.jsp';
 								}
 
-							},
-							error : function(e) {
-								console.log(e);
 							}
-						});
+						} else {
+							alert("장바구니에 담지 못했습니다.\r\n 다시 시도해주세요.")
+						}
+
+					},
+					error : function(e) {
+						console.log(e);
+					}
+				});
 			}
 		}
 	}
@@ -202,18 +185,10 @@
 			var $pId = new String("${product.productId}");
 			//var $pId = ${product.productId};
 			var $pName = new String("${product.productName}");
-			var $pPrice = $
-			{
-				product.price
-			}
-			;
+			var $pPrice = ${product.price};
 			var $pCnt = $("input[name='productCnt']").val();
 			var $tPrice = $pCnt * $pPrice;
-			var $stock = $
-			{
-				product.stock
-			}
-			;
+			var $stock = ${product.stock};
 
 			console.log("id_" + $pId);
 			console.log("name_" + $pName);
