@@ -151,6 +151,8 @@ public class BoardController extends HttpServlet {
 			req.setAttribute("keyword", map2.get("keyword"));
 			req.setAttribute("keywordMin", map2.get("keywordMin"));
 			req.setAttribute("keywordMax", map2.get("keywordMax"));
+			req.setAttribute("keywordNickName", map2.get("keywordNickName"));
+			req.setAttribute("keywordItem", map2.get("keywordItem"));
 			req.setAttribute("postSearchOpt", map2.get("postSearchOpt"));
 			req.setAttribute("categoryId", map2.get("categoryId"));
 			dis = req.getRequestDispatcher("postList.jsp");

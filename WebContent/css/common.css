@@ -194,3 +194,7 @@ th {
 	float:left;
 	margin-left:30px;
 }
+.recipeFigure:hover, .recipeFigure:focus {
+   opacity: 0.5;
+   color: white;
+}

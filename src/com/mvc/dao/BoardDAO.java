@@ -499,7 +499,7 @@ public class BoardDAO {
 					}
 				}else if(postSearchOpt.equals("itemSearch") && categoryId != 0) {
 					System.out.println("postSearchOpt.equals(\"itemSearch\") && categoryId != 0  실행");
-						sql += "WHERE rnum between ? AND ? AND categoryId=? AND item ? ";
+						sql += "WHERE rnum between ? AND ? AND categoryId=? AND item like ? ";
 						try {
 							ps = conn.prepareStatement(sql);
 							ps.setInt(1, start);
@@ -524,14 +524,79 @@ public class BoardDAO {
 						} catch (SQLException e) {
 							e.printStackTrace();
 						}
+				}else if(categoryId == 0 && postSearchOpt.equals("nickNameSearch")) {
+					System.out.println("categoryId == 0 && postSearchOpt.equals(\"nickNameSearch\")  실행");
+					sql = "SELECT rnum,postid, title,recipePrice, item, hits, likes, imgNewName, nickname,categoryId,contents "+ 
+							"FROM(SELECT ROW_NUMBER() OVER(ORDER BY p.postDate DESC)AS RNUM "+ 
+							",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName,p.categoryId,p.contents "+ 
+							",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
+							"FROM post p LEFT OUTER JOIN image i ON p.postId=i.fieldId AND i.imgField='post_th' "+ 
+							"ORDER BY p.postDate DESC) WHERE rnum between ? AND ? AND nickName like ?";
+				
+					try {
+						ps = conn.prepareStatement(sql);
+						ps.setInt(1, start);
+						ps.setInt(2, end);
+						ps.setString(3, keywordNickNames);
+						rs = ps.executeQuery();
+						while(rs.next()) {
+							dto = new MainDTO();
+							dto.setPostId(rs.getString("postId"));
+							dto.setTitle(rs.getString("title"));
+							dto.setRecipePrice(rs.getInt("recipePrice"));
+							dto.setItem(rs.getString("item"));
+							dto.setHits(rs.getInt("hits"));
+							dto.setLikes(rs.getInt("likes"));
+							dto.setImgNewName(rs.getString("imgNewName"));
+							dto.setNickName(rs.getString("nickName"));
+							dto.setCategoryId(rs.getString("categoryId"));
+							dto.setContents(rs.getString("contents"));
+							list.add(dto);
+							}
+						} catch (SQLException e) {
+						e.printStackTrace();
+						}
+				}else if(categoryId == 0 && postSearchOpt.equals("recipePriceSearch")) {
+					System.out.println("categoryId == 0 && postSearchOpt.equals(\"recipePriceSearch\")  실행");
+					sql = "SELECT rnum,postid, title,recipePrice, item, hits, likes, imgNewName, nickname,categoryId,contents "+ 
+							"FROM(SELECT ROW_NUMBER() OVER(ORDER BY p.postDate DESC)AS RNUM "+ 
+							",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName,p.categoryId,p.contents "+ 
+							",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
+							"FROM post p LEFT OUTER JOIN image i ON p.postId=i.fieldId AND i.imgField='post_th' "+ 
+							"ORDER BY p.postDate DESC) WHERE rnum between ? AND ? AND item like ? ";
+					try {
+						ps = conn.prepareStatement(sql);
+						ps.setInt(1, start);
+						ps.setInt(2, end);
+						ps.setString(3, keywordItems);
+						rs = ps.executeQuery();
+						while(rs.next()) {
+							dto = new MainDTO();
+							dto.setPostId(rs.getString("postId"));
+							dto.setTitle(rs.getString("title"));
+							dto.setRecipePrice(rs.getInt("recipePrice"));
+							dto.setItem(rs.getString("item"));
+							dto.setHits(rs.getInt("hits"));
+							dto.setLikes(rs.getInt("likes"));
+							dto.setImgNewName(rs.getString("imgNewName"));
+							dto.setNickName(rs.getString("nickName"));
+							dto.setCategoryId(rs.getString("categoryId"));
+							dto.setContents(rs.getString("contents"));
+							list.add(dto);
+						}
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 				}
 		return list;
 	}
 
-	public int searchCount(int categoryId, String keyword, String keywordMin, String keywordMax, String postSearchOpt) {
+	public int searchCount(String keywordMax, String keyword, String keywordMin, int categoryId, String postSearchOpt, String keywordItem, String keywordNickName) {
 		System.out.println("BoardDAO searchCount() 실행");
 		int total = 0;
 		String keywords = '%' + keyword + '%';
+		String keywordNickNames = '%' + keywordNickName + '%';
+		String keywordItems = '%' + keywordItem + '%';
 		if(postSearchOpt.equals("title_contentsSearch") && categoryId != 0 ) {
 			try {
 				String sql = "SELECT COUNT(postId) FROM post WHERE categoryId=? AND title like ? OR contents like ? ";
@@ -582,6 +647,60 @@ public class BoardDAO {
 				ps = conn.prepareStatement(sql);
 				ps.setString(1, keywordMin);
 				ps.setString(2, keywordMax);
+				rs = ps.executeQuery();
+				
+				if(rs.next()) {
+					total = rs.getInt(1);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}if(postSearchOpt.equals("nickNameSearch") && categoryId != 0 ) {
+			try {
+				String sql = "SELECT COUNT(p.postId) FROM post p, member m WHERE p.userId=m.userId AND categoryId=? AND nickName like ? ";
+				ps = conn.prepareStatement(sql);
+				ps.setInt(1, categoryId);
+				ps.setString(2, keywordNickNames);
+				rs = ps.executeQuery();
+				
+				if(rs.next()) {
+					total = rs.getInt(1);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}else if(postSearchOpt.equals("itemSearch") && categoryId != 0) {
+			try {
+				String sql = "SELECT COUNT(postId) FROM post WHERE categoryId=? AND item like ?";
+				ps = conn.prepareStatement(sql);
+				ps.setInt(1, categoryId);
+				ps.setString(2, keywordItems);
+				rs = ps.executeQuery();
+
+				if(rs.next()) {
+					total = rs.getInt(1);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}else if(categoryId == 0 && postSearchOpt.equals("nickNameSearch")) {
+			try {
+				String sql = "SELECT COUNT(p.postId) FROM post p, member m WHERE p.userId=m.userId AND nickName like ?  ";
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, keywordNickNames);
+				rs = ps.executeQuery();
+				
+				if(rs.next()) {
+					total = rs.getInt(1);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}else if(categoryId == 0 && postSearchOpt.equals("itemSearch")) {
+			try {
+				String sql = "SELECT COUNT(postId) FROM post WHERE item like ? ";
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, keywordItems);
 				rs = ps.executeQuery();
 				
 				if(rs.next()) {

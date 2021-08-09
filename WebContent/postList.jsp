@@ -85,24 +85,25 @@
 
 				<form action="postSearch" method="get" id="postSearch">
 					<select name="postSearchOpt" id="postSearchOpt">
-						<option value='title_contentsSearch' selected="selected">제목
-							+ 내용</option>
+						<option value='title_contentsSearch' selected="selected">제목 + 내용</option>
 						<option value='recipePriceSearch'>예산</option>
 						<option value='nickNameSearch'>닉네임</option>
 						<option value='itemSearch'>재료</option>
-					</select> <span id="option1"><input type="text"
-						id="title_contentsSearch" name="keyword" placeholder="제목 + 내용 입력" /></span>
-					<span hidden="hidden" id="option2"><input type="number"
-						id="recipePriceSearch" name="keywordMin" placeholder="최소 예산" /> ~
-						<input type="number" name="keywordMax" placeholder="최대 예산" />￦</span> <span
-						hidden="hidden" id="option3"><input type="text"
-						id="nickNameSearch" name="keywordNickName" placeholder="닉네임 입력" /></span>
+					</select> 
+					<span id="option1">
+						<input type="text" id="title_contentsSearch" name="keyword" placeholder="제목 + 내용 입력" />
+					</span>
+					<span hidden="hidden" id="option2">
+						<input type="number" id="recipePriceSearch" name="keywordMin" placeholder="최소 예산" /> ~
+						<input type="number" name="keywordMax" placeholder="최대 예산" />￦
+					</span> 
+					<span hidden="hidden" id="option3">
+						<input type="text" id="nickNameSearch" name="keywordNickName" placeholder="닉네임 입력" />
+					</span>
 					<span hidden="hidden" id="option4"><input type="text"
 						id="itemSearch" name="keywordItem" placeholder="재료 입력" /></span>
-					<c:if
-						test="${category.equals(category) && total != 0 && notAll.equals(notAll)}">
-						<input type="hidden" name="categoryId"
-							value="${list[0].categoryId}" />
+					<c:if test="${category.equals(category) && total != 0 && notAll.equals(notAll)}">
+						<input type="hidden" name="categoryId" value="${list[0].categoryId}" />
 					</c:if>
 					<c:if test="${all.equals(all) || total == 0}">
 						<input type="hidden" name="categoryId" value="0" />
@@ -166,54 +167,28 @@
 						</c:forEach>
 					</c:when>
 					<c:otherwise>
-						<div>검색된 내용이 없습니다.</div>
+						<div>검색된 결과가 없습니다.</div>
 					</c:otherwise>
 				</c:choose>
 			</div>
 
 			<div class="pageArea" style="width:740px; margin:auto; text-align:center;">
-				<c:if test="${i ne currPage && postList.equals(postList)}">
-					<button type="button"
-						onclick="location.href='./postList?postPage=${start}&button=1'">이전</button>
-				</c:if>
-				<c:if test="${i ne currPage && categoryPage.equals(categoryPage)}">
-					<button type="button"
-						onclick="location.href='./category?categoryId=${list[0].categoryId}&postPage=${start}&button=1'">이전</button>
-				</c:if>
-				<c:if test="${i ne currPage && searchPage.equals(searchPage)}">
-					<button type="button"
-						onclick="location.href='./postSearch?postSearchOpt=${postSearchOpt}&keyword=${keyword}&keywordMin=${keywordMin}&keywordMax=${keywordMax}&categoryId=${categoryId}&postPage=${start}&button=1'">이전</button>
-				</c:if>
-				<c:forEach var="i" begin="${start }" end="${end}" step="1">
-					<span class="postPage"> <c:if
-							test="${i ne currPage && postList.equals(postList)}">
-							<a href="./postList?postPage=${i}">${i}</a>
-						</c:if> <c:if
-							test="${i ne currPage && categoryPage.equals(categoryPage)}">
-							<a
-								href="./category?categoryId=${list[0].categoryId}&postPage=${i}">${i}</a>
-						</c:if> <c:if test="${i ne currPage && searchPage.equals(searchPage)}">
-							<a
-								href="./postSearch?postSearchOpt=${postSearchOpt}&keyword=${keyword}&keywordMin=${keywordMin}&keywordMax=${keywordMax}&categoryId=${categoryId}&postPage=${i}">${i}</a>
-						</c:if> <c:if test="${i eq currPage }">
-							<b>${i}</b>
-						</c:if>
-					</span>
+				<c:if test="${i ne currPage && postList.equals(postList)}"><button type="button" onclick="location.href='./postList?postPage=${start}&button=1'">이전</button></c:if>
+				<c:if test="${i ne currPage && categoryPage.equals(categoryPage)}"><button type="button" onclick="location.href='./category?categoryId=${list[0].categoryId}&postPage=${start}&button=1'">이전</button></c:if>
+				<c:if test="${i ne currPage && searchPage.equals(searchPage)}"><button type="button" onclick="location.href='./postSearch?postSearchOpt=${postSearchOpt}&keyword=${keyword}&keywordMin=${keywordMin}&keywordMax=${keywordMax}&categoryId=${categoryId}&postPage=${start}&button=1'">이전</button></c:if>
+			<c:forEach var="i" begin="${start }" end="${end}" step="1">
+			<span class="postPage"> 
+				<c:if test="${i ne currPage && postList.equals(postList)}"><a href="./postList?postPage=${i}">${i}</a></c:if> 
+				<c:if test="${i ne currPage && categoryPage.equals(categoryPage)}"><a href="./category?categoryId=${list[0].categoryId}&postPage=${i}">${i}</a></c:if>
+				<c:if test="${i ne currPage && searchPage.equals(searchPage)}"><a href="./postSearch?postSearchOpt=${postSearchOpt}&keyword=${keyword}&keywordMin=${keywordMin}&keywordMax=${keywordMax}&keywordNickName=${keywordNickName}&keywordItem=${keywordItem}categoryId=${categoryId}&postPage=${i}">${i}</a></c:if>
+				<c:if test="${i eq currPage }"><b>${i}</b></c:if>
+			</span>
 				</c:forEach>
-				<c:if test="${i ne currPage && postList.equals(postList)}">
-					<button type="button"
-						onclick="location.href='./postList?postPage=${end}&button=2'">다음</button>
-				</c:if>
-				<c:if test="${i ne currPage && categoryPage.equals(categoryPage)}">
-					<button type="button"
-						onclick="location.href='./category?categoryId=${list[0].categoryId}&postPage=${end}&button=2'">다음</button>
-				</c:if>
-				<c:if test="${i ne currPage && searchPage.equals(searchPage)}">
-					<button type="button"
-						onclick="location.href='./postSearch?postSearchOpt=${postSearchOpt}&keyword=${keyword}&keywordMin=${keywordMin}&keywordMax=${keywordMax}&categoryId=${categoryId}&postPage=${end}&button=2'">다음</button>
-				</c:if>
+				<c:if test="${i ne currPage && postList.equals(postList)}"><button type="button" onclick="location.href='./postList?postPage=${end}&button=2'">다음</button></c:if> 
+				<c:if test="${i ne currPage && categoryPage.equals(categoryPage)}"><button type="button" onclick="location.href='./category?categoryId=${list[0].categoryId}&postPage=${end}&button=2'">다음</button></c:if> 
+				<c:if test="${i ne currPage && searchPage.equals(searchPage)}"><button type="button" onclick="location.href='./postSearch?postSearchOpt=${postSearchOpt}&keyword=${keyword}&keywordMin=${keywordMin}&keywordMax=${keywordMax}&categoryId=${categoryId}&postPage=${end}&button=2'">다음</button></c:if> 
 			</div>
-	</div>
+	
 	</main>
 	<footer></footer>
 	</div>

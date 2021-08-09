@@ -222,7 +222,7 @@ public class BoardService {
 		System.out.println("categoryId : "+categoryId+" / "+"postSearchOpt : "+postSearchOpt);
 		
 		list = dao.postSearch(keyword,keywordMin,keywordMax,categoryId,postSearchOpt,keywordNickName,keywordItem,start,end);
-		int total = dao.searchCount(categoryId,keyword,keywordMin,keywordMax,postSearchOpt);
+		int total = dao.searchCount(keyword,keywordMin,keywordMax,categoryId,postSearchOpt,keywordNickName,keywordItem);
 		int postPages = (total/pagePerCnt)+1;
 		System.out.println("총 게시글 수: "+total+"/"+"페이지 수: "+postPages);
 		if(categoryId != 0) {
@@ -238,6 +238,8 @@ public class BoardService {
 		map2.put("keyword", keyword);
 		map2.put("keywordMin", keywordMin);
 		map2.put("keywordMax", keywordMax);
+		map2.put("keywordNickName", keywordNickName);
+		map2.put("keywordItem", keywordItem);
 		map2.put("postSearchOpt", postSearchOpt);
 		map2.put("categoryId", categoryId);
 		dao.resClose();
