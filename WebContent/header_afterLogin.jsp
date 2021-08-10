@@ -12,6 +12,51 @@
 </head>
 <body>
 	<c:choose>
+		<c:when test="${not empty sessionScope.isAdmin}">
+			<div class="wrap">
+				<div id="header" style="height: 100px; display: flex;">
+					<div style="width:300px;">
+						<a href="./"> <img src="hlogo.png" alt="로고"
+							style="margin-left:20px; width:100px; height:100px;" /></a>
+					</div>
+					<div id="center_img" style="text-align:center; width: 300px; height:100px; line-height:100px;">
+						<a href="./"><img src="center.png" alt="센터" style="width:250px; height:100px;"></a>
+					</div>
+					<div id="top_menu" style="width: 300px; text-align:right; ">
+						<div>
+							<ul>
+								<li>${sessionScope.nickName} 님,
+								<a href="./cashHistory">&nbsp;보유캐시 :&nbsp; &nbsp; <b id="showCash"></b> 원
+								</a>
+								</li>
+							</ul>
+						</div>
+						<div>
+							<ul>
+								<li><a href="adminMain.jsp">관리자페이지</a></li>
+								<li><a href="./myPage">마이페이지</a></li>
+								<li><a href="./logout">로그아웃</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="search">
+					<form action="postSearch?postSearchOpt=title_contentsSearch"
+						method="get" id="search">
+						<input type="text" id="keyword" placeholder="검색어입력" />
+						<button>검색</button>
+					</form>
+				</div>
+				<div id="menu">
+					<ul>
+						<li><a href="#">알다시피란?</a></li>
+						<li><a href="./bestPost">베스트레시피</a></li>
+						<li><a href="./postList">레시피게시판</a></li>
+						<li><a href="./shop">쇼핑몰</a></li>
+					</ul>
+				</div>
+			</div>
+		</c:when>
 		<c:when test="${not empty sessionScope.userId}">
 			<div class="wrap">
 				<div id="header" style="height: 100px; display: flex;">
