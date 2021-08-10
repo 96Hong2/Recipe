@@ -20,15 +20,15 @@
 							style="margin-left:20px; width:100px; height:100px;" /></a>
 					</div>
 					<div id="center_img" style="text-align:center; width: 300px; height:100px; line-height:100px;">
-						<a href="./"><img src="center.png" alt="센터" style="width:250px; height:100px;"><a href="./">
+						<a href="./"><img src="center.png" alt="센터" style="width:250px; height:100px;"></a>
 					</div>
 					<div id="top_menu" style="width: 300px; text-align:right; ">
 						<div>
 							<ul>
-								<li>${sessionScope.nickName} 님, <a
-									href="./cashHistory">&nbsp;보유캐시 :&nbsp; &nbsp; <b
-										id="showCash"></b> 원
-								</a></li>
+								<li>${sessionScope.nickName} 님,
+								<a href="./cashHistory">&nbsp;보유캐시 :&nbsp; &nbsp; <b id="showCash"></b> 원
+								</a>
+								</li>
 							</ul>
 						</div>
 						<div>
