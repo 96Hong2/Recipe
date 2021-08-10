@@ -3,6 +3,9 @@
 	width: 900px;
 }
 
+#header {
+	height:100px;
+}
 #logo {
 	margin: auto;
 	position: absolute;

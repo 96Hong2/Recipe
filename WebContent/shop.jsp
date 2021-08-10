@@ -12,37 +12,7 @@
 <body>
 	<div class="wrap">
 		<header>
-			<div id="header">
-
-				<a href="./"> <img src="logo.png" alt="로고" width="150px"
-					height="50px" /></a>
-
-				<div id="top_menu">
-					<ul>
-						<li><a href="./login.jsp">로그인</a></li>
-						<li><a href="./logout">로그아웃</a></li>
-						<li><a href="./cart.jsp">장바구니</a></li>
-						<li><a href="./myPage">마이페이지</a></li>
-					</ul>
-				</div>
-
-			</div>
-
-			<div class="search">
-				<form action="#" method="get" id="search">
-					<input type="text" id="keyword" placeholder="검색어입력" />
-					<button>검색</button>
-				</form>
-			</div>
-
-			<div id="menu">
-				<ul>
-					<li><a href="#">알다시피란?</a></li>
-					<li><a href="#">베스트레시피</a></li>
-					<li><a href="./postList">레시피게시판</a></li>
-					<li><a href="./shop">쇼핑몰</a></li>
-				</ul>
-			</div>
+			<%@include file="header_afterLogin.jsp"%>
 		</header>
 
 		<main id="body">
