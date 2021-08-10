@@ -26,10 +26,16 @@ if("${sessionScope.isAdmin}"!="Y"){
 			<td><input type="text" name="productName" value="${product.productName}"/></td>
 		</tr>
 		<tr>
-			<td>썸네일 이미지<input type= "file" name="image"  ></td>
-		</tr>
-		<tr>
-			<td>첨부 이미지 <input type= "file" name="image" ></td>				
+			<td>
+		<c:import url="./fileUpdate.jsp" charEncoding="utf-8">
+         <c:param name="field" value="product"/>
+         <c:param name="fieldId" value="${product.productId }"/>
+         <c:param name="ex_thumbnail" value="${product.th_imgid}"/>
+         <c:param name="ex_contentImg" value="${product.imgid}"/>
+        <c:param name="ex_thumbnail_Name" value="${product.th_imgNewName}"/>
+        <c:param name="ex_contentImg_Name" value="${product.imgNewName}"/>
+      </c:import>
+      </td>				
 		</tr>
 		<tr>
 		<td>개당 가격:<input type="text" name="price" maxlength="8" value="${product.price}"> 원
@@ -41,7 +47,7 @@ if("${sessionScope.isAdmin}"!="Y"){
 		<tr>
 			<td colspan="2">
 			<input type="button" onclick="location.href='./adminProductList'" value="상품 리스트"/>
-			<button>상품 수정하기</button>
+			<button id='submitBtn' type='button' onclick='javascript:save()'>상품 수정하기</button>
 			</td>
 		</tr>
 	</table>

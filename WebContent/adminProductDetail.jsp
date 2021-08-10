@@ -20,8 +20,23 @@ if("${sessionScope.isAdmin}"!="Y"){
 		<td>${product.productName}</td>
 	</tr>
 	<tr>
-		<th>첨부 이미지</th>
-		<td colspan="14"><c:if test="${product.imgNewName ne null }"><img src="/photo/${product.imgNewName}" width="500px" height="500px"/></c:if></td>
+		<th>썸네일 이미지</th>
+			<td colspan="14"><c:if test="${product.th_imgNewName ne null }">
+					<img src="/photo/${product.th_imgNewName}" width="250px"
+						height="150px" />
+				</c:if></td>
+			<c:if test="${product.th_imgNewName eq null }">
+				<td colspan="3"><img src="./defaultThum.png"
+					onclick="location.href='productDetail?productId=${product.productId}'" /></td></c:if>
+			<th>첨부 이미지</th>
+			<td colspan="14"><c:if test="${product.imgNewName ne null }">
+					<img src="/photo/${product.imgNewName}" width="250px"
+						height="150px" />
+				</c:if></td>
+			<c:if test="${product.imgNewName eq null }">
+				<td colspan="3"><img src="./defaultThum.png"
+					onclick="location.href='productDetail?productId=${product.productId}'" /></td>
+			</c:if>
 	</tr>
 	<tr>
 		<td>개당 가격: ${product.price}원

@@ -875,8 +875,8 @@ public class AdminDAO {
 				
 		 
 					 
-		String sql = "SELECT p.productId, p.productName, p.price, p.stock, p.productDetail , p.isdel, i.imgNewName FROM product p LEFT OUTER JOIN image i ON p.productId = i.fieldid AND i.imgfield='product' WHERE p.productId=?";
-		 
+		String sql = "SELECT p.productId, p.productName, p.price, p.stock, p.productDetail , p.isdel, i.imgNewName noThimgnewname, i.imgId noThimgId, (SELECT imgId FROM image WHERE fieldid =p.productId AND imgfield='product_th') imgId, "+ 
+				"(SELECT imgnewname FROM image WHERE fieldid =p.productId AND imgfield='product_th') imgnewname FROM product p LEFT OUTER JOIN image i ON p.productId = i.fieldid AND i.imgfield='product' WHERE p.productId=? ";
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, productId);
@@ -889,7 +889,10 @@ public class AdminDAO {
 				dto.setStock(rs.getInt("stock"));
 				dto.setProductDetail(rs.getString("productDetail"));
 				dto.setIsDel(rs.getString("isDel"));
-				 dto.setImgNewName(rs.getString("imgNewName")); 
+				dto.setTh_imgNewName(rs.getString("imgNewName"));
+	            dto.setTh_imgid(rs.getString("imgId"));
+	            dto.setImgNewName(rs.getString("noThimgnewname"));
+	            dto.setImgid(rs.getString("noThimgId"));;  
 				
 			}
 		} catch (SQLException e) {			
