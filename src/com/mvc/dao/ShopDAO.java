@@ -174,7 +174,7 @@ public class ShopDAO {
 	}
 
 	public ArrayList<MainDTO> cartList(String uId) { // 의건
-		String sql = "SELECT productcount, totalprice, productid, userid, productName, price FROM cart where userid = ?";
+		String sql = "select c.productcount productCount, c.totalprice totalPrice, c.productid productId, c.userid userId, c.productName productName, c.price price, p.stock stock from cart c, product p where userid = ? AND c.productid=p.productid";
 		ArrayList<MainDTO> list = null;
 		MainDTO dto = null;
 
@@ -191,6 +191,7 @@ public class ShopDAO {
 				dto.setTotalPrice(rs.getInt("totalprice"));
 				dto.setProductId(rs.getString("productId"));
 				dto.setUserId(rs.getString("userid"));
+				dto.setStock(rs.getInt("stock"));
 				list.add(dto);
 			}
 		} catch (Exception e) {
