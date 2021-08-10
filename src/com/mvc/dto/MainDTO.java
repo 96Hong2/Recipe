@@ -52,6 +52,7 @@ public class MainDTO {
    private String rankId;
    private String paymentId;
    private String paymentPrice;
+   private Date paymentDate;
    private String orderPrice;
    private String orderStatus;
    private int discount;
@@ -577,5 +578,12 @@ public String getSearchResult() {
 public void setSearchResult(String searchResult) {
 	this.searchResult = searchResult;
 }
+public Date getPaymentDate() {
+	return paymentDate;
+}
+public void setPaymentDate(Date paymentDate) {
+	this.paymentDate = paymentDate;
+}
+
    
 }

@@ -19,10 +19,11 @@
 	<c:if test="${!empty myOrderHistory}">
 		<c:forEach items = "${myOrderHistory}" var = "history">
 			<tr>				
+				<td>${history.paymentDate}</td>
 				<td><a href="detail?idx=${history.productName}">${history.productName}</a></td>
 				<td>${history.productCount}</td>
-				<td>${history.price}</td>
-				<td>${history.productId}</td>
+				<td>${history.orderPrice}</td>
+				<td>${history.paymentPrice}</td>
 			</tr>
 		</c:forEach>
 	</c:if>

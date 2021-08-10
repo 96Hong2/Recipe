@@ -1113,9 +1113,9 @@ public class MemberDAO {
 		System.out.println("DAO startPage/endPage : " + startPage + "/" + endPage);
 
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		String sql = "select o.productname, o.productcnt, o.price, o.productid "
-				+ "from payment p left outer join orderhistory o on p.paymentid = o.paymentid "
-				+ "where p.userid = ?";
+		String sql = "select p.paymentid as paymentId, p.userid as ID, o.productname as productName, o.price as price, o.productcnt as productCount, "
+				+ "p.orderprice as orderPrice, p.paymentprice as paymentPrice, p.discount as discount, p.paymentdate paymentDate "
+				+ "from payment p, orderhistory o where p.paymentid = o.paymentid and userid = ?";
 
 
 		myOrderHistory = new ArrayList<MainDTO>();
@@ -1128,10 +1128,15 @@ public class MemberDAO {
 			
 			while (rs.next()) {
 				MainDTO dto = new MainDTO();
+				dto.setPaymentId(rs.getString("paymentId"));
+				dto.setUserId(rs.getString("ID"));
 				dto.setProductName(rs.getString("productName"));
-				dto.setProductCount(rs.getInt("productCnt"));
 				dto.setPrice(rs.getInt("price"));
-				dto.setProductId(rs.getString("productId"));
+				dto.setProductCount(rs.getInt("productCount"));
+				dto.setOrderPrice(rs.getString("orderPrice"));
+				dto.setPaymentPrice(rs.getString("paymentPrice"));
+				dto.setDiscount(rs.getInt("discount"));
+				dto.setPaymentDate(rs.getDate("paymentDate"));
 				System.out.println("dto : " + dto);
 				myOrderHistory.add(dto);
 			}
