@@ -2,6 +2,7 @@ package com.mvc.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -250,6 +251,24 @@ public class AdminController extends HttpServlet {
 			
 			
 			/*-----------------------------------------------------진후----------------------------------------------------------*/		
+		
+		case "/adminProductList": // 진후		
+			System.out.println("상품 리스트 보기 요청");
+			page = req.getParameter("page");
+			String productId = req.getParameter("productId");
+			if (page == null) {
+				page = "1";
+			}
+			HashMap<String, Object> map = AdminService.adminProductList(Integer.parseInt(page), productId);
+
+			req.setAttribute("adminProductList", map.get("adminProductList"));
+			req.setAttribute("currPage", map.get("currPage"));
+			req.setAttribute("totalPage", map.get("totalPage"));
+
+			dis = req.getRequestDispatcher("/adminProductList.jsp");
+			dis.forward(req, resp);
+			break;			
+			
 			
 		case "/adminProductSearch": //진후
 			System.out.println("관리자 컨트롤러 상품 검색");
