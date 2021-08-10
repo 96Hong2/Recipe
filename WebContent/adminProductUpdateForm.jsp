@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>알다시피 관리자 페이지 - 상품 수정</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 if("${sessionScope.isAdmin}"!="Y"){
@@ -29,12 +29,14 @@ if("${sessionScope.isAdmin}"!="Y"){
 			<td>
 		<c:import url="./fileUpdate.jsp" charEncoding="utf-8">
          <c:param name="field" value="product"/>
-         <c:param name="fieldId" value="${product.productId }"/>
+         <c:param name="fieldId" value="${product.productId}"/>
          <c:param name="ex_thumbnail" value="${product.th_imgid}"/>
          <c:param name="ex_contentImg" value="${product.imgid}"/>
         <c:param name="ex_thumbnail_Name" value="${product.th_imgNewName}"/>
         <c:param name="ex_contentImg_Name" value="${product.imgNewName}"/>
       </c:import>
+      	<p>썸네일 PK : <input type='text' id='thImg' name='thImg'/></p>
+		<p>첨부이미지 PK : <input type='text' id='img' name='img'/></p>
       </td>				
 		</tr>
 		<tr>

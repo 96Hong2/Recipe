@@ -55,6 +55,7 @@ public class UploadService {
 			if (fieldId != null && fieldId !="" ) {
 				System.out.println("**파일 수정 fieldId : " + fieldId);
 				dto.setFieldId(fieldId);
+				dto.setTh_fieldId(fieldId);
 			}
 
 			//6. 수정하는 경우 기존 이미지 제거
