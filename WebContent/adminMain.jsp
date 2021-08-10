@@ -7,6 +7,9 @@
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+<header>
+	<c:import url="./header_afterLogin.jsp"/>
+</header>
 <body>
 	 <h3>관리자 페이지</h3>
             <button onclick="location.href='./memberList.jsp'">회원 조회</button>

@@ -13,6 +13,9 @@ if("${sessionScope.isAdmin}"!="Y"){
 }
 </script>
 </head>
+<header>
+	<c:import url="./header_afterLogin.jsp"/>
+</header>
 <body>
 <h2>${member.nickname} 님의 회원정보 수정</h2>
 <form action = "./memberUpdate" method = "POST"> 
@@ -57,6 +60,7 @@ if("${sessionScope.isAdmin}"!="Y"){
 		</tr>		
 	</table>
 	<input type="button" value="저장" style="margin: 5px;" onclick="Check()"/>
+	<input type="button" value="취소" onclick="location.href='./memberInfo?userId=${member.userId}'"/>
 </form>
 </body>
 <script>

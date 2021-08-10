@@ -59,6 +59,9 @@ p {
 }
 </style>
 </head>
+<header>
+	<c:import url="./header_afterLogin.jsp"/>
+</header>
 <body>
 	<h3>
 		<a href="./susMemberList.jsp" id="memberView">정지 회원 목록</a>

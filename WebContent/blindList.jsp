@@ -58,6 +58,9 @@ p {
 }
 </style>
 </head>
+<header>
+	<c:import url="./header_afterLogin.jsp"/>
+</header>
 <body>
 	<h3>
 		<a href="./blindList.jsp" id="blindView">블라인드 관리</a>

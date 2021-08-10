@@ -58,6 +58,9 @@ p {
 }
 </style>
 </head>
+<header>
+	<c:import url="./header_afterLogin.jsp"/>
+</header>
 <body>
 	<h3>
 		<a href="./memberList.jsp" id="memberView">회원 조회</a>

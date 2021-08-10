@@ -13,6 +13,9 @@ if("${sessionScope.isAdmin}"!="Y"){
 }
 </script>
 </head>
+<header>
+	<c:import url="./header_afterLogin.jsp"/>
+</header>
 <body>
 <h2>${member.nickname} 님의 회원정보 보기</h2>
 	<table>
