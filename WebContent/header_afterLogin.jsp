@@ -41,10 +41,9 @@
 					</div>
 				</div>
 				<div class="search">
-					<form action="postSearch" method="get" id="search" name="postSearch">
-						<input type="text" id="keyword" name="keyword" placeholder="검색어입력" />
-						<input type="hidden" name="categoryId" value="0" />
-						<input type="hidden" name="postSearchOpt" value="title_contentsSearch" />
+					<form action="postSearch?postSearchOpt=title_contentsSearch"
+						method="get" id="search">
+						<input type="text" id="keyword" placeholder="검색어입력" />
 						<button>검색</button>
 					</form>
 				</div>
@@ -132,10 +131,9 @@
 				</div>
 				
 				<div class="search">
-					<form action="postSearch" method="get" id="search" name="postSearch">
-						<input type="text" id="keyword" name="keyword" placeholder="검색어입력" />
-						<input type="hidden" name="categoryId" value="0" />
-						<input type="hidden" name="postSearchOpt" value="title_contentsSearch" />
+					<form action="postSearch?postSearchOpt=title_contentsSearch"
+						method="get" id="search">
+						<input type="text" id="keyword" placeholder="검색어입력" />
 						<button>검색</button>
 					</form>
 				</div>

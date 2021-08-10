@@ -8,16 +8,6 @@
 <title>레시피 게시글 상세보기</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
-#board, #board th, #board td {
-	border: 1px solid;
-	border-collapse: collapse;
-	padding: 5px 10px;
-}
-
-#board td {
-	text-align: center;
-}
-
 .container {
 	margin-left: 20%;
 	background-color: ligthgrey;
