@@ -7,7 +7,6 @@
 <meta charset="UTF-8">
 <title>게시글 리스트</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link rel="stylesheet" type="text/css" href="css/common.css" media="all" />
 </head>
 <body>
 	<div class="wrap">
@@ -21,46 +20,37 @@
 					<div>
 						<input type="radio" id="all" name="categoryId" value="0"
 							onclick="location.href='./postList'"
-							<c:if test="${all != null || list[0].categoryId == null ||all.equals(all) }">checked="checked"</c:if> />전체
+							<c:if test="${categoryId == 0}" >checked="checked"</c:if> />전체
 						&nbsp; <input type="radio" id="chinaFood" name="categoryId"
 							value="2" onclick="document.getElementById('frm').submit();"
-							<c:if test="${list[0].categoryId == 2 && category.equals(category) && notAll.equals(notAll)}">checked="checked"</c:if> />한식
+							<c:if test="${categoryId == 2}" >checked="checked"</c:if> />한식
 						&nbsp; <input type="radio" id="koreanFood" name="categoryId"
 							value="3" onclick="document.getElementById('frm').submit();"
-							<c:if test="${list[0].categoryId == 3 && category.equals(category)&& notAll.equals(notAll)}">checked="checked"</c:if> />중식
+							<c:if test="${categoryId == 3}" >checked="checked"</c:if> />중식
 						&nbsp; <input type="radio" id="japaneseFood" name="categoryId"
 							value="4" onclick="document.getElementById('frm').submit();"
-							<c:if test="${list[0].categoryId == 4 && category.equals(category)&& notAll.equals(notAll)}">checked="checked"</c:if> />일식
+							<c:if test="${categoryId == 4}" >checked="checked"</c:if> />일식
 						&nbsp; <input type="radio" id="westernFood" name="categoryId"
 							value="5" onclick="document.getElementById('frm').submit();"
-							<c:if test="${list[0].categoryId == 5 && category.equals(category)&& notAll.equals(notAll)}">checked="checked"</c:if> />양식
+							<c:if test="${categoryId == 5}" >checked="checked"</c:if> />양식
 						&nbsp; <input type="radio" id="snackFood" name="categoryId"
 							value="6" onclick="document.getElementById('frm').submit();"
-							<c:if test="${list[0].categoryId == 6 && category.equals(category)&& notAll.equals(notAll)}">checked="checked"</c:if> />분식
+							<c:if test="${categoryId == 6}" >checked="checked"</c:if> />분식
 						&nbsp; <input type="radio" id="vegetarian" name="categoryId"
 							value="7" onclick="document.getElementById('frm').submit();"
-							<c:if test="${list[0].categoryId == 7 && category.equals(category)&& notAll.equals(notAll)}">checked="checked"</c:if> />채식
+							<c:if test="${categoryId == 7}" >checked="checked"</c:if> />채식
 						&nbsp; <input type="radio" id="babyFood" name="categoryId"
 							value="8" onclick="document.getElementById('frm').submit();"
-							<c:if test="${list[0].categoryId == 8 && category.equals(category)&& notAll.equals(notAll)}">checked="checked"</c:if> />이유식
+							<c:if test="${categoryId == 8}" >checked="checked"</c:if> />이유식
 						&nbsp; <input type="radio" id="dessert" name="categoryId"
 							value="9" onclick="document.getElementById('frm').submit();"
-							<c:if test="${list[0].categoryId == 9 && category.equals(category)&& notAll.equals(notAll)}">checked="checked"</c:if> />디저트
+							<c:if test="${categoryId == 9}" >checked="checked"</c:if> />디저트
 						&nbsp; <input type="radio" id="etc" name="categoryId" value="1"
 							onclick="document.getElementById('frm').submit();"
-							<c:if test="${list[0].categoryId == 1 && category.equals(category)&& notAll.equals(notAll)}">checked="checked"</c:if> />기타
+							<c:if test="${categoryId == 1}" >checked="checked"</c:if> />기타
 					</div>
 				</form>
 				
-				<form>
-					<div>
-						<a>최신순</a>&nbsp;&nbsp;
-						<a>조회수</a>&nbsp;&nbsp;
-						<a>좋아요</a>&nbsp;&nbsp;
-						<a>금액 ↑↓</a>
-					</div>
-				</form>
-
 				<form action="postSearch" method="get" id="postSearch" name="postSearch">
 					<select name="postSearchOpt" id="postSearchOpt">
 						<option value='title_contentsSearch' selected="selected">제목 + 내용</option>
@@ -80,12 +70,7 @@
 					</span>
 					<span hidden="hidden" id="option4"><input type="text"
 						id="itemSearch" name="keywordItem" placeholder="재료 입력" /></span>
-					<c:if test="${category.equals(category) && total != 0 && notAll.equals(notAll) || category.equals(category)}">
-						<input type="text" name="categoryId" value="${list[0].categoryId}" />
-					</c:if>
-					<c:if test="${all.equals(all) || total == 0 }">
-						<input type="text" name="categoryId" value="0" />
-					</c:if>
+					<input type="hidden" name="categoryId" value="${categoryId }" />
 					<button>검색</button>
 				</form>
 			</div>
@@ -154,14 +139,31 @@
 				<c:if test="${i ne currPage && postList.equals(postList)}"><button type="button" onclick="location.href='./postList?postPage=${start}&button=1'">이전</button></c:if>
 				<c:if test="${i ne currPage && categoryPage.equals(categoryPage)}"><button type="button" onclick="location.href='./category?categoryId=${list[0].categoryId}&postPage=${start}&button=1'">이전</button></c:if>
 				<c:if test="${i ne currPage && searchPage.equals(searchPage)}"><button type="button" onclick="location.href='./postSearch?postSearchOpt=${postSearchOpt}&keyword=${keyword}&keywordMin=${keywordMin}&keywordMax=${keywordMax}&categoryId=${categoryId}&postPage=${start}&button=1'">이전</button></c:if>
-			<c:forEach var="i" begin="${start }" end="${end}" step="1">
-			<span class="postPage"> 
-				<c:if test="${i ne currPage && postList.equals(postList)}"><a href="./postList?postPage=${i}">${i}</a></c:if> 
-				<c:if test="${i ne currPage && categoryPage.equals(categoryPage)}"><a href="./category?categoryId=${list[0].categoryId}&postPage=${i}">${i}</a></c:if>
-				<c:if test="${i ne currPage && searchPage.equals(searchPage)}"><a href="./postSearch?postSearchOpt=${postSearchOpt}&keyword=${keyword}&keywordMin=${keywordMin}&keywordMax=${keywordMax}&keywordNickName=${keywordNickName}&keywordItem=${keywordItem}categoryId=${categoryId}&postPage=${i}">${i}</a></c:if>
-				<c:if test="${i eq currPage }"><b>${i}</b></c:if>
-			</span>
-				</c:forEach>
+				
+			<c:choose>
+				<c:when test="${totalPage < end}">	
+					<c:forEach var="i" begin="${start }" end="${totalPage}" step="1">
+						<span class="postPage"> 
+							<c:if test="${i ne currPage && postList.equals(postList)}"><a href="./postList?postPage=${i}">${i}</a></c:if> 
+							<c:if test="${i ne currPage && categoryPage.equals(categoryPage)}"><a href="./category?categoryId=${list[0].categoryId}&postPage=${i}">${i}</a></c:if>
+							<c:if test="${i ne currPage && searchPage.equals(searchPage)}"><a href="./postSearch?postSearchOpt=${postSearchOpt}&keyword=${keyword }&keywordMin=${keywordMin }&keywordMax=${keywordMax }&keywordNickName=${keywordNickName }&keywordItem=${keywordItem }&categoryId=${categoryId }&postPage=${i}">${i}</a></c:if>
+							<c:if test="${i eq currPage }"><b>${i}</b></c:if>               
+						</span>
+					</c:forEach>
+				</c:when>
+					
+				<c:otherwise>
+					<c:forEach var="i" begin="${start }" end="${end}" step="1">
+						<span class="postPage"> 
+							<c:if test="${i ne currPage && postList.equals(postList)}"><a href="./postList?postPage=${i}">${i}</a></c:if> 
+							<c:if test="${i ne currPage && categoryPage.equals(categoryPage)}"><a href="./category?categoryId=${list[0].categoryId}&postPage=${i}">${i}</a></c:if>
+							<c:if test="${i ne currPage && searchPage.equals(searchPage)}"><a href="./postSearch?postSearchOpt=${postSearchOpt}&keyword=${keyword }&keywordMin=${keywordMin }&keywordMax=${keywordMax }&keywordNickName=${keywordNickName }&keywordItem=${keywordItem }&categoryId=${categoryId }&postPage=${i}">${i}</a></c:if>
+							<c:if test="${i eq currPage }"><b>${i}</b></c:if>               
+						</span>
+					</c:forEach>
+				</c:otherwise>	
+			</c:choose>
+					
 				<c:if test="${i ne currPage && postList.equals(postList)}"><button type="button" onclick="location.href='./postList?postPage=${end}&button=2'">다음</button></c:if> 
 				<c:if test="${i ne currPage && categoryPage.equals(categoryPage)}"><button type="button" onclick="location.href='./category?categoryId=${list[0].categoryId}&postPage=${end}&button=2'">다음</button></c:if> 
 				<c:if test="${i ne currPage && searchPage.equals(searchPage)}"><button type="button" onclick="location.href='./postSearch?postSearchOpt=${postSearchOpt}&keyword=${keyword}&keywordMin=${keywordMin}&keywordMax=${keywordMax}&categoryId=${categoryId}&postPage=${end}&button=2'">다음</button></c:if> 

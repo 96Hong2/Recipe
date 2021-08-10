@@ -7,7 +7,6 @@
 <meta charset="UTF-8">
 <title>레시피 게시글 상세보기</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link rel="stylesheet" type="text/css" href="css/board.css" media="all" />
 <style>
 .container {
 	margin-left: 20%;
@@ -140,22 +139,13 @@
 				</tr>
 				<tr>
 					<td colspan="14">
-						<%-- <c:if test="${sessionScope.userId != null}"><button onclick="reportPopUp(${post.postId},'${post.nickName}')">신고</button></c:if> --%>
-						<!-- 신고버튼 교체 -->
-						<button onclick="reportPopUp('${post.postId}','${post.nickName}')">신고</button>
-
-						<%-- <c:if test="${sessionScope.isAdmin != null}"><button onclick="blindPopUp(${post.postId},'${post.nickName}')">블라인드</button></c:if> --%>
-						<!-- 블라인드 버튼 교체 -->
-						<button onclick="blindPopUp('${post.postId}','${post.nickName}')">블라인드</button>
-
-						<%-- <c:if test="${sessionScope.userId == post.userId}"><button onclick="location.href='./postUpdateForm?postId=${post.postId}'">수정</button></c:if> --%>
-						<!-- 수정 버튼 교체 -->
-						<button
-							onclick="location.href='./postUpdateForm?postId=${post.postId}'">수정</button>
-
-						<%-- <c:if test="${sessionScope.userId == post.userId}"><input type="button" value="삭제" onclick="button_evert()"/></c:if> --%>
-						<input type="button" value="삭제" onclick="button_evert()" />
-						<button onclick="location.href='./postList'">리스트</button>
+						<c:if test="${sessionScope.userId ne null && sessionScope.userId ne post.userId}"><button onclick="reportPopUp(${post.postId},'${post.nickName}')">신고</button></c:if> 
+						<c:if test="${sessionScope.isAdmin eq 'Y' || sessionScope.userId eq admin}"><button onclick="blindPopUp(${post.postId},'${post.nickName}')">블라인드</button></c:if> 
+						<c:if test="${sessionScope.userId eq post.userId}"><button onclick="location.href='./postUpdateForm?postId=${post.postId}'">수정</button></c:if> 
+						<c:if test="${sessionScope.userId eq post.userId}"><input type="button" value="삭제" onclick="button_evert()"/></c:if>
+						<button onclick="location.href='./category?categoryId=${post.categoryId }'">리스트</button>
+						<button onclick="location.href='./postList'">전체 목록</button>
+						<button type="button" onclick="postLike();"><img id="likeImg" class="img" src="./likeButton.png"></button>
 					</td>
 				</tr>
 			</table>
@@ -283,6 +273,55 @@
 		console.log("새로고침");
 		location.reload();
 	}
+	
+	$(document).ready(function(){
+		postLikeCheck();
+	});	
+	
+	function postLike(){
+		console.log("좋아요");
+		console.log("${param.postId}");
+		console.log("${sessionScope.userId}");
+		
+		 $.ajax({
+			type : "post",
+			url : "./postLike",
+			data : {
+				postId : "${param.postId}"
+			},
+			dataType : 'JSON',
+			success : function(data){
+				console.log(data.success);
+				if(data.success){ 
+					document.getElementById("likeImg").src = './likeOnClick.png'
+				}
+			}	
+		})
+
+			
+	} 
+		
+	function postLikeCheck(){
+		console.log("좋아요");
+		console.log("${param.postId}");
+		console.log("${sessionScope.userId}");
+		
+		 $.ajax({
+			type : "post",
+			url : "./postLikeCheck",
+			data : {
+				postId : "${param.postId}"
+			},
+			dataType : 'JSON',
+			success : function(data){
+				console.log(data.success);
+				if(data.success){
+					document.getElementById("likeImg").src = './likeOnClick.png'
+					$("#likeImg").removeAttr("onclick");
+				}
+			}	
+			})	
+		} 
 	
 </script>
 </html>

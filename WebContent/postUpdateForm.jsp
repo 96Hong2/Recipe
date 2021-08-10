@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <title>레시피 작성</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link rel="stylesheet" type="text/css" href="css/board.css" media="all" />
+
 </head>
 <script>
 if("${sessionScope.userId}"==""){
@@ -19,7 +19,7 @@ if("${sessionScope.userId}"==""){
 		   location.href = "./postDetail?postId=${post.postId}";
 	}
 </script>
-<body>
+<body>	
 	<form action="postUpdate" method="post">
 	<input type="hidden" name="userId" value="${sessionScope.userId}" readonly="readonly"/>
 	<input type="hidden" name="postId" value="${post.postId}"/>
@@ -28,15 +28,15 @@ if("${sessionScope.userId}"==""){
 			<th>제목</th>
 			<td><input type="text" name="title"  min="2" maxlength="20" value="${post.title}" /></td>
 		</tr>
-		<tr>
-			<th>썸네일 이미지</th>
-			<td><input type="file" name="thumbnail"/></td>
-		</tr>
-		<tr>
-			<th>첨부 이미지</th>
-			<td><input type="file" name="image"/></td>
-		</tr>
-		<tr>
+		<c:import url="./fileUpdate.jsp" charEncoding="utf-8">
+  		 <c:param name="field" value="post"/>
+  		 <c:param name="fieldId" value="${post.postId }"/>
+  		 <c:param name="ex_thumbnail" value="${post.th_imgid }"/>
+  		 <c:param name="ex_contentImg" value="${post.imgid }"/>
+ 		 <c:param name="ex_thumbnail_Name" value="${post.th_imgNewName }"/>
+ 		 <c:param name="ex_contentImg_Name" value="${post.imgNewName }"/>
+		</c:import>
+			<tr>
 			<th>카테고리 설정</th>
 			<td>
 				<input type="radio" name="categoryId" value="2" />한식
@@ -73,11 +73,12 @@ if("${sessionScope.userId}"==""){
 		<tr>
 			<td colspan="2">
 				<input type="button" onclick="location.href='./postDetail?postId=${post.postId}'" value="취소"/> 
-				<button>저장</button>
+				<button id='submitBtn' type='button' onclick='javascript:save()'>저장</button>
 			</td>
 		</tr>
 	</table>
 	</form>
+	
 </body>
 <script>
 $('[name=categoryId]:radio[value="'+'${post.categoryId}'+'"]').prop('checked', true );

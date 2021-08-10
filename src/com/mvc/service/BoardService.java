@@ -156,18 +156,38 @@ public class BoardService {
 		BoardDAO dao = new BoardDAO();
 		ArrayList<MainDTO> list = null;
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		//한 페이지당 게시글 수
-		int pagePerCnt = 9;
-		int end = postPage * pagePerCnt;
-		int start=(end-pagePerCnt);
+		
+		int start = 0;
+		int end = 0;
+		int startPage = 0;
+		int endPage = 0;
+		int pagePerCnt = 9; 
+		int pagePerPage = 5; 
+		
+		int total = 0;
+		try {
+			total = dao.totalCount();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		int postPages = ((int)(total/pagePerCnt))+1;
+		
+		if(postPage > postPages) {
+			postPage = postPages;
+		}
+		
+		end = postPage*pagePerCnt; 
+		start = end-(pagePerCnt-1);
+		endPage = pagePerPage*((int)((postPage-1)/pagePerPage)+1);
+		startPage = endPage-pagePerPage+1;
 		
 		list = dao.postList(end,start);
-		int total = dao.totalCount();
-		int postPages = (total/pagePerCnt)+1;
 		System.out.println("총 게시글 수: "+total+"/"+"페이지 수: "+postPages);
 		map.put("list", list);
 		map.put("totalPage", postPages);
 		map.put("currPage", postPage);
+		map.put("start", startPage);
+		map.put("end", endPage);
 		
 		dao.resClose();
 		return map;
@@ -175,63 +195,96 @@ public class BoardService {
 
 	public HashMap<String, Object> categoryList(int postPage) { //영환
 		System.out.println("BoardService categoryList() 실행");
+		String notAll = "notAll";
 		BoardDAO dao = new BoardDAO();
 		ArrayList<MainDTO> list = null;
 		HashMap<String, Object> map1 = new HashMap<String, Object>();
 		int categoryId = Integer.parseInt(req.getParameter("categoryId"));
 		System.out.println("검색된 카테고리ID"+categoryId);
-		//한 페이지당 게시글 수
-		int pagePerCnt = 9;
-		int end = postPage * pagePerCnt;
-		int start=(end-pagePerCnt);
-		String notAll = "notAll";
 		
+		int start = 0;
+		int end = 0;
+		int startPage = 0;
+		int endPage = 0;
+		int pagePerCnt = 9; 
+		int pagePerPage = 5; 
+		
+		int total = 0;
+		try {
+			total = dao.categoryCount(categoryId);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		int postPages = ((int)(total/pagePerCnt))+1;
+		
+		if(postPage > postPages) {
+			postPage = postPages;
+		}
+		
+		end = postPage*pagePerCnt; 
+		start = end-(pagePerCnt-1);
+		endPage = pagePerPage*((int)((postPage-1)/pagePerPage)+1);
+		startPage = endPage-pagePerPage+1;
 		
 		list = dao.categoryList(end,start,categoryId);
-		int total = dao.categoryCount(categoryId);
-		int postPages = (total/pagePerCnt)+1;
 		System.out.println("총 게시글 수: "+total+"/"+"페이지 수: "+postPages);
 		map1.put("list", list);
 		map1.put("totalPage", postPages);
 		map1.put("currPage", postPage);
-		map1.put("notAll", notAll);
+		map1.put("start", startPage);
+		map1.put("end", endPage);
+		map1.put("categoryId", categoryId);
 		dao.resClose();
 		return map1;
 	}
 
 	public HashMap<String, Object> postSearch(int postPage) { //영환
 		System.out.println("BoardServic postSearch() 실행 ");
-		ArrayList<MainDTO> list = null;
-		HashMap<String, Object> map2 = new HashMap<String, Object>();
-		BoardDAO dao = new BoardDAO();
-		
 		String notAll = "notAll";
 		String all = "all";
 		String searchPage = "searchPage";
-		int pagePerCnt = 9;
-		int end = postPage * pagePerCnt;
-		int start=(end-pagePerCnt);
-		
+		ArrayList<MainDTO> list = null;
+		HashMap<String, Object> map2 = new HashMap<String, Object>();
+		BoardDAO dao = new BoardDAO();
+			
 		String keyword = req.getParameter("keyword");
 		String keywordMin = req.getParameter("keywordMin");
 		String keywordMax = req.getParameter("keywordMax");
 		String keywordNickName = req.getParameter("keywordNickName");
 		String keywordItem = req.getParameter("keywordItem");
 		System.out.println("키워드 :"+keyword+" / "+"예산최소 :"+keywordMin+" / "+"예산최대 :"+keywordMax+"닉네임 :"+keywordNickName+" / "+"재료 :"+keywordItem);
-		
+
 		int categoryId = Integer.parseInt(req.getParameter("categoryId"));
 		String postSearchOpt = req.getParameter("postSearchOpt");
 		System.out.println("categoryId : "+categoryId+" / "+"postSearchOpt : "+postSearchOpt);
 		
-		list = dao.postSearch(keyword,keywordMin,keywordMax,categoryId,postSearchOpt,keywordNickName,keywordItem,start,end);
-		int total = dao.searchCount(keyword,keywordMin,keywordMax,categoryId,postSearchOpt,keywordNickName,keywordItem);
-		int postPages = (total/pagePerCnt)+1;
-		System.out.println("총 게시글 수: "+total+"/"+"페이지 수: "+postPages);
-		if(categoryId != 0) {
-			map2.put("notAll", notAll);
-		}else {
-			map2.put("all", all);
+		int start = 0;
+		int end = 0;
+		int startPage = 0;
+		int endPage = 0;
+		int pagePerCnt = 9; 
+		int pagePerPage = 5; 
+		
+		int total = 0;
+		try {
+			total = dao.searchCount(keyword,keywordMin,keywordMax,categoryId,postSearchOpt,keywordNickName,keywordItem);
+		} catch (Exception e1) {
+			e1.printStackTrace();
 		}
+		int postPages = ((int)(total/pagePerCnt))+1;
+		
+		if(postPage > postPages) {
+			postPage = postPages;
+		}
+		
+		end = postPage*pagePerCnt; 
+		start = end-(pagePerCnt-1);
+		endPage = pagePerPage*((int)((postPage-1)/pagePerPage)+1);
+		startPage = endPage-pagePerPage+1;
+		System.out.println("총 게시글 수: "+total+"/"+"페이지 수: "+postPages);
+		
+		list = dao.postSearch(keyword,keywordMin,keywordMax,categoryId,postSearchOpt,keywordNickName,keywordItem,start,end);
+		
 		map2.put("list", list);
 		map2.put("totalPage", postPages);
 		map2.put("currPage", postPage);
@@ -244,6 +297,8 @@ public class BoardService {
 		map2.put("keywordItem", keywordItem);
 		map2.put("postSearchOpt", postSearchOpt);
 		map2.put("categoryId", categoryId);
+		map2.put("start", startPage);
+		map2.put("end", endPage);
 		dao.resClose();
 		return map2;
 	}
@@ -372,7 +427,51 @@ public class BoardService {
 		
 	}
 	
+	public boolean postLike() { //영환
+		System.out.println("BoardService postLike() 실행");
+		BoardDAO dao = new BoardDAO(); 
+		boolean success = false;
+		int result = 0;
+		String postId = req.getParameter("postId");
+		String userId = (String) req.getSession().getAttribute("userId");
+		System.out.println("postId : "+postId+"/"+"loginId : "+userId);
+		
+		result = dao.postLikeCheck(postId,userId); 
+		if(result > 0) {
+			success = false;
+		}else {
+		result = dao.postLikeCountUp(postId);
+		if(result>0) {
+			success = dao.postLike(postId,userId);
+		};
+		dao.isLike(success);
+		}
+		
+		dao.resClose();
+		return success;
+	}
 	
+	public boolean postLikeCheck() { //영환
+		System.out.println("BoardService postLike() 실행");
+		BoardDAO dao = new BoardDAO(); 
+		boolean success = false;
+		int result = 0;
+		String postId = req.getParameter("postId");
+		String userId = (String) req.getSession().getAttribute("userId");
+		System.out.println("postId : "+postId+"/"+"loginId : "+userId);
+		
+		result = dao.postLikeCheck(postId,userId); 
+		if(result > 0) {
+			System.out.println("좋아요 기록 있음");
+			success = true;
+		}else {
+			System.out.println("좋아요 기록 없음");
+			success = false;
+		}
+		
+		dao.resClose();
+		return success;
+    }
 
 	
 

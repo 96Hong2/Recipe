@@ -91,12 +91,14 @@ public class BoardDAO {
 		MainDTO dto = null;
 		
 			String sql = "SELECT p.postId, p.title, p.contents, m.nickName,p.isDel, "+
-								"p.recipePrice, p.hits, p.likes, p.postDate,i.imgnewname, "+
-								"p.item, p.userId, r.rankName, c.categoryname, p.categoryId "+ 
-						        "FROM post p, member m, category c, rank r, image i "+
-						        "WHERE p.postId = ? AND p.userId = m.userId "+
-						        "AND m.rankId = r.rankId AND p.categoryId = c.categoryId "+
-						        "AND i.fieldid =p.postId AND i.imgfield='post'";
+						"p.recipePrice, p.hits, p.likes, p.postDate,i.imgnewname noThimgnewname, i.imgId noThimgId,  "+
+						"p.item, p.userId, r.rankName, c.categoryname, p.categoryId, "+
+						"(SELECT imgId FROM image WHERE fieldid =p.postId AND imgfield='post_th') imgId, "+
+						"(SELECT imgnewname FROM image WHERE fieldid =p.postId AND imgfield='post_th') imgnewname "+
+						"FROM post p, member m, category c, rank r, image i  "+
+						"WHERE p.postId = ? AND p.userId = m.userId  "+
+						"AND m.rankId = r.rankId AND p.categoryId = c.categoryId  "+
+						"AND i.fieldid =p.postId AND i.imgfield='post' ";
 			
 			try {
 				ps = conn.prepareStatement(sql);
@@ -118,8 +120,10 @@ public class BoardDAO {
 				dto.setCategoryName(rs.getString("categoryName"));
 				dto.setCategoryId(rs.getString("categoryId"));
 				dto.setIsDel(rs.getString("isDel"));
-				dto.setImgNewName(rs.getString("imgNewName"));
-				
+				dto.setTh_imgNewName(rs.getString("imgNewName"));
+				dto.setTh_imgid(rs.getString("imgId"));
+				dto.setImgNewName(rs.getString("noThimgnewname"));
+				dto.setImgid(rs.getString("noThimgId"));
 				System.out.println("게시글 상세보기 dto :"+dto);
 				}
 			} catch (SQLException e) {
@@ -339,27 +343,65 @@ public class BoardDAO {
 		System.out.println("BoardDAO postSearch() 실행");
 		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
 		MainDTO dto = null;
-		String sql = "SELECT rnum,postid, title,recipePrice, item, hits, likes, imgNewName, nickname,categoryId,contents "+ 
-					"FROM(SELECT ROW_NUMBER() OVER(PARTITION BY categoryId ORDER BY p.postDate DESC)AS RNUM "+ 
-					",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName,p.categoryId,p.contents "+ 
-					",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
-					"FROM post p LEFT OUTER JOIN image i ON p.postId=i.fieldId AND i.imgField='post_th' "+ 
-					"ORDER BY p.postDate DESC) ";
-					
+		String sql = "";			
 		String keywords = '%' + keyword + '%';
 		String keywordNickNames = '%' + keywordNickName + '%';
 		String keywordItems = '%' + keywordItem + '%';
 		
+		if(postSearchOpt.equals("title_contentsSearch") && categoryId == 0) {
+			System.out.println("categoryId == 0 && postSearchOpt.equals(\"title_contentsSearch\")  실행");
+			
+			sql =   "SELECT rnum,postid, title,recipePrice, item, hits, likes, imgNewName, nickname,categoryId,contents "+ 
+					"FROM(SELECT ROW_NUMBER() OVER(ORDER BY p.postDate DESC)AS RNUM "+ 
+					",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName,p.categoryId,p.contents "+ 
+					",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
+					"FROM post p LEFT OUTER JOIN image i ON (p.postId=i.fieldId AND i.imgField='post_th') "+ 
+					"WHERE title like ? OR contents like ? "+
+					"ORDER BY p.postDate DESC) WHERE rnum between ? AND ?";
+		
+			try {
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, keywords);
+				ps.setString(2, keywords);
+				ps.setInt(3, start);
+				ps.setInt(4, end);
+				rs = ps.executeQuery();
+				while(rs.next()) {
+					dto = new MainDTO();
+					dto.setPostId(rs.getString("postId"));
+					dto.setTitle(rs.getString("title"));
+					dto.setRecipePrice(rs.getInt("recipePrice"));
+					dto.setItem(rs.getString("item"));
+					dto.setHits(rs.getInt("hits"));
+					dto.setLikes(rs.getInt("likes"));
+					dto.setImgNewName(rs.getString("imgNewName"));
+					dto.setNickName(rs.getString("nickName"));
+					dto.setCategoryId(rs.getString("categoryId"));
+					dto.setContents(rs.getString("contents"));
+					list.add(dto);
+					}
+				} catch (SQLException e) {
+				e.printStackTrace();
+				}
+		}
+		
 		if(postSearchOpt.equals("title_contentsSearch") && categoryId != 0) {
 			System.out.println("title_contentsSearch\") && categoryId != 0  실행");
-		sql += "WHERE rnum between ? AND ? AND categoryId=? AND (title like ? OR contents like ?) ";
+			
+			sql =   "SELECT rnum,postid, title,recipePrice, item, hits, likes, imgNewName, nickname,categoryId,contents "+ 
+					"FROM(SELECT ROW_NUMBER() OVER(PARTITION BY categoryId ORDER BY p.postDate DESC)AS RNUM "+ 
+					",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName,p.categoryId,p.contents "+ 
+					",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
+					"FROM post p LEFT OUTER JOIN image i ON (p.postId=i.fieldId AND i.imgField='post_th') "+ 
+					"WHERE title like ? OR contents like ? "+
+					"ORDER BY p.postDate DESC) WHERE categoryId= ? AND rnum between ? AND ?";
 		try {
 			ps = conn.prepareStatement(sql);
-			ps.setInt(1, start);
-			ps.setInt(2, end);
+			ps.setString(1, keywords);
+			ps.setString(2, keywords);
 			ps.setInt(3, categoryId);
-			ps.setString(4, keywords);
-			ps.setString(5, keywords);
+			ps.setInt(4, start);
+			ps.setInt(5, end);
 			rs = ps.executeQuery();
 			while(rs.next()) {
 				dto = new MainDTO();
@@ -378,81 +420,62 @@ public class BoardDAO {
 			} catch (SQLException e) {
 			e.printStackTrace();
 			}
-		}else if(postSearchOpt.equals("recipePriceSearch") && categoryId != 0) {
-			System.out.println("postSearchOpt.equals(\"recipePriceSearch\") && categoryId != 0  실행");
-				sql += "WHERE rnum between ? AND ? AND categoryId=? AND recipePrice between ? AND ? ";
-				try {
-					ps = conn.prepareStatement(sql);
-					ps.setInt(1, start);
-					ps.setInt(2, end);
-					ps.setInt(3, categoryId);
-					ps.setString(4, keywordMin);
-					ps.setString(5, keywordMax);
-					rs = ps.executeQuery();
-					while(rs.next()) {
-						dto = new MainDTO();
-						dto.setPostId(rs.getString("postId"));
-						dto.setTitle(rs.getString("title"));
-						dto.setRecipePrice(rs.getInt("recipePrice"));
-						dto.setItem(rs.getString("item"));
-						dto.setHits(rs.getInt("hits"));
-						dto.setLikes(rs.getInt("likes"));
-						dto.setImgNewName(rs.getString("imgNewName"));
-						dto.setNickName(rs.getString("nickName"));
-						dto.setCategoryId(rs.getString("categoryId"));
-						dto.setContents(rs.getString("contents"));
-						list.add(dto);
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
+		}
+		
+		if(postSearchOpt.equals("recipePriceSearch") && categoryId == 0) {
+			System.out.println("categoryId == 0 && postSearchOpt.equals(\"recipePriceSearch\")  실행");
+			
+			sql =   "SELECT rnum,postid, title,recipePrice, item, hits, likes, imgNewName, nickname,categoryId,contents "+ 
+					"FROM(SELECT ROW_NUMBER() OVER(ORDER BY p.postDate DESC)AS RNUM "+ 
+					",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName,p.categoryId,p.contents "+ 
+					",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
+					"FROM post p LEFT OUTER JOIN image i ON (p.postId=i.fieldId AND i.imgField='post_th') "+ 
+					"WHERE  recipePrice between ? AND ? "+
+					"ORDER BY p.postDate DESC) WHERE rnum between ? AND ?";
+			try {
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, keywordMin);
+				ps.setString(2, keywordMax);
+				ps.setInt(3, start);
+				ps.setInt(4, end);
+				rs = ps.executeQuery();
+				while(rs.next()) {
+					dto = new MainDTO();
+					dto.setPostId(rs.getString("postId"));
+					dto.setTitle(rs.getString("title"));
+					dto.setRecipePrice(rs.getInt("recipePrice"));
+					dto.setItem(rs.getString("item"));
+					dto.setHits(rs.getInt("hits"));
+					dto.setLikes(rs.getInt("likes"));
+					dto.setImgNewName(rs.getString("imgNewName"));
+					dto.setNickName(rs.getString("nickName"));
+					dto.setCategoryId(rs.getString("categoryId"));
+					dto.setContents(rs.getString("contents"));
+					list.add(dto);
 				}
-			}else if(categoryId == 0 && postSearchOpt.equals("title_contentsSearch")) {
-				System.out.println("categoryId == 0 && postSearchOpt.equals(\"title_contentsSearch\")  실행");
-				sql = "SELECT rnum,postid, title,recipePrice, item, hits, likes, imgNewName, nickname,categoryId,contents "+ 
-						"FROM(SELECT ROW_NUMBER() OVER(ORDER BY p.postDate DESC)AS RNUM "+ 
-						",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName,p.categoryId,p.contents "+ 
-						",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
-						"FROM post p LEFT OUTER JOIN image i ON p.postId=i.fieldId AND i.imgField='post_th' "+ 
-						"ORDER BY p.postDate DESC) WHERE rnum between ? AND ? AND (title like ? OR contents like ?)";
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if(postSearchOpt.equals("recipePriceSearch") && categoryId != 0) {
+			System.out.println("postSearchOpt.equals(\"recipePriceSearch\") && categoryId != 0  실행");
+				
+			sql =   "SELECT rnum,postid, title,recipePrice, item, hits, likes, imgNewName, nickname,categoryId,contents "+ 
+					"FROM(SELECT ROW_NUMBER() OVER(PARTITION BY categoryId ORDER BY p.postDate DESC)AS RNUM "+ 
+					",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName,p.categoryId,p.contents "+ 
+					",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
+					"FROM post p LEFT OUTER JOIN image i ON (p.postId=i.fieldId AND i.imgField='post_th') "+ 
+					"WHERE recipePrice between ? AND ? "+
+					"ORDER BY p.postDate DESC) WHERE categoryId= ? AND rnum between ? AND ?";
 			
 				try {
 					ps = conn.prepareStatement(sql);
-					ps.setInt(1, start);
-					ps.setInt(2, end);
-					ps.setString(3, keywords);
-					ps.setString(4, keywords);
-					rs = ps.executeQuery();
-					while(rs.next()) {
-						dto = new MainDTO();
-						dto.setPostId(rs.getString("postId"));
-						dto.setTitle(rs.getString("title"));
-						dto.setRecipePrice(rs.getInt("recipePrice"));
-						dto.setItem(rs.getString("item"));
-						dto.setHits(rs.getInt("hits"));
-						dto.setLikes(rs.getInt("likes"));
-						dto.setImgNewName(rs.getString("imgNewName"));
-						dto.setNickName(rs.getString("nickName"));
-						dto.setCategoryId(rs.getString("categoryId"));
-						dto.setContents(rs.getString("contents"));
-						list.add(dto);
-						}
-					} catch (SQLException e) {
-					e.printStackTrace();
-					}
-			}else if(categoryId == 0 && postSearchOpt.equals("recipePriceSearch")) {
-				System.out.println("categoryId == 0 && postSearchOpt.equals(\"recipePriceSearch\")  실행");
-				sql = "SELECT rnum,postid, title,recipePrice, item, hits, likes, imgNewName, nickname,categoryId,contents "+ 
-						"FROM(SELECT ROW_NUMBER() OVER(ORDER BY p.postDate DESC)AS RNUM "+ 
-						",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName,p.categoryId,p.contents "+ 
-						",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
-						"FROM post p LEFT OUTER JOIN image i ON p.postId=i.fieldId AND i.imgField='post_th' "+ 
-						"ORDER BY p.postDate DESC) WHERE rnum between ? AND ? AND recipePrice between ? AND ? ";
-				try {
-					ps = conn.prepareStatement(sql);
-					ps.setInt(1, start);
-					ps.setInt(2, end);
-					ps.setString(3, keywordMin);
-					ps.setString(4, keywordMax);
+					ps.setString(1, keywordMin);
+					ps.setString(2, keywordMax);
+					ps.setInt(3, categoryId);
+					ps.setInt(4, start);
+					ps.setInt(5, end);
 					rs = ps.executeQuery();
 					while(rs.next()) {
 						dto = new MainDTO();
@@ -471,15 +494,56 @@ public class BoardDAO {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-			}else if(postSearchOpt.equals("nickNameSearch") && categoryId != 0) {
+			}
+		
+		if(postSearchOpt.equals("nickNameSearch") && categoryId == 0) {
+			System.out.println("categoryId == 0 && postSearchOpt.equals(\"nickNameSearch\")  실행");
+			
+			sql = "SELECT * FROM(SELECT ROWNUM rnum, u.*  FROM (SELECT postid, title, recipePrice, item, hits, likes, imgNewName, "+
+				  "nickname,categoryId,contents FROM(SELECT p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName, "+
+				  "p.categoryId,p.contents, (SELECT nickname FROM member WHERE userid=p.userId) nickname "+
+				  "FROM post p LEFT OUTER JOIN image i ON p.postId=i.fieldId AND i.imgField='post_th' ORDER BY p.postDate DESC)) "+
+				  "u WHERE nickname like ?) WHERE rnum between ? AND ?";
+		
+			try {
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, keywordNickNames);
+				ps.setInt(2, start);
+				ps.setInt(3, end);
+				rs = ps.executeQuery();
+				while(rs.next()) {
+					dto = new MainDTO();
+					dto.setPostId(rs.getString("postId"));
+					dto.setTitle(rs.getString("title"));
+					dto.setRecipePrice(rs.getInt("recipePrice"));
+					dto.setItem(rs.getString("item"));
+					dto.setHits(rs.getInt("hits"));
+					dto.setLikes(rs.getInt("likes"));
+					dto.setImgNewName(rs.getString("imgNewName"));
+					dto.setNickName(rs.getString("nickName"));
+					dto.setCategoryId(rs.getString("categoryId"));
+					dto.setContents(rs.getString("contents"));
+					list.add(dto);
+					}
+				} catch (SQLException e) {
+				e.printStackTrace();
+				}
+		}
+		
+		if(postSearchOpt.equals("nickNameSearch") && categoryId != 0) {
 				System.out.println("nickNameSearch\") && categoryId != 0  실행");
-				sql += "WHERE rnum between ? AND ? AND categoryId=? AND nickName like ?  ";
+				
+				sql = "SELECT * FROM(SELECT ROWNUM rnum, u.*  FROM (SELECT postid, title, recipePrice, item, hits, likes, imgNewName, "+
+						  "nickname,categoryId,contents FROM(SELECT p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName, "+
+						  "p.categoryId,p.contents, (SELECT nickname FROM member WHERE userid=p.userId) nickname "+
+						  "FROM post p LEFT OUTER JOIN image i ON p.postId=i.fieldId AND i.imgField='post_th' ORDER BY p.postDate DESC)) "+
+						  "u WHERE categoryId=? AND nickname like ?) WHERE rnum between ? AND ?";
 				try {
 					ps = conn.prepareStatement(sql);
-					ps.setInt(1, start);
-					ps.setInt(2, end);
-					ps.setInt(3, categoryId);
-					ps.setString(4, keywordNickNames);
+					ps.setInt(1, categoryId);
+					ps.setString(2, keywordNickNames);
+					ps.setInt(3, start);
+					ps.setInt(4, end);
 					rs = ps.executeQuery();
 					while(rs.next()) {
 						dto = new MainDTO();
@@ -498,15 +562,59 @@ public class BoardDAO {
 					} catch (SQLException e) {
 					e.printStackTrace();
 					}
-				}else if(postSearchOpt.equals("itemSearch") && categoryId != 0) {
-					System.out.println("postSearchOpt.equals(\"itemSearch\") && categoryId != 0  실행");
-						sql += "WHERE rnum between ? AND ? AND categoryId=? AND item like ? ";
+				}
+		
+		if(postSearchOpt.equals("itemSearch") && categoryId == 0) {
+			System.out.println("categoryId == 0 && postSearchOpt.equals(\"recipePriceSearch\")  실행");
+			
+			sql = "SELECT rnum,postid, title,recipePrice, item, hits, likes, imgNewName, nickname,categoryId,contents "+ 
+					"FROM(SELECT ROW_NUMBER() OVER(ORDER BY p.postDate DESC)AS RNUM "+ 
+					",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName,p.categoryId,p.contents "+ 
+					",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
+					"FROM post p LEFT OUTER JOIN image i ON (p.postId=i.fieldId AND i.imgField='post_th') "+ 
+					"WHERE p.item like ? ORDER BY p.postDate DESC) WHERE rnum between ? AND ? ";
+					
+			try {
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, keywordItems);
+				ps.setInt(2, start);
+				ps.setInt(3, end);
+				rs = ps.executeQuery();
+				while(rs.next()) {
+					dto = new MainDTO();
+					dto.setPostId(rs.getString("postId"));
+					dto.setTitle(rs.getString("title"));
+					dto.setRecipePrice(rs.getInt("recipePrice"));
+					dto.setItem(rs.getString("item"));
+					dto.setHits(rs.getInt("hits"));
+					dto.setLikes(rs.getInt("likes"));
+					dto.setImgNewName(rs.getString("imgNewName"));
+					dto.setNickName(rs.getString("nickName"));
+					dto.setCategoryId(rs.getString("categoryId"));
+					dto.setContents(rs.getString("contents"));
+					list.add(dto);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if(postSearchOpt.equals("itemSearch") && categoryId != 0) {
+			System.out.println("postSearchOpt.equals(\"itemSearch\") && categoryId != 0  실행");
+			
+			sql = "SELECT rnum,postid, title,recipePrice, item, hits, likes, imgNewName, nickname,categoryId,contents "+ 
+				   "FROM(SELECT ROW_NUMBER() OVER(PARTITION BY categoryId ORDER BY p.postDate DESC)AS RNUM "+
+					",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName,p.categoryId,p.contents "+ 
+					",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
+					"FROM post p LEFT OUTER JOIN image i ON (p.postId=i.fieldId AND i.imgField='post_th') WHERE item like ? "+
+					"ORDER BY p.postDate DESC) WHERE categoryId=? AND rnum between ? AND ?";
+			
 						try {
 							ps = conn.prepareStatement(sql);
-							ps.setInt(1, start);
-							ps.setInt(2, end);
-							ps.setInt(3, categoryId);
-							ps.setString(4, keywordItems);
+							ps.setString(1, keywordItems);
+							ps.setInt(2, categoryId);
+							ps.setInt(3, start);
+							ps.setInt(4, end);
 							rs = ps.executeQuery();
 							while(rs.next()) {
 								dto = new MainDTO();
@@ -525,79 +633,34 @@ public class BoardDAO {
 						} catch (SQLException e) {
 							e.printStackTrace();
 						}
-				}else if(categoryId == 0 && postSearchOpt.equals("nickNameSearch")) {
-					System.out.println("categoryId == 0 && postSearchOpt.equals(\"nickNameSearch\")  실행");
-					sql = "SELECT rnum,postid, title,recipePrice, item, hits, likes, imgNewName, nickname,categoryId,contents "+ 
-							"FROM(SELECT ROW_NUMBER() OVER(ORDER BY p.postDate DESC)AS RNUM "+ 
-							",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName,p.categoryId,p.contents "+ 
-							",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
-							"FROM post p LEFT OUTER JOIN image i ON p.postId=i.fieldId AND i.imgField='post_th' "+ 
-							"ORDER BY p.postDate DESC) WHERE rnum between ? AND ? AND nickName like ?";
-				
-					try {
-						ps = conn.prepareStatement(sql);
-						ps.setInt(1, start);
-						ps.setInt(2, end);
-						ps.setString(3, keywordNickNames);
-						rs = ps.executeQuery();
-						while(rs.next()) {
-							dto = new MainDTO();
-							dto.setPostId(rs.getString("postId"));
-							dto.setTitle(rs.getString("title"));
-							dto.setRecipePrice(rs.getInt("recipePrice"));
-							dto.setItem(rs.getString("item"));
-							dto.setHits(rs.getInt("hits"));
-							dto.setLikes(rs.getInt("likes"));
-							dto.setImgNewName(rs.getString("imgNewName"));
-							dto.setNickName(rs.getString("nickName"));
-							dto.setCategoryId(rs.getString("categoryId"));
-							dto.setContents(rs.getString("contents"));
-							list.add(dto);
-							}
-						} catch (SQLException e) {
-						e.printStackTrace();
-						}
-				}else if(categoryId == 0 && postSearchOpt.equals("recipePriceSearch")) {
-					System.out.println("categoryId == 0 && postSearchOpt.equals(\"recipePriceSearch\")  실행");
-					sql = "SELECT rnum,postid, title,recipePrice, item, hits, likes, imgNewName, nickname,categoryId,contents "+ 
-							"FROM(SELECT ROW_NUMBER() OVER(ORDER BY p.postDate DESC)AS RNUM "+ 
-							",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName,p.categoryId,p.contents "+ 
-							",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
-							"FROM post p LEFT OUTER JOIN image i ON p.postId=i.fieldId AND i.imgField='post_th' "+ 
-							"ORDER BY p.postDate DESC) WHERE rnum between ? AND ? AND item like ? ";
-					try {
-						ps = conn.prepareStatement(sql);
-						ps.setInt(1, start);
-						ps.setInt(2, end);
-						ps.setString(3, keywordItems);
-						rs = ps.executeQuery();
-						while(rs.next()) {
-							dto = new MainDTO();
-							dto.setPostId(rs.getString("postId"));
-							dto.setTitle(rs.getString("title"));
-							dto.setRecipePrice(rs.getInt("recipePrice"));
-							dto.setItem(rs.getString("item"));
-							dto.setHits(rs.getInt("hits"));
-							dto.setLikes(rs.getInt("likes"));
-							dto.setImgNewName(rs.getString("imgNewName"));
-							dto.setNickName(rs.getString("nickName"));
-							dto.setCategoryId(rs.getString("categoryId"));
-							dto.setContents(rs.getString("contents"));
-							list.add(dto);
-						}
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
 				}
+		
 		return list;
 	}
 
-	public int searchCount(String keywordMax, String keyword, String keywordMin, int categoryId, String postSearchOpt, String keywordItem, String keywordNickName) {
+	public int searchCount(String keyword, String keywordMin, String keywordMax, int categoryId, String postSearchOpt, String keywordNickName, String keywordItem) {
 		System.out.println("BoardDAO searchCount() 실행");
 		int total = 0;
 		String keywords = '%' + keyword + '%';
 		String keywordNickNames = '%' + keywordNickName + '%';
 		String keywordItems = '%' + keywordItem + '%';
+		
+		if(postSearchOpt.equals("title_contentsSearch") && categoryId == 0) {
+			try {
+				String sql = "SELECT COUNT(postId) FROM post WHERE title like ? OR contents like ?  ";
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, keywords);
+				ps.setString(2, keywords);
+				rs = ps.executeQuery();
+				
+				if(rs.next()) {
+					total = rs.getInt(1);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		if(postSearchOpt.equals("title_contentsSearch") && categoryId != 0 ) {
 			try {
 				String sql = "SELECT COUNT(postId) FROM post WHERE categoryId=? AND title like ? OR contents like ? ";
@@ -613,7 +676,9 @@ public class BoardDAO {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}else if(postSearchOpt.equals("recipePriceSearch") && categoryId != 0) {
+		}
+		
+		if(postSearchOpt.equals("recipePriceSearch") && categoryId != 0) {
 			try {
 				String sql = "SELECT COUNT(postId) FROM post WHERE categoryId=? AND recipePrice between ? AND ?";
 				ps = conn.prepareStatement(sql);
@@ -628,21 +693,9 @@ public class BoardDAO {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}else if(categoryId == 0 && postSearchOpt.equals("title_contentsSearch")) {
-			try {
-				String sql = "SELECT COUNT(postId) FROM post WHERE title like ? OR contents like ?  ";
-				ps = conn.prepareStatement(sql);
-				ps.setString(1, keywords);
-				ps.setString(2, keywords);
-				rs = ps.executeQuery();
-				
-				if(rs.next()) {
-					total = rs.getInt(1);
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}else if(categoryId == 0 && postSearchOpt.equals("recipePriceSearch")) {
+		}
+		
+		if(postSearchOpt.equals("recipePriceSearch") && categoryId == 0) {
 			try {
 				String sql = "SELECT COUNT(postId) FROM post WHERE recipePrice between ? AND ? ";
 				ps = conn.prepareStatement(sql);
@@ -656,7 +709,24 @@ public class BoardDAO {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}if(postSearchOpt.equals("nickNameSearch") && categoryId != 0 ) {
+		}
+		
+		if(postSearchOpt.equals("nickNameSearch") && categoryId == 0) {
+			try {
+				String sql = "SELECT COUNT(p.postId) FROM post p, member m WHERE p.userId=m.userId AND nickName like ?  ";
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, keywordNickNames);
+				rs = ps.executeQuery();
+				
+				if(rs.next()) {
+					total = rs.getInt(1);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if(postSearchOpt.equals("nickNameSearch") && categoryId != 0 ) {
 			try {
 				String sql = "SELECT COUNT(p.postId) FROM post p, member m WHERE p.userId=m.userId AND categoryId=? AND nickName like ? ";
 				ps = conn.prepareStatement(sql);
@@ -670,34 +740,9 @@ public class BoardDAO {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}else if(postSearchOpt.equals("itemSearch") && categoryId != 0) {
-			try {
-				String sql = "SELECT COUNT(postId) FROM post WHERE categoryId=? AND item like ?";
-				ps = conn.prepareStatement(sql);
-				ps.setInt(1, categoryId);
-				ps.setString(2, keywordItems);
-				rs = ps.executeQuery();
-
-				if(rs.next()) {
-					total = rs.getInt(1);
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}else if(categoryId == 0 && postSearchOpt.equals("nickNameSearch")) {
-			try {
-				String sql = "SELECT COUNT(p.postId) FROM post p, member m WHERE p.userId=m.userId AND nickName like ?  ";
-				ps = conn.prepareStatement(sql);
-				ps.setString(1, keywordNickNames);
-				rs = ps.executeQuery();
-				
-				if(rs.next()) {
-					total = rs.getInt(1);
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}else if(categoryId == 0 && postSearchOpt.equals("itemSearch")) {
+		}
+		
+		if(postSearchOpt.equals("itemSearch") && categoryId == 0) {
 			try {
 				String sql = "SELECT COUNT(postId) FROM post WHERE item like ? ";
 				ps = conn.prepareStatement(sql);
@@ -711,6 +756,22 @@ public class BoardDAO {
 				e.printStackTrace();
 			}
 		}
+		
+		if(postSearchOpt.equals("itemSearch") && categoryId != 0) {
+			try {
+				String sql = "SELECT COUNT(postId) FROM post WHERE categoryId=? AND item like ?";
+				ps = conn.prepareStatement(sql);
+				ps.setInt(1, categoryId);
+				ps.setString(2, keywordItems);
+				rs = ps.executeQuery();
+
+				if(rs.next()) {
+					total = rs.getInt(1);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}	
 		System.out.println("total : "+total);
 		return total;
 	}
@@ -934,6 +995,78 @@ public class BoardDAO {
 		}
 		System.out.println("itemList : "+itemList);
 		return itemList;
+	}
+	
+	public boolean postLike(String postId, String userId) { //영환
+		System.out.println("BoardDAO postLike() 실행");
+		boolean success = false;
+		int result = 0;
+		sql = "INSERT INTO PostLike(postId,userId) VALUES(?,?)";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, postId);
+			ps.setString(2, userId);
+			result = ps.executeUpdate();
+			if(result>0) {
+				success = true;
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return success;
+	}
+
+	public int postLikeCountUp(String postId) { //영환
+		System.out.println("BoardDAO postLikeCountUp() 실행");
+		int result = 0;
+		sql =  "UPDATE post SET likes =likes+1 WHERE postId=?";
+		try {
+			conn.setAutoCommit(false);
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, postId);
+			result = ps.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public void isLike(boolean success) { //영환
+		System.out.println("BoardDAO isLike() 실행 : rollback/commit");
+
+		try {
+			if(success == false) {
+				conn.rollback();
+				System.out.println("좋아요 올리기 실패 롤백");
+			} else {
+				conn.commit();
+				System.out.println("좋아요 올리기 커밋 완료");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	public int postLikeCheck(String postId, String userId) { //영환
+		System.out.println("BoardDAO postLikeCheck() 실행 ");
+		int total = 0;
+		String sql = "SELECT count(userId) FROM postLike WHERE postid = ? AND userId=?";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, postId);
+			ps.setString(2, userId);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				total = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return total;
+	
 	}
 
 }

@@ -10,6 +10,6 @@
 </head>
 <body>
 <div>삭제된 게시물 입니다.</div>
-<input type="button" name="return" onclick="location.href='./postList'" value="돌아가기"/>
+<input type="button" name="return" onclick="history.back();" value="돌아가기"/>
 </body>
 </html>

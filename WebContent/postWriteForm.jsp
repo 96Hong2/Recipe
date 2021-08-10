@@ -7,7 +7,6 @@
 <meta charset="UTF-8">
 <title>레시피 작성</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link rel="stylesheet" type="text/css" href="css/board.css" media="all" />
 </head>
 <script>
 if("${sessionScope.userId}"==""){
@@ -62,15 +61,15 @@ if("${sessionScope.userId}"==""){
 		</tr>
 		<tr>
 			<th>재료</th>
-			<td><textarea name="item" id="postItem"></textarea></td>
+			<td><textarea name="item" maxlength="1000" id="postItem"></textarea></td>
 		</tr>	
 		<tr>
 			<th>Recipe</th>
-			<td><textarea name="contents" id="postContents"></textarea></td>
+			<td><textarea name="contents" maxlength="2000"  id="postContents"></textarea></td>
 		</tr>
 		<tr>
 			<td colspan="2">
-				<input type="button" onclick="location.href='./postList'" value="취소"/> 
+				<input type="button" onclick="history.back();" value="취소"/> 
 				<button id='submitBtn' type='button' onclick='javascript:save()'>저장</button> 
 			</td>
 		</tr>

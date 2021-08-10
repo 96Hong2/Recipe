@@ -15,7 +15,7 @@ import com.mvc.dto.MainDTO;
 import com.mvc.service.BoardService;
 import com.mvc.service.MemberService;
 
-@WebServlet({"/postWriteForm","/postWrite","/postDetail","/postUpdateForm","/postUpdate","/postDel","/postList","/category","/postSearch","/writeComment", "/loadComments", "/updateComment", "/writeRecomment", "/deleteComment","/itemListCall"})
+@WebServlet({"/postWriteForm","/postWrite","/postDetail","/postUpdateForm","/postUpdate","/postDel","/postList","/category","/postSearch","/writeComment", "/loadComments", "/updateComment", "/writeRecomment", "/deleteComment","/itemListCall","/postLike","/postLikeCheck"})
 public class BoardController extends HttpServlet {
 
 	@Override
@@ -45,6 +45,7 @@ public class BoardController extends HttpServlet {
 		boolean success = false;
 		int result = 0;
 		String postPage = null;
+		String button_str = null;
 		HashMap<String, Object> map = null;
 		
 		switch(addr) {
@@ -97,64 +98,108 @@ public class BoardController extends HttpServlet {
 			
 		case "/postList" : //영환
 			System.out.println("게시글 리스트 요청");
-			postPage = req.getParameter("postPage");
-			String all = "all";
+
 			String postList = "postList";
-			if(postPage == null) {
+			postPage = req.getParameter("postPage");
+			button_str = req.getParameter("button");
+			int categoryId = 0;
+			
+			if(button_str != null) {
+				int button = Integer.parseInt(button_str);
+				if(button == 1) {
+					postPage = String.valueOf(Integer.parseInt(postPage)-1);
+				}else if(button == 2) {
+					postPage = String.valueOf(Integer.parseInt(postPage)+1);
+				}				
+			}
+			
+			if(postPage == null || Integer.parseInt(postPage) <= 0) {
+				System.out.println("controller 처음 요청 받은 페이지 : "+postPage);
 				postPage = "1";
 			}
+			
+			
 			map = service.postList(Integer.parseInt(postPage));
 			req.setAttribute("list", map.get("list"));
 			req.setAttribute("currPage", map.get("currPage"));
 			req.setAttribute("totalPage", map.get("totalPage"));
-			req.setAttribute("all",all);
+			req.setAttribute("start", map.get("start"));
+			req.setAttribute("end", map.get("end"));
 			req.setAttribute("postList",postList);
+			req.setAttribute("categoryId",categoryId);
 			dis = req.getRequestDispatcher("postList.jsp");
 			dis.forward(req, resp);
 			break;
 			
 		case "/category" : //영환
 			System.out.println("카테고리별 리스트 요청");
+			
+			String categoryPage = "categoryPage";		
 			postPage = req.getParameter("postPage");
-			String categoryPage = "categoryPage";
-			String category = "category";
-			if(postPage == null) {
+			button_str = req.getParameter("button");
+			
+			if(button_str != null) {
+				int button = Integer.parseInt(button_str);
+				if(button == 1) {
+					postPage = String.valueOf(Integer.parseInt(postPage)-1);
+				}else if(button == 2) {
+					postPage = String.valueOf(Integer.parseInt(postPage)+1);
+				}				
+			}
+			
+			if(postPage == null || Integer.parseInt(postPage) <= 0) {
+				System.out.println("controller 처음 요청 받은 페이지 : "+postPage);
 				postPage = "1";
 			}
+			
+			
 			HashMap<String, Object> map1 = service.categoryList(Integer.parseInt(postPage));
 			req.setAttribute("list", map1.get("list"));
 			req.setAttribute("currPage", map1.get("currPage"));
 			req.setAttribute("totalPage", map1.get("totalPage"));
-			req.setAttribute("category", category);
-			req.setAttribute("notAll", map1.get("notAll"));
+			req.setAttribute("start", map1.get("start"));
+			req.setAttribute("end", map1.get("end"));
 			req.setAttribute("categoryPage", categoryPage);
+			req.setAttribute("categoryId", map1.get("categoryId"));
 			dis = req.getRequestDispatcher("postList.jsp");
 			dis.forward(req, resp);
 			break;
 			
 		case "/postSearch" : //영환
 			System.out.println("게시글 검색 요청");
+			
+			String searchPage = "searchPage";
 			postPage = req.getParameter("postPage");
-			category = "category";
-			if(postPage == null) {
+			button_str = req.getParameter("button");
+			
+			if(button_str != null) {
+				int button = Integer.parseInt(button_str);
+				if(button == 1) {
+					postPage = String.valueOf(Integer.parseInt(postPage)-1);
+				}else if(button == 2) {
+					postPage = String.valueOf(Integer.parseInt(postPage)+1);
+				}				
+			}
+			
+			if(postPage == null || Integer.parseInt(postPage) <= 0) {
+				System.out.println("controller 처음 요청 받은 페이지 : "+postPage);
 				postPage = "1";
 			}
+			
 			HashMap<String, Object> map2 = service.postSearch(Integer.parseInt(postPage));
 			req.setAttribute("list", map2.get("list"));
 			req.setAttribute("currPage", map2.get("currPage"));
 			req.setAttribute("totalPage", map2.get("totalPage"));
-			req.setAttribute("total", map2.get("total"));
-			req.setAttribute("category", category);
-			req.setAttribute("notAll", map2.get("notAll"));
-			req.setAttribute("all", map2.get("all"));
-			req.setAttribute("searchPage", map2.get("searchPage"));
+			req.setAttribute("start", map2.get("start"));
+			req.setAttribute("end", map2.get("end"));
+			req.setAttribute("categoryId", map2.get("categoryId"));
 			req.setAttribute("keyword", map2.get("keyword"));
 			req.setAttribute("keywordMin", map2.get("keywordMin"));
 			req.setAttribute("keywordMax", map2.get("keywordMax"));
 			req.setAttribute("keywordNickName", map2.get("keywordNickName"));
 			req.setAttribute("keywordItem", map2.get("keywordItem"));
 			req.setAttribute("postSearchOpt", map2.get("postSearchOpt"));
-			req.setAttribute("categoryId", map2.get("categoryId"));
+			req.setAttribute("searchPage",searchPage);
 			dis = req.getRequestDispatcher("postList.jsp");
 			dis.forward(req, resp);
 			break;
@@ -239,6 +284,26 @@ public class BoardController extends HttpServlet {
 			System.out.println("상품리스트 불러오기 요청");
 			service.itemListCall();
 			break;
+			
+		case "/postLike" : // 영환
+			success = service.postLike();
+			map = new HashMap<String, Object>();
+			map.put("success", success);
+			Gson gson = new Gson();
+			String obj = gson.toJson(map);
+			resp.getWriter().println(obj);
+			
+			break;
+		
+		case "/postLikeCheck" : // 영환
+			success = service.postLikeCheck();
+			map = new HashMap<String, Object>();
+			map.put("success", success);
+			gson = new Gson();
+			obj = gson.toJson(map);
+			resp.getWriter().println(obj);
+			
+			break;	
 			
 		}
 	}
