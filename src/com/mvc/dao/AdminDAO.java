@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -716,6 +717,302 @@ public class AdminDAO {
 			}
 		
 		return change;
+	}
+	
+	
+	
+	/*-----------------------------------------------------진후----------------------------------------------------------*/
+	public HashMap<String, Object> adminProductList(int page, String productId) { // 진후
+		System.out.println("어드민DAO 상품리스트");
+		System.out.println("page : " + page);
+
+		ArrayList<MainDTO> adminProductList = new ArrayList<MainDTO>();
+		String item = "로드실패";
+		int start = 0;
+		int end = 0;
+		int endPage = 0;
+		int startPage = 0;
+		int pagePerCnt = 9; // 한 페이지당 보여줄 게시글 수
+		int pagePerPage = 5; // 한 페이지당 보여줄 페이지 수
+		int total = 0;
+		try {
+			total = adminProductListTotalCount(productId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // 총 게시글 수
+		int pages = total % pagePerCnt == 0 ? total / pagePerCnt : (total / pagePerCnt) + 1; // 만들 수 있는 페이지 수
+		System.out.println("total pages : " + total + " / pages : " + pages);
+
+		if (page > pages) {
+			page = pages;
+		}
+		System.out.println("DAO 요청 받은 페이지 : " + page);
+
+		start = ((page - 1) * pagePerCnt) + 1;
+		end = page * pagePerCnt; 
+		endPage = pagePerPage * ((int) ((page - 1) / pagePerPage) + 1);
+		startPage = endPage - pagePerPage + 1;
+		System.out.println("DAO startPage/endPage : " + startPage + "/" + endPage);
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+
+		String sql = "SELECT rnum, productId, productName, price, stock, isdel, imgNewName FROM (SELECT ROW_NUMBER() OVER (ORDER BY productId DESC) AS rnum, p.productId ,p.productName, p.price, p.stock, p.isdel, i.imgNewName FROM product p LEFT OUTER JOIN image i ON productId=i.fieldId AND i.imgField='product_th' ORDER BY p.productId desc) WHERE rnum BETWEEN ? AND ?" ;
+		 
+
+
+		adminProductList = new ArrayList<MainDTO>();
+		System.out.println("DAO adminProductList() size : " + adminProductList.size());
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, start);
+			ps.setInt(2, end);
+			rs = ps.executeQuery();
+			adminProductList = new ArrayList<MainDTO>();			
+			while (rs.next()) {
+				MainDTO dto = new MainDTO();
+				dto.setProductId(rs.getString("productId"));
+				dto.setProductName(rs.getString("productName"));
+				dto.setPrice(rs.getInt("price"));
+				dto.setStock(rs.getInt("stock"));
+				dto.setIsDel(rs.getString("isDel"));
+				 dto.setImgNewName(rs.getString("imgNewName")); 
+				System.out.println("dto : " + dto);
+				adminProductList.add(dto);
+			}
+			
+			System.out.println("DAO adminProductList() size : " + adminProductList.size());
+
+			map.put("adminProductList", adminProductList);
+			map.put("totalPage", pages);
+			map.put("currPage", page);
+			map.put("start", startPage);
+			map.put("end", endPage);
+		} catch (Exception e) {
+			System.out.println("**DAO list()에러**");
+			e.printStackTrace();
+		}
+		return map;
+	}
+	
+	public int adminProductListTotalCount(String productId) throws SQLException { //진후
+		
+		String sql = "SELECT count(*) FROM (SELECT ROW_NUMBER() OVER (ORDER BY productId) AS rnum, product.* FROM product ORDER BY productId desc)";
+		
+		ps = conn.prepareStatement(sql);
+		rs = ps.executeQuery();
+
+		int total = 0;
+
+		if (rs.next()) {
+			total = rs.getInt(1);
+		}
+
+		return total;
+	}
+	
+	
+
+	public ArrayList<MainDTO> adminProductList(String keyword) { //진후
+		/*
+		 * String sql =
+		 * "SELECT productId, productName, price, stock, isdel FROM product WHERE productname LIKE ?"
+		 * ;
+		 */
+		String sql = "SELECT productId, productName, price, stock, isDel, imgNewName FROM product p LEFT OUTER JOIN image i ON p.productId=i.fieldId AND i.imgField='product_th' WHERE productname LIKE ?"; 
+		ArrayList<MainDTO> adminProductList = null;
+		MainDTO dto = null;
+		String keywords = '%' + keyword + '%';
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, keywords);
+			rs = ps.executeQuery();
+			adminProductList = new ArrayList<MainDTO>();
+			while (rs.next()) {
+				dto = new MainDTO();
+				dto.setProductId(rs.getString("productId"));
+				dto.setProductName(rs.getString("productName"));
+				dto.setPrice(rs.getInt("price"));
+				dto.setStock(rs.getInt("stock"));
+				dto.setIsDel(rs.getString("isDel"));
+				dto.setImgNewName(rs.getString("imgNewName"));
+				adminProductList.add(dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return adminProductList;
+	}
+	
+	
+
+	public String addProduct(MainDTO dto) { //진후
+		System.out.println("어드민DAO 상품 추가 들어옴");
+		String productId = "";
+		String sql = "INSERT INTO product(productId, productName, price ,stock, productDetail)"
+				+"VALUES(productId.NEXTVAL,?,?,?,?)";
+		try {
+			ps = conn.prepareStatement(sql, new String[] {"productId"});
+			ps.setString(1, dto.getProductName());
+			ps.setInt(2, dto.getPrice());
+			ps.setInt(3, dto.getStock());
+			ps.setString(4, dto.getProductDetail());
+			ps.executeUpdate();
+			rs = ps.getGeneratedKeys();
+			if(rs.next()) {
+				productId = rs.getString(1); // ps에서 String배열의 1번째 값(postId) 가져오기
+				System.out.println("작성된 postId:" + productId);			
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
+		return productId;
+		
+	}
+
+	public MainDTO productDetail(String productId) {//진후
+		System.out.println("어드민DAO 상품 상세보기");
+		MainDTO dto = null;
+				
+		 
+					 
+		String sql = "SELECT p.productId, p.productName, p.price, p.stock, p.productDetail , p.isdel, i.imgNewName FROM product p LEFT OUTER JOIN image i ON p.productId = i.fieldid AND i.imgfield='product' WHERE p.productId=?";
+		 
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, productId);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				dto = new MainDTO();
+				dto.setProductId(rs.getString("productId"));
+				dto.setProductName(rs.getString("productName"));
+				dto.setPrice(rs.getInt("price"));
+				dto.setStock(rs.getInt("stock"));
+				dto.setProductDetail(rs.getString("productDetail"));
+				dto.setIsDel(rs.getString("isDel"));
+				 dto.setImgNewName(rs.getString("imgNewName")); 
+				
+			}
+		} catch (SQLException e) {			
+			e.printStackTrace();
+		}
+		
+		return dto;
+	}
+
+	public int productUpdate(String productId, String productName, int price, int stock, String productDetail) { //진후
+		int success = 0;
+		String sql="UPDATE product SET productName=?, price=?, stock=?, productDetail=? WHERE productId=?";
+		
+		try {
+			ps = conn.prepareStatement(sql);			
+			ps.setString(1, productName);
+			ps.setInt(2, price);
+			ps.setInt(3, stock);
+			ps.setString(4, productDetail);
+			ps.setString(5, productId);
+			success = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+
+		return success;
+	}
+
+	public int productDel(String productId) { //진후
+		String sql="UPDATE product SET isDel='Y' WHERE productId=?";
+		int success = 0;
+		
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, productId);
+			success = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+
+		return success;
+	}
+
+	public ArrayList<MainDTO> adminList() throws SQLException { //진후
+		sql = "SELECT userid, nickName, name FROM member WHERE isAdmin = 'Y'";
+		ArrayList<MainDTO> adminList = new ArrayList<MainDTO>();
+
+			ps = conn.prepareStatement(sql);			
+			rs = ps.executeQuery();
+			
+			
+			while(rs.next()) {
+				MainDTO dto = new MainDTO();
+				dto.setUserId( rs.getString("userid"));
+				dto.setNickName(rs.getString("nickname"));
+				dto.setName(rs.getString("name"));				
+				adminList.add(dto);
+			}
+		return adminList;
+	}
+
+	public int adminSet(String userId) {//진후
+		System.out.println("어드민DAO 관리자지정");
+		String sql="UPDATE member SET isAdmin='Y' WHERE userId=?";
+		int success = 0;
+		
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, userId);
+			success = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+
+		return success;
+	}
+	
+	public int adminNot(String userId) {//진후
+		System.out.println("어드민DAO 관리자해제");
+		String sql="UPDATE member SET isAdmin='N' WHERE userId=?";
+		int success = 0;
+		
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, userId);
+			success = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+
+		return success;
+	}
+	
+	
+	public MainDTO adminInfo(String userId) {//진후
+		System.out.println("어드민DAO 관리자정보");
+		MainDTO dto = null;
+		String sql = "SELECT userId, pw, name, nickname, address, tel FROM member where userId = ?";
+		
+		
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, userId);
+			rs = ps.executeQuery();
+			System.out.println("DAO에서 인식된 아이디 : " + userId);
+			
+			if(rs.next()) {
+				dto = new MainDTO();
+				dto.setUserId(rs.getString("userId"));
+				dto.setPw(rs.getString("pw"));
+				dto.setName(rs.getString("name"));
+				dto.setNickname(rs.getString("nickName"));
+				dto.setAddress(rs.getString("address"));
+				dto.setTel(rs.getString("tel"));
+								
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return dto;
 	}
 
 

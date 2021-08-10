@@ -474,6 +474,214 @@ public class AdminService {
 		adDao.resClose();
 		return change;
 	}
+	
+	
+	/*-----------------------------------------------------진후----------------------------------------------------------*/
+	
+	
+	public static HashMap<String, Object> adminProductList(int page, String productId) { //어드민 서비스 상품관리(진후)
+		System.out.println("어드민서비스 상품리스트");
+		AdminDAO dao = new AdminDAO();
+		HashMap<String, Object> map = dao.adminProductList(page, productId);
+		System.out.println("map : " + map.size());
+		System.out.println("map : " + map);
+
+		dao.resClose();
+
+		return map;
+	}
+	
+	
+	
+	public ArrayList<MainDTO> adminProductSearch() {//어드민 상품관리 검색 (진후)
+		System.out.println("관리자 상품 검색 요청");
+		String keyword = req.getParameter("keyword");
+		System.out.println("검색한 상품 : " + keyword);
+		AdminDAO dao = new AdminDAO();		
+		ArrayList<MainDTO> adminProductList = dao.adminProductList(keyword);
+		System.out.println("검색된 상품 개수 : " + adminProductList.size());		
+		dao.resClose();
+		return adminProductList;
+	}
+
+	
+	
+	public String addProduct() {//어드민 상품 추가(진후)
+		System.out.println("관리자 서비스 상품 등록 요청");		
+		
+		MemberDAO memberdao = new MemberDAO();
+		MainDTO dto = new MainDTO();		
+		AdminDAO dao = new AdminDAO();
+		String productId ="";
+		
+		
+		String thImg = req.getParameter("thImg");
+		String img = req.getParameter("img");
+		System.out.println("th_imgid :"+thImg+"/"+"imgid: "+img);
+		
+		
+		String productName = req.getParameter("productName");			
+		int price = Integer.parseInt(req.getParameter("price"));		
+		int stock = Integer.parseInt(req.getParameter("stock"));
+		String productDetail = req.getParameter("productDetail");
+		System.out.println(productName+"/"+price+"/"+stock+"/"+productDetail);
+		
+		dto.setProductName(productName);
+		dto.setPrice(price);
+		dto.setStock(stock);
+		dto.setProductDetail(productDetail);	
+		
+		productId = dao.addProduct(dto);
+		
+		if(thImg != null) { //썸네일이 있으면,
+			memberdao.setImgField(productId, thImg);
+		}
+		if(img != null) {// 첨부가 있으면,
+			memberdao.setImgField(productId, img);
+		}
+		memberdao.getPoint(productId, "새 레시피 작성", 10);
+
+		dao.resClose(); //자원닫기
+		return productId;	
+			
+		}		
+		
+	
+
+	public MainDTO productDetail() { //진후
+		System.out.println("어드민 서비스 상품상세보기");
+		MainDTO dto = null;
+		String productId = req.getParameter("productId");
+		System.out.println("productId : "+productId);
+		
+		AdminDAO dao = new AdminDAO();		
+		
+			dto = dao.productDetail(productId);				
+			dao.resClose();			
+			
+		return dto;
+	}
+
+	public Object productUpdateForm() { //진후
+		System.out.println("어드민서비스 상품 수정폼");
+		String productId = req.getParameter("productId");
+		System.out.println("productId : "+productId);		
+		AdminDAO dao = new AdminDAO();
+		MainDTO dto = dao.productDetail(productId);
+		System.out.println("dto : "+dto);
+		dao.resClose();		
+		return dto;
+	}
+
+	public int productUpdate(String productId) { //진후
+		System.out.println("어드민서비스 상품 수정");
+		int success = 0;		
+		String productName = req.getParameter("productName");			
+		int price = Integer.parseInt(req.getParameter("price"));		
+		int stock = Integer.parseInt(req.getParameter("stock"));
+		String productDetail = req.getParameter("productDetail");
+		System.out.println(productName+"/"+price+"/"+stock+"/"+productDetail);
+		
+		AdminDAO dao = new AdminDAO();
+		success = dao.productUpdate(productId, productName, price, stock, productDetail);
+		System.out.println("수정 성공 : "+success);
+		dao.resClose();
+		
+		
+		return success;
+	}
+
+	public int productDel() { //진후
+		System.out.println("어드민 서비스 상품 삭제 요청");
+		String productId = req.getParameter("productId");
+		System.out.println("productId : "+productId);
+		
+		AdminDAO dao = new AdminDAO();
+		int success = dao.productDel(productId);
+		System.out.println("삭제 성공 : "+success);
+		dao.resClose();
+		
+		return success;
+		
+	}
+
+	public void adminList() throws IOException { //진후
+		System.out.println("어드민 서비스 관리자 리스트 요청");
+		AdminDAO dao = new AdminDAO();
+		ArrayList<MainDTO> list = null;
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		try {
+			list = dao.adminList();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}finally {
+			dao.resClose();
+			map.put("list", list);
+		}
+		
+		resp.setContentType("text/html; charset=UTF-8");
+		resp.getWriter().println(new Gson().toJson(map));
+		
+	}
+
+	public void adminSet() throws IOException { //진후
+		System.out.println("어드민 서비스 관리자 지정");
+		String cnt = req.getParameter("cnt");
+		int success = 0;
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		System.out.println("아이디 : "+cnt);
+		
+			AdminDAO dao = new AdminDAO();
+			success = dao.adminSet(cnt);
+			if(success > 0) {
+				System.out.println("관리자 지정 성공 : "+success);
+			dao.resClose();
+			map.put("msg", "성공");
+		}else {
+			System.out.println("관리자 지정 실패!");
+			dao.resClose();
+			map.put("msg", "실패");
+		}
+			resp.setContentType("text/html; charset=UTF-8");
+			resp.getWriter().println(new Gson().toJson(map));
+
+	}
+	
+	public void adminNot() throws IOException {//진후
+		System.out.println("어드민 서비스 관리자 해제");
+		String userId = req.getParameter("userId");
+		int success = 0;
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		System.out.println("아이디 : "+userId);
+		
+			AdminDAO dao = new AdminDAO();
+			success = dao.adminNot(userId);
+			if(success > 0) {
+				System.out.println("관리자 해제 성공 : "+success);
+			dao.resClose();
+			
+		}else {
+			System.out.println("관리자 해제 실패!");
+			dao.resClose();
+			
+		}
+			resp.setContentType("text/html; charset=UTF-8");
+			resp.getWriter().println(new Gson().toJson(map));
+	}
+	
+	public MainDTO adminInfo(String userId) {//진후
+		System.out.println("어드민 서비스 관리자 정보");
+		MainDTO dto = null;
+		AdminDAO dao = new AdminDAO();
+		
+		dto = dao.adminInfo(userId);
+		System.out.println("서비스의 memberInfo DTO : "+dto);
+		dao.resClose();
+		System.out.println("자원 반납");
+
+		return dto;
+	}
 
 
 }

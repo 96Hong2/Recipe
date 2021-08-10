@@ -355,13 +355,14 @@ public class MemberController extends HttpServlet {
 
 		case "/logout":// 진후
 			System.out.println("로그아웃 요청");
-			req.getSession().removeAttribute("userId");			
+			req.getSession().invalidate();			
 			msg = "로그아웃 되었습니다.";
 			page = "/index.jsp";
 			req.setAttribute("msg", msg);
 			dis = req.getRequestDispatcher(page);
 			dis.forward(req, resp);
 			break;
+		
 
 		case "/overlay":// 진후
 			System.out.println("ID 중복 확인 요청");

@@ -16,7 +16,8 @@ import com.mvc.service.AdminService;
 @WebServlet({"/memberList","/memberSearch","/memberInfo","/memberUpdate","/memberUpdateForm",
 	"/memberSusPopUp", "/memberSuspend","/memberSusNot","/nickOverlay","/memberBlind", "/blindSth",
 	"/report/reportList","/report/reportSearch","/report/reportNotYet","/report/reportChk","/blindList","/blindSearch","/blindNot",
-	"/susMemberList","/susMemberSearch","/reportSth","/memberReport"})
+	"/susMemberList","/susMemberSearch","/reportSth","/memberReport", "/adminProductList", "/adminProductSearch","/addProduct","/productDetail","/productUpdate",
+	"/productUpdateForm","/productDel", "/adminList","/adminSet","/adminNot","/adminInfo"})
 public class AdminController extends HttpServlet {
 
 	@Override
@@ -246,6 +247,88 @@ public class AdminController extends HttpServlet {
 			dis.forward(req, resp);
 
 			break;
+			
+			
+			/*-----------------------------------------------------진후----------------------------------------------------------*/		
+			
+		case "/adminProductSearch": //진후
+			System.out.println("관리자 컨트롤러 상품 검색");
+			req.setAttribute("adminProductList", adService.adminProductSearch());
+			dis = req.getRequestDispatcher("/adminProductList.jsp");
+			dis.forward(req, resp);
+			break;					
+			
+		case "/addProduct"://진후
+			System.out.println("관리자 컨트롤러 상품 등록 요청");			
+			String productId = adService.addProduct();
+			page = productId != null ? "./adminProductDetail?productId="+productId:"adminProductRegister.jsp";
+			resp.sendRedirect(page);
+			break;
+			
+						
+		case "/productDetail": //진후
+			System.out.println("어드민 컨트롤러 상품 상세보기 요청");	
+			req.setAttribute("product", adService.productDetail());
+			dis = req.getRequestDispatcher("/adminProductDetail.jsp");
+			dis.forward(req, resp);
+			break;
+			
+		case "/productUpdateForm": //진후
+			System.out.println("어드민 컨트롤러 상품 수정폼 요청");
+			req.setAttribute("product", adService.productUpdateForm());
+			dis = req.getRequestDispatcher("/adminProductUpdateForm.jsp");
+			dis.forward(req, resp);
+			break;
+			
+		case "/productUpdate": //진후
+			System.out.println("어드민 컨트롤 수정 요청");
+			productId = req.getParameter("productId");
+			System.out.println("productId : "+productId);
+			msg = "빈칸이 있습니다.";
+			page = "productUpdateForm?productId="+productId;
+			if(adService.productUpdate(productId)>0) {
+				msg="수정에 성공 했습니다.";
+				page = "productDetail?productId="+productId;
+			} 
+			req.setAttribute("msg", msg);
+			dis = req.getRequestDispatcher(page);
+			dis.forward(req, resp);
+			
+			break;
+			
+		case "/productDel": //진후
+			System.out.println("어드민 컨트롤 상품 삭제 요청");
+			adService.productDel();
+			resp.sendRedirect("./adminProductList");	
+			msg ="상품이 삭제 되었습니다.";
+			req.setAttribute("msg",msg);		
+			break;
+			
+		case "/adminList": //진후
+			System.out.println("전체 관리자 리스트 요청");
+			adService.adminList();
+			break;
+			
+		case "/adminSet": //진후
+			System.out.println("관리자 지정요청");
+			adService.adminSet();
+			break;
+			
+		case "/adminNot": //진후
+			System.out.println("관리자 해제요청");
+			adService.adminNot();
+			break;
+	
+		case "/adminInfo"://진후
+			System.out.println("관리자의 회원정보 상세보기 요청");	
+			String userId = req.getParameter("userId");
+			System.out.println("받아온 아이디 : "+userId);
+			req.setAttribute("member", adService.adminInfo(userId));
+			dis = req.getRequestDispatcher("adminInfo.jsp");
+			dis.forward(req, resp);
+			break;
+			
+			
 		}
 		
 	}
