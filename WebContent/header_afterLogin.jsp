@@ -8,64 +8,7 @@
 <title>header_afterLogin.jsp</title>
 <script src=https://code.jquery.com/jquery-3.6.0.min.js></script>
 <link rel="stylesheet" type="text/css" href="css/common.css" media="all" />
-<script>
-window.onkeydown  = function(e){
-    var ua = navigator.userAgent;
-      if ( e.keyCode == 123 /* F12 */) {
-        alert("보안상의 이유로 F12버튼이 금지되어 있습니다.");
-        e.preventDefault();
-        e.returnValue = false;
-      }
-      if(ua.indexOf("Macintosh") > -1){
-        if(e.keyCode == 91 /*Ctrl*/){
-          alert("보안상의 이유로 Command 버튼이 금지되어 있습니다.");
-        }
-      }else{
-        if(e.keyCode == 17 /*Ctrl*/){
-          alert("보안상의 이유로 Ctrl 버튼이 금지되어 있습니다.");
-        }
-      }
-  }
-  document.oncontextmenu = function (e) {
-    alert("보안상의 이유로 우클릭이 금지되어 있습니다.");
-    return false;
-  }
 
-  !function() {
-    function detectDevTool(allow) {
-      if(isNaN(+allow)) allow = 100;
-      var start = +new Date(); // Validation of built-in Object tamper prevention.
-      debugger;
-      var end = +new Date(); // Validates too.
-      if(isNaN(start) || isNaN(end) || end - start > allow) {
-        alert('개발자모드 창이 감지되었습니다.\r\n 개발자모드창이 열린상태에서는 사이트 이용이 불가합니다.');
-        sleep(20000);
-      }
-    }
-    if(window.attachEvent) {
-      if (document.readyState === "complete" || document.readyState === "interactive") {
-        detectDevTool();
-        window.attachEvent('onresize', detectDevTool);
-        window.attachEvent('onmousemove', detectDevTool);
-        window.attachEvent('onfocus', detectDevTool);
-        window.attachEvent('onblur', detectDevTool);
-      } else {
-        setTimeout(argument.callee, 0);
-      }
-    } else {
-      window.addEventListener('load', detectDevTool);
-      window.addEventListener('resize', detectDevTool);
-      window.addEventListener('mousemove', detectDevTool);
-      window.addEventListener('focus', detectDevTool);
-      window.addEventListener('blur', detectDevTool);
-    }
-
-    function sleep(ms) {
-      const wakeUpTime = Date.now() + ms;
-      while (Date.now() < wakeUpTime) {}
-    }
-  }();
-</script>
 </head>
 <body>
 	<c:choose>
@@ -77,7 +20,7 @@ window.onkeydown  = function(e){
 							style="margin-left:20px; width:100px; height:100px;" /></a>
 					</div>
 					<div id="center_img" style="text-align:center; width: 300px; height:100px; line-height:100px;">
-						<img src="center.png" alt="센터" style="width:250px; height:100px;">
+						<a href="./"><img src="center.png" alt="센터" style="width:250px; height:100px;"><a href="./">
 					</div>
 					<div id="top_menu" style="width: 300px; text-align:right; ">
 						<div>
