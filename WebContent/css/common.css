@@ -1,6 +1,7 @@
 .wrap {
 	margin: 0 auto 70px;
 	width: 900px;
+	height: 140px;
 }
 
 #header {
@@ -63,6 +64,7 @@ a:hover, a:focus {
 	border-top: 2px solid #bbb;
 	border-bottom: 2px solid #bbb;
 	text-align: center;
+	font-weight: bold;
 	display: flex;
 }
 
@@ -130,7 +132,7 @@ td.info {
 	text-align: center;
 	width: 200px;
 	height: 200px;
-	background-color: #D5D5D5;
+	background-color: #eee;
 	border-radius: 10px;
 }
 .recipeContainer {
@@ -144,7 +146,7 @@ td.info {
 	text-align: center;
 	width: 200px;
 	height: 215px;
-	background-color: #D5D5D5;
+	background-color: #eee;
 	border-radius: 10px;
 }
 
@@ -168,14 +170,14 @@ table {
 }
 
 th {
-	background-color: #bbb;
+	background-color: #eee;
 	height: 40px;
 	display: table-cell;
 	vertical-align: inherit;
 	font-weight: bold;
 }
 td {
-	background-color: white; 
+	background-color: #FBFBFB; 
 	height: 20px;
 }
 .table-right {
@@ -229,6 +231,6 @@ td {
 	display: inline;
 }
 
-#pointTable {
+#commentTable, #pointTable {
 		width:100%;
 }

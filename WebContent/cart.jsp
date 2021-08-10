@@ -17,10 +17,11 @@
 			<%@include file="header_afterLogin.jsp"%>
 		</header>
 
-		<main id="body">
+		<main id="body" >
 
-			<h1>장바구니</h1>
-			<div class="divtable">
+			<h1 style="border:2px solid #bbb; border-radius:10px; text-align:center; width:200px;"> 장바구니 </h1>
+			<div class="divtable"
+				>
 				<table class="table">
 					<thead>
 						<tr>
@@ -64,7 +65,6 @@
 <script>
 	listCall();
 	var $dis = 0;
-	
 
 	function listCall() {
 		console.log("리스트");
@@ -75,13 +75,13 @@
 			dataType : 'JSON',
 			success : function(data) {
 				console.log(data.cartList);
-				if (data.cartList.length == 0){
+				if (data.cartList.length == 0) {
 					drawEmptyList();
 					console.log("빈거");
 					$dis = data.member;
 					$("#dis").text($dis);
 
-				} else{
+				} else {
 					drawList(data.cartList)
 					console.log("!!!!!!!");
 					$dis = data.member;
@@ -93,87 +93,85 @@
 			}
 		});
 	}
-	
-	$('#checkAll').click(function(){
+
+	$('#checkAll').click(function() {
 		var chk = $(this).is(':checked');
-	    if(chk){
-	    	$("input[name='chkBox']").each(function() {
-	    		var disabled = $(this).prop("disabled");
-	    		if(!disabled) {
-	    			$(this).prop('checked',true);
-	    		}
-	    	});
-	    } else{
-	    	$("input[name='chkBox']").prop('checked',false);
-	    }
-	    
-	    var $chk = $("input[name='chkBox']:checked");
+		if (chk) {
+			$("input[name='chkBox']").each(function() {
+				var disabled = $(this).prop("disabled");
+				if (!disabled) {
+					$(this).prop('checked', true);
+				}
+			});
+		} else {
+			$("input[name='chkBox']").prop('checked', false);
+		}
+
+		var $chk = $("input[name='chkBox']:checked");
 		var $sum = 0;
 		$chk.each(function(idx, item) {//item 은 자바스크립트 객체
 			var $strTok = item.value.split(',');
 			$sum += new Number($strTok[1]);
 		});
-		var $discount = $sum*($dis/100);
+		var $discount = $sum * ($dis / 100);
 		$("input[name='total_sum']").val($sum);
 		$("#total_sum").text($sum);
 		$("input[name='discount']").val($discount);
-		$("#discount").text('-'+$discount);
-		$("input[name='result_price']").val($sum - $discount);
-		$("#result_price").text($sum - $discount);
-		console.log($("input[name='discount']").val());
-	});
-	
-	
-	$(document).on('click','.del-chk',function(){
-	    if($('input[class=del-chk]:checked').length==$('.del-chk').length){
-	        $('#checkAll').prop('checked',true);
-	    }else{
-	       $('#checkAll').prop('checked',false);
-	    }
-	    
-	    var $chk = $("input[name='chkBox']:checked");
-		var $sum = 0;
-		$chk.each(function(idx, item) {//item 은 자바스크립트 객체
-			var $strTok = item.value.split(',');
-			$sum += new Number($strTok[1]);
-		});
-		var $discount = $sum*($dis/100);
-		$("input[name='total_sum']").val($sum);
-		$("#total_sum").text($sum);
-		$("input[name='discount']").val($discount);
-		$("#discount").text('-'+$discount);
+		$("#discount").text('-' + $discount);
 		$("input[name='result_price']").val($sum - $discount);
 		$("#result_price").text($sum - $discount);
 		console.log($("input[name='discount']").val());
 	});
 
-	
+	$(document).on('click', '.del-chk', function() {
+		if ($('input[class=del-chk]:checked').length == $('.del-chk').length) {
+			$('#checkAll').prop('checked', true);
+		} else {
+			$('#checkAll').prop('checked', false);
+		}
+
+		var $chk = $("input[name='chkBox']:checked");
+		var $sum = 0;
+		$chk.each(function(idx, item) {//item 은 자바스크립트 객체
+			var $strTok = item.value.split(',');
+			$sum += new Number($strTok[1]);
+		});
+		var $discount = $sum * ($dis / 100);
+		$("input[name='total_sum']").val($sum);
+		$("#total_sum").text($sum);
+		$("input[name='discount']").val($discount);
+		$("#discount").text('-' + $discount);
+		$("input[name='result_price']").val($sum - $discount);
+		$("#result_price").text($sum - $discount);
+		console.log($("input[name='discount']").val());
+	});
+
 	function modify(clicked) {
 
-		last_char = clicked.substr(clicked.length-1, 1);
+		last_char = clicked.substr(clicked.length - 1, 1);
 		var $pCnt_m = "cntModify" + last_char;
 		var $pId_m = "productId" + last_char;
-		
+
 		console.log($("input[name='" + $pCnt_m + "']").val());
 		console.log($("input[name='" + $pId_m + "']").val());
 		var $pId = $("input[name='" + $pId_m + "']").val();
 		var $pCnt = $("input[name='" + $pCnt_m + "']").val();
-		
+
 		var param = {};
 		param.pId = $pId;
 		param.pCnt = $pCnt;
-		
+
 		console.log(param);
-		
+
 		$.ajax({
-			type:'get',
-			url:'cartModify',
-			data:param,
-			dataType:'JSON',
-			success:function(data){
+			type : 'get',
+			url : 'cartModify',
+			data : param,
+			dataType : 'JSON',
+			success : function(data) {
 				console.log(data);
-				if(data.success){
-					if(data.success == -1) {
+				if (data.success) {
+					if (data.success == -1) {
 						alert("재고수량보다 많습니다. \r\n다시 선택해주세요.");
 						listCall();
 					} else {
@@ -184,24 +182,24 @@
 				} else {
 					alert("장바구니에 담지 못했습니다.\r\n 다시 시도해주세요.")
 				}
-				
+
 			},
-			error:function(e){
+			error : function(e) {
 				console.log(e);
 			}
 		});
 	}
-	
+
 	function deldel(clicked) {
 
-		last_char = clicked.substr(clicked.length-1, 1);
+		last_char = clicked.substr(clicked.length - 1, 1);
 		var $pId_m = "productId" + last_char;
 		var $pId = $("input[name='" + $pId_m + "']").val();
 
 		var chkArr = [];
 		chkArr.push($pId);
 		isDel = confirm("품절된 상품을 삭제하시겠습니까?");
-		if(isDel) {
+		if (isDel) {
 			$.ajax({
 				type : 'get',
 				url : './cartDel',
@@ -210,7 +208,7 @@
 				},
 				dataType : 'JSON',
 				success : function(data) {
-					
+
 					if (data.cnt > 0) {
 						alert('삭제에 성공 했습니다.');
 						//location.href='main.jsp';
@@ -225,14 +223,13 @@
 			});
 		}
 	}
-	
+
 	function del() {
 		var $chk = $("input[name='chkBox']:checked");
 		if ($chk.length > 0) {
 			console.log("삭제");
 
 			var chkArr = [];
-			
 
 			$chk.each(function(idx, item) {//item 은 자바스크립트 객체
 				var $strTok = item.value.split(',');
@@ -240,11 +237,11 @@
 				console.log(item);
 				console.log($(item));
 				console.log(item.value);
-				
+
 				chkArr.push($strTok[0]);
 			});
 			isDel = confirm("선택하신 상품을 장바구니에서 삭제하시겠습니까?");
-			if(isDel) {
+			if (isDel) {
 				$.ajax({
 					type : 'get',
 					url : './cartDel',
@@ -253,7 +250,7 @@
 					},
 					dataType : 'JSON',
 					success : function(data) {
-						
+
 						if (data.cnt > 0) {
 							alert(data.cnt + '건 삭제에 성공 했습니다.');
 							//location.href='main.jsp';
@@ -261,7 +258,7 @@
 						} else {
 							alert('삭제에 실패 했습니다.');
 						}
-	
+
 					},
 					error : function(e) {
 						console.log(e);
@@ -274,7 +271,7 @@
 	}
 	function order() {
 		var $chk = $("input[name='chkBox']:checked");
-		
+
 		if ($chk.length > 0) {
 			console.log("주문");
 			var chkArr = [];
@@ -285,14 +282,14 @@
 				console.log(item);
 				console.log($(item));
 				console.log(item.value);
-				
+
 				chkArr.push($strTok[0]);
 			});
 			console.log("??????????");
 			console.log(chkArr);
 
 			isOrder = confirm("선택하신 상품을 주문하시겠습니까?");
-			if(isOrder){
+			if (isOrder) {
 				console.log(chkArr);
 				console.log("----------");
 				$.ajax({
@@ -303,21 +300,21 @@
 					},
 					dataType : 'JSON',
 					success : function(data) {
-						
+
 						if (data.cnt > 0) {
 							console.log("여기는 왜..?");
 							alert(data.cnt + '건 주문.');
 							//console.log(data.orderList);
-							location.href='./orderList';
+							location.href = './orderList';
 							//console.log(list);
 							//list 파라미터로 보내서
 							//orderList(list);
 							//다른 함수호출
 						} else {
-							
+
 							alert('주문에 실패 했습니다.');
 						}
-	
+
 					},
 					error : function(e) {
 						console.log(e);
@@ -331,7 +328,7 @@
 	function orderList(list) {
 		console.log("오더리스트");
 		console.log(list);
-		
+
 		$.ajax({
 			type : 'get',
 			url : './orderList',
@@ -346,15 +343,15 @@
 				console.log(e);
 			}
 		});
-		
+
 	}
 	function drawEmptyList() {
 		var content = "";
-		content += "<tr><td colspan='7'>" +"　"+ "</td></tr>";
+		content += "<tr><td colspan='7'>" + "　" + "</td></tr>";
 		content += "<tr>";
 		content += "<td colspan='7'>장바구니가 비었습니다.</td>";
 		content += "</tr>";
-		
+
 		$("tbody").empty();
 		$("tbody").append(content);
 	}
@@ -364,34 +361,58 @@
 
 		var tPrice = 0;
 		var id = 1;
-		list.forEach(function(item, idx) {
+		list
+				.forEach(function(item, idx) {
 
-			content += "<tr>";
-			
-			if(item.stock == 0) {
-				content += "<td><input class='del-chk' name='chkBox' type='checkbox' disabled  value='"+ item.productId+","+ item.totalPrice +"'/></td>";
-				content += "<td><label style='color: white !important; position: absolute; background: red; '>품절</label>";
-				content += "<a href='shopDetail?productId=" + item.productId + "'><img src='logo.png' style='width: 100px; height: 80px;' /></a></td>";
-				content += "<td class='info' colspan='3'><div><div>" + item.productName + "</div><div><hr/><div><input name='cntModify" + id +"' type='text' style='width:20px; text-align:center;' value= '"  + item.productCount + "' /><input name='stock" + id +"' type='hidden' style='width:20px; text-align:center;' value= '"  + item.stock + "' /><input onclick='modify(this.id)' id='btn" + id +"'type='button' value='수정'/><input onclick='deldel(this.id)' id='btn" + id +"'type='button' value='삭제'/></div></div></div><input name='productId" + id +"' type='hidden' value='"+ item.productId+"'/></td>";
-			} else if(item.stock < item.productCount) {
-				content += "<td><input class='del-chk' name='chkBox' type='checkbox' disabled  value='"+ item.productId+","+ item.totalPrice +"'/></td>";
-				content += "<td><label style='color: white !important; position: absolute; background: red; '>수량 수정 필요</label>";
-				content += "<a href='shopDetail?productId=" + item.productId + "'><img src='logo.png' style='width: 100px; height: 80px;' /></a></td>";
-				content += "<td class='info' colspan='3'><div><div>" + item.productName + "</div><div><hr/><div><input name='cntModify" + id +"' type='text' style='width:20px; text-align:center;' value= '"  + item.productCount + "' /><input name='stock" + id +"' type='hidden' style='width:20px; text-align:center;' value= '"  + item.stock + "' /><input onclick='modify(this.id)' id='btn" + id +"'type='button' value='수정'/> "+ "남은 개수 : " + item.stock + "</div></div></div><input name='productId" + id +"' type='hidden' value='"+ item.productId+"'/></td>";
-			} else {
-				content += "<td><input class='del-chk' name='chkBox' type='checkbox' value='"+ item.productId+","+ item.totalPrice +"'/></td>";
-				content += "<td><a href='shopDetail?productId=" + item.productId + "'><img src='logo.png' style='width: 100px; height: 80px;' /></a></td>";
-				content += "<td class='info' colspan='3'><div><div>" + item.productName + "</div><div><hr/><div><input name='cntModify" + id +"' type='text' style='width:20px; text-align:center;' value= '"  + item.productCount + "' /><input name='stock" + id +"' type='hidden' style='width:20px; text-align:center;' value= '"  + item.stock + "' /><input onclick='modify(this.id)' id='btn" + id +"'type='button' value='수정'/></div></div></div><input name='productId" + id +"' type='hidden' value='"+ item.productId+"'/></td>";
-			}
-			//content += "<td>" + item.productName + "</td>";
-			content += "<td>" + item.price + " 원</td>";
-			//content += "<td><input name='cntModify" + id +"' type='text' style='width:20px; text-align:center;' value= '"  + item.productCount + "' /><input onclick='modify(this.id)' id='btn" + id +"'type='button' value='수정'/></td>";
-			content += "<td>" + item.totalPrice + " 원</td>";
-			content += "</div></tr>";
-			content += "<tr><td colspan='7'><hr></td></div></tr>"
-			id++;
-		});
-		
+					content += "<tr>";
+
+					if (item.stock == 0) {
+						content += "<td><input class='del-chk' name='chkBox' type='checkbox' disabled  value='"+ item.productId+","+ item.totalPrice +"'/></td>";
+						content += "<td><label style='color: white !important; position: absolute; background: red; '>품절</label>";
+						content += "<a href='shopDetail?productId="
+								+ item.productId
+								+ "'><img src='logo.png' style='width: 100px; height: 80px;' /></a></td>";
+						content += "<td class='info' colspan='3'><div><div>"
+								+ item.productName
+								+ "</div><div><hr/><div><input name='cntModify" + id +"' type='text' style='width:20px; text-align:center;' value= '"  + item.productCount + "' /><input name='stock" + id +"' type='hidden' style='width:20px; text-align:center;' value= '"  + item.stock + "' /><input onclick='modify(this.id)' id='btn"
+								+ id
+								+ "'type='button' value='수정'/><input onclick='deldel(this.id)' id='btn"
+								+ id
+								+ "'type='button' value='삭제'/></div></div></div><input name='productId" + id +"' type='hidden' value='"+ item.productId+"'/></td>";
+					} else if (item.stock < item.productCount) {
+						content += "<td><input class='del-chk' name='chkBox' type='checkbox' disabled  value='"+ item.productId+","+ item.totalPrice +"'/></td>";
+						content += "<td><label style='color: white !important; position: absolute; background: red; '>수량 수정 필요</label>";
+						content += "<a href='shopDetail?productId="
+								+ item.productId
+								+ "'><img src='logo.png' style='width: 100px; height: 80px;' /></a></td>";
+						content += "<td class='info' colspan='3'><div><div>"
+								+ item.productName
+								+ "</div><div><hr/><div><input name='cntModify" + id +"' type='text' style='width:20px; text-align:center;' value= '"  + item.productCount + "' /><input name='stock" + id +"' type='hidden' style='width:20px; text-align:center;' value= '"  + item.stock + "' /><input onclick='modify(this.id)' id='btn"
+								+ id
+								+ "'type='button' value='수정'/> "
+								+ "남은 개수 : "
+								+ item.stock
+								+ "</div></div></div><input name='productId" + id +"' type='hidden' value='"+ item.productId+"'/></td>";
+					} else {
+						content += "<td><input class='del-chk' name='chkBox' type='checkbox' value='"+ item.productId+","+ item.totalPrice +"'/></td>";
+						content += "<td><a href='shopDetail?productId="
+								+ item.productId
+								+ "'><img src='logo.png' style='width: 100px; height: 80px;' /></a></td>";
+						content += "<td class='info' colspan='3'><div><div>"
+								+ item.productName
+								+ "</div><div><hr/><div><input name='cntModify" + id +"' type='text' style='width:20px; text-align:center;' value= '"  + item.productCount + "' /><input name='stock" + id +"' type='hidden' style='width:20px; text-align:center;' value= '"  + item.stock + "' /><input onclick='modify(this.id)' id='btn"
+								+ id
+								+ "'type='button' value='수정'/></div></div></div><input name='productId" + id +"' type='hidden' value='"+ item.productId+"'/></td>";
+					}
+					//content += "<td>" + item.productName + "</td>";
+					content += "<td>" + item.price + " 원</td>";
+					//content += "<td><input name='cntModify" + id +"' type='text' style='width:20px; text-align:center;' value= '"  + item.productCount + "' /><input onclick='modify(this.id)' id='btn" + id +"'type='button' value='수정'/></td>";
+					content += "<td>" + item.totalPrice + " 원</td>";
+					content += "</div></tr>";
+					content += "<tr><td colspan='7'><hr></td></div></tr>"
+					id++;
+				});
+
 		$("tbody").empty();
 		$("tbody").append(content);
 	}

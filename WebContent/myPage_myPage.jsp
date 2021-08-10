@@ -16,126 +16,191 @@
 	}
 </script>
 <body>
-	<div class="wrap" >
+	<div class="wrap">
+	
 		<header>
 			<c:import url="./header_afterLogin.jsp" />
 		</header>
-
-
-		<main id="body" style="padding:20px;background-color:#d5d5d5; border-radius:10px;">
+		<main id="body" style="padding: 20px;">
+		<a href='index.jsp' id='main'>
+		<h4 style="border:2px solid #bbb; border-radius:10px; text-align:center; width:230px;"> ← MAIN PAGE로 돌아가기</h4>
+		</a>
 			<div>
-				<div style="width:900px; display:flex; margin-bottom:20px;">
-					<div style="width:660px;">
+				<div style="width: 900px; display: flex; margin-bottom: 20px;">
+					<div style="width: 660px;">
 						<img src="./staticImg/user.jpeg" id='userImg' alt="유저이미지"
 							width='100px' height='100px' />
 
-						<h3>${sessionScope.nickName}님의 마이페이지</h3>
-						<a href='index.jsp' id='main'>MAIN PAGE로 돌아가기</a>
+						<h3>${sessionScope.nickName}님의마이페이지</h3>
+						
 					</div>
-					<div id="info" style="width:200px;">
+					<div id="info" style="width: 200px;">
 						<c:import url="./myPage_info.jsp" />
 					</div>
 				</div>
 
-				<div id="myMenu">
-					<div class="myMenu">
+				<div id="myMenu" style="width: 780px; display: flex; padding: 0 40px;">
+					<div class="myMenu" style="width:20%;">
+				
 						<img src="./staticImg/catIcon.png" alt="내정보아이콘" width=50px;
-							height=50px; /><br/>
+							height=50px; /><br />
 						<button type='button' onclick="location.href='./clientInfo'">내
 							정보 수정/보기</button>
 					</div>
-					<div class="myMenu">
+					<div class="myMenu" style="width:20%;">
 						<img src="./staticImg/catIcon.png" alt="주문아이콘" width=50px;
-							height=50px; /><br/>
+							height=50px; /><br />
 						<button type='button' onclick="location.href='index.jsp'">주문조회</button>
 					</div>
-					<div class="myMenu">
+					<div class="myMenu" style="width:20%;">
 						<img src="./staticImg/catIcon.png" alt="장바구니아이콘" width=50px;
-							height=50px; /><br/>
+							height=50px; /><br />
 						<button type='button' onclick="location.href='cart.jsp'">장바구니</button>
 					</div>
-					<div class="myMenu">
+					<div class="myMenu" style="width:20%;">
 						<img src="./staticImg/catIcon.png" alt="캐시아이콘" width=50px;
-							height=50px; /><br/>
+							height=50px; /><br />
 						<button type='button' onclick='location.href="./cashHistory"'>마이캐시</button>
 					</div>
-					<div class="myMenu">
+					<div class="myMenu" style="width:20%;">
 						<img src="./staticImg/catIcon.png" alt="명예아이콘" width=50px;
-							height=50px; /><br/>
+							height=50px; /><br />
 						<button type='button' onclick="location.href='./pointHistory'">명예조회</button>
 					</div>
 				</div>
 
 				<div id="like">
 					<h4>♥ 좋아요한 레시피</h4>
-					<table>
-						<tr>
-							<th>썸네일</th>
-							<th>좋아요</th>
-							<th>제목</th>
-							<th>조회수</th>
-							<th>재료</th>
-							<th>예산</th>
-							<th>작성자</th>
-						</tr>
+					<div class="recipeContainer">
 						<c:if test="${myPage_Like eq null || myPage_Like eq ''}">
-							<tr>
-								<td colspan='7'>좋아요한 레시피가 없습니다.</td>
-							</tr>
+							<div>좋아요한 레시피가 없습니다.</div>
+
 						</c:if>
 						<c:forEach items='${myPage_Like}' var='likeItem'>
-							<tr>
-								<td>썸네일</td>
-								<td>${likeItem.like}</td>
-								<td><a href='#?postid=${likeItem.postId}'>${likeItem.title}</a></td>
-								<td>${likeItem.hits}</td>
-								<td>${likeItem.item}</td>
-								<td>${likeItem.recipePrice}</td>
-								<td>${likeItem.nickName}</td>
-							</tr>
+							<div style="width: 280px; height: 252px;">
+								<a href="postDetail?postId=${likeItem.postId}">
+									<figure class="recipeFigure">
+										<c:set var="imgNewName" value="${post.imgNewName}" />
+										<c:if test="${imgNewName eq null }">
+											<img class="img" src="./defaultThum.png"
+												style="height: 100px; width: 180px; margin: 10px;"
+												onclick="location.href='postDetail?postId=${post.postId}'" />
+										</c:if>
+										<c:if test="${imgNewName ne null }">
+											<img class="img" src="/photo/${post.imgNewName}"
+												style="height: 100px; width: 180px; margin: 10px;"
+												onclick="location.href='postDetail?postId=${post.postId}'" />
+
+
+										</c:if>
+										<figcaption>
+											<div style="margin: 0 5px 5px 5px;">
+												<div>
+													<div style="font-size: 0.5em; float: left; width: 30px;">
+														좋아요<br />${likeItem.like}</div>
+													<div
+														style="float: left; width: 122px; margin: 0 4px 0 4px;">
+														<small>${likeItem.title}</small>
+													</div>
+													<div style="font-size: 0.5em; float: left; width: 30px;">
+														조회수<br />${likeItem.hits}</div>
+												</div>
+												<div>
+													<div>
+														<div style="text-align: left;">
+															<small>${likeItem.item}</small>
+														</div>
+														<div style="text-align: left;">
+															<small>${likeItem.recipePrice}\</small>
+														</div>
+														<div style="text-align: right;">
+															<small>${likeItem.nickName}</small>
+														</div>
+													</div>
+
+
+												</div>
+											</div>
+										</figcaption>
+
+									</figure>
+								</a>
+							</div>
 						</c:forEach>
-					</table>
-					<button style="margin-bottom:10px;" onclick="href.location='index.jsp'">좋아요한 레시피 더보기</button>
+					</div>
+
+					<button style="margin-bottom: 10px;"
+						onclick="href.location='index.jsp'">좋아요한 레시피 더보기</button>
 				</div>
 
 				<div id="myRecipe">
 					<h4>♥ 내 레시피</h4>
-					<table>
-						<tr>
-							<th>썸네일</th>
-							<th>좋아요</th>
-							<th>제목</th>
-							<th>조회수</th>
-							<th>재료</th>
-							<th>예산</th>
-							<th>작성자</th>
-						</tr>
+					<div class="recipeContainer">
 						<c:if test="${myPage_Post eq null || myPage_Post eq ''}">
-							<tr>
-								<td colspan='7'>작성한 레시피가 없습니다.</td>
-							</tr>
+							<b>작성한 레시피가 없습니다.</b>
 						</c:if>
 						<c:forEach items='${myPage_Post}' var='postItem'>
-							<tr>
-								<td>썸네일</td>
-								<td>${postItem.like}</td>
-								<td><a href='#?postid=${postItem.postId}'>${postItem.title}</a></td>
-								<td>${postItem.hits}</td>
-								<td>${postItem.item}</td>
-								<td>${postItem.recipePrice}</td>
-								<td>${postItem.nickName}</td>
-							</tr>
+							<div style="width: 280px; height: 252px;">
+								<a href="postDetail?postId=${likeItem.postId}">
+									<figure class="recipeFigure">
+										<c:set var="imgNewName" value="${postItem.imgNewName}" />
+										<c:if test="${imgNewName eq null }">
+											<img class="img" src="./defaultThum.png"
+												style="height: 100px; width: 180px; margin: 10px;"
+												onclick="location.href='postDetail?postId=${postItem.postId}'" />
+										</c:if>
+										<c:if test="${imgNewName ne null }">
+											<img class="img" src="/photo/${post.imgNewName}"
+												style="height: 100px; width: 180px; margin: 10px;"
+												onclick="location.href='postDetail?postId=${postItem.postId}'" />
+
+
+										</c:if>
+										<figcaption>
+											<div style="margin: 0 5px 5px 5px;">
+												<div>
+													<div style="font-size: 0.5em; float: left; width: 30px;">
+														좋아요<br />${postItem.like}</div>
+													<div
+														style="float: left; width: 122px; margin: 0 4px 0 4px;">
+														<small>${postItem.title}</small>
+													</div>
+													<div style="font-size: 0.5em; float: left; width: 30px;">
+														조회수<br />${postItem.hits}</div>
+												</div>
+												<div>
+													<div>
+														<div style="text-align: left;">
+															<small>${postItem.item}</small>
+														</div>
+														<div style="text-align: left;">
+															<small>${postItem.recipePrice}\</small>
+														</div>
+														<div style="text-align: right;">
+															<small>${postItem.nickName}</small>
+														</div>
+													</div>
+
+
+												</div>
+											</div>
+										</figcaption>
+
+									</figure>
+								</a>
+							</div>
 						</c:forEach>
-					</table>
-					<button style="margin-bottom:10px;" onclick="href.location='./myWrite'">내가 작성한 레시피 더보기</button>
+					</div>
+					<button style="margin-bottom: 10px;"
+						onclick="href.location='./myWrite'">내가 작성한 레시피 더보기</button>
 				</div>
 
 				<div id="myComment">
 					<h4>♥ 내가 쓴 댓글</h4>
-					<table>
+					<table id="commentTable">
 						<tr>
 							<th>레시피제목</th>
-							<th>댓글내용</th>
+							<th style="width:600px;">댓글내용</th>
 							<th>작성날짜</th>
 						</tr>
 						<c:if test="${myPage_Comment eq null || myPage_Comment eq ''}">
@@ -151,12 +216,12 @@
 							</tr>
 						</c:forEach>
 					</table>
-					<button style="margin-bottom:10px;"onclick="href.location='./myComment'">내가 작성한 댓글
-						더보기</button>
+					<button style="margin-bottom: 10px;"
+						onclick="href.location='./myComment'">내가 작성한 댓글 더보기</button>
 				</div>
 
-				<button style="margin-top:10px;"id='delAccount' onclick="href.location='index.jsp'">회원
-					탈퇴</button>
+				<button style="margin-top: 10px;" id='delAccount'
+					onclick="href.location='index.jsp'">회원 탈퇴</button>
 			</div>
 		</main>
 		<footer> </footer>

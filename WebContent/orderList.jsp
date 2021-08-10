@@ -19,7 +19,7 @@
 
 		<main id="body">
 
-			<h1>주문하기</h1>
+			<h1 style="border:2px solid #bbb; border-radius:10px; text-align:center; width:200px;"> 주문하기 </h1>
 			<div>
 				<h2>배송정보</h2>
 				이름 : ${member.name} <br /> 배송주소 : ${member.address}<br /> 연락처 :
