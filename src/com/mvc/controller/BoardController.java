@@ -15,7 +15,7 @@ import com.mvc.dto.MainDTO;
 import com.mvc.service.BoardService;
 import com.mvc.service.MemberService;
 
-@WebServlet({"/postWriteForm","/postWrite","/postDetail","/postUpdateForm","/postUpdate","/postDel","/postList","/category","/postSearch","/writeComment", "/loadComments", "/updateComment", "/writeRecomment", "/deleteComment"})
+@WebServlet({"/postWriteForm","/postWrite","/postDetail","/postUpdateForm","/postUpdate","/postDel","/postList","/category","/postSearch","/writeComment", "/loadComments", "/updateComment", "/writeRecomment", "/deleteComment","/itemListCall"})
 public class BoardController extends HttpServlet {
 
 	@Override
@@ -234,6 +234,12 @@ public class BoardController extends HttpServlet {
 				e.printStackTrace();
 			}
 		break;
+		
+		case "/itemListCall"://지현
+			System.out.println("상품리스트 불러오기 요청");
+			service.itemListCall();
+			break;
+			
 		}
 	}
 	

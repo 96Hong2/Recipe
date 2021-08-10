@@ -1,6 +1,7 @@
 package com.mvc.service;
 
 import java.awt.print.Printable;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.jasper.tagplugins.jstl.core.Out;
 
+import com.google.gson.Gson;
 import com.mvc.dao.BoardDAO;
 import com.mvc.dao.MemberDAO;
 import com.mvc.dto.MainDTO;
@@ -347,6 +349,29 @@ public class BoardService {
 		System.out.println("댓글 삭제 성공 여부 : " + success);
 		return success;
 	}
+	
+	public void itemListCall() throws IOException {//지현
+		String item = req.getParameter("item");
+		String postId = req.getParameter("postId");
+		System.out.println("item / postId : "+item+"/"+postId);
+		BoardDAO dao = new BoardDAO();
+		ArrayList<MainDTO> list = null;
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		try {
+			list = dao.itemListCall(item);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			dao.resClose();
+			map.put("list", list);
+		}
+		
+		resp.setContentType("text/html; charset=UTF-8");
+		resp.getWriter().println(new Gson().toJson(map));
+		
+	}
+	
 	
 
 	

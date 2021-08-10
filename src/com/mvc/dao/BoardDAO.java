@@ -906,4 +906,35 @@ public class BoardDAO {
 		}
 		return success;
 	}
+	
+	public ArrayList<MainDTO> itemListCall(String item) throws SQLException {//지현
+		String sql = "SELECT p.productid, p.productname, p.price, i.imgNewName FROM product p LEFT OUTER JOIN image i "
+				+ "ON (p.productid = i.fieldid) AND (i.imgField='product_th') WHERE (p.productname LIKE ?) AND (p.stock > 0) AND (p.isdel = 'N')";
+
+		String[] itemArr = item.split(",");
+		ArrayList<MainDTO> itemList = new ArrayList<MainDTO>();
+		
+
+		for (String items : itemArr) {
+			System.out.println(items);
+			String keyword = '%' + items + '%';
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, keyword);
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				MainDTO dto = new MainDTO();
+				dto.setProductId(rs.getString("productid"));
+				dto.setProductName(rs.getString("productname"));
+				dto.setPrice(rs.getInt("price"));
+				dto.setImgNewName(rs.getString("imgNewName"));
+				itemList.add(dto);
+			}
+			
+		}
+		System.out.println("itemList : "+itemList);
+		return itemList;
+	}
+
 }
+

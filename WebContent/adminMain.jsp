@@ -9,10 +9,10 @@
 </head>
 <body>
 	 <h3>관리자 페이지</h3>
-            <button>회원 조회</button>
-            <button>신고 관리</button>
-            <button>블라인드 관리</button>
-            <button>정지 관리</button>
+            <button onclick="location.href='./memberList.jsp'">회원 조회</button>
+            <button onclick="location.href='./report/reportList.jsp'">신고 관리</button>
+            <button onclick="location.href='./blindList.jsp'">블라인드 관리</button>
+            <button onclick="location.href='./susMemberList.jsp'">정지 관리</button>
              <button onclick="location.href='./adminList.jsp'">관리자 관리</button>
             <button onclick="location.href='./adminProductList'">상품 관리</button>
 </body>
