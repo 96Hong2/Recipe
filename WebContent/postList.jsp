@@ -81,9 +81,17 @@
 							<c:if test="${list[0].categoryId == 1 && category.equals(category)&& notAll.equals(notAll)}">checked="checked"</c:if> />기타
 					</div>
 				</form>
+				
+				<form>
+					<div>
+						<a>최신순</a>&nbsp;&nbsp;
+						<a>조회수</a>&nbsp;&nbsp;
+						<a>좋아요</a>&nbsp;&nbsp;
+						<a>금액 ↑↓</a>
+					</div>
+				</form>
 
-
-				<form action="postSearch" method="get" id="postSearch">
+				<form action="postSearch" method="get" id="postSearch" name="postSearch">
 					<select name="postSearchOpt" id="postSearchOpt">
 						<option value='title_contentsSearch' selected="selected">제목 + 내용</option>
 						<option value='recipePriceSearch'>예산</option>
@@ -95,18 +103,18 @@
 					</span>
 					<span hidden="hidden" id="option2">
 						<input type="number" id="recipePriceSearch" name="keywordMin" placeholder="최소 예산" /> ~
-						<input type="number" name="keywordMax" placeholder="최대 예산" />￦
+						<input type="number" id="recipePriceSearchMax" name="keywordMax" placeholder="최대 예산" />￦
 					</span> 
 					<span hidden="hidden" id="option3">
 						<input type="text" id="nickNameSearch" name="keywordNickName" placeholder="닉네임 입력" />
 					</span>
 					<span hidden="hidden" id="option4"><input type="text"
 						id="itemSearch" name="keywordItem" placeholder="재료 입력" /></span>
-					<c:if test="${category.equals(category) && total != 0 && notAll.equals(notAll)}">
-						<input type="hidden" name="categoryId" value="${list[0].categoryId}" />
+					<c:if test="${category.equals(category) && total != 0 && notAll.equals(notAll) || category.equals(category)}">
+						<input type="text" name="categoryId" value="${list[0].categoryId}" />
 					</c:if>
-					<c:if test="${all.equals(all) || total == 0}">
-						<input type="hidden" name="categoryId" value="0" />
+					<c:if test="${all.equals(all) || total == 0 }">
+						<input type="text" name="categoryId" value="0" />
 					</c:if>
 					<button>검색</button>
 				</form>
@@ -137,7 +145,7 @@
 													<div style="font-size: 0.5em; float: left; width: 30px;">
 														좋아요<br />${post.likes}</div>
 													<div
-														style="float: left; width: 122px; margin: 0 4px 0 4px;">
+														style="float: left;  width: 122px; margin: 0 4px 0 4px;">
 														<small>${post.title}</small>
 													</div>
 													<div style="font-size: 0.5em; float: left; width: 30px;">
@@ -201,33 +209,36 @@
 				$("#option2").hide();
 				$("#option3").hide();
 				$("#option4").hide();
-				$("#recipePriceSearch").claer();
-				$("#nickNameSearch").claer();
-				$("#itemSearch").claer();
+				 document.getElementById("recipePriceSearch").value ='';
+				 document.getElementById("recipePriceSearchMax").value ='';
+				 document.getElementById("nickNameSearch").value ='';
+				 document.getElementById("itemSearch").value ='';
 			} else if ($("#postSearchOpt").val() == "recipePriceSearch") {
 				$("#option2").show();
 				$("#option1").hide();
 				$("#option3").hide();
 				$("#option4").hide();
-				$("#title_contentsSearch").clear();
-				$("#nickNameSearch").clear();
-				$("#itemSearch").clear();
+				 document.getElementById("title_contentsSearch").value ='';
+				 document.getElementById("nickNameSearch").value ='';
+				 document.getElementById("itemSearch").value ='';
 			} else if ($("#postSearchOpt").val() == "nickNameSearch") {
 				$("#option3").show();
 				$("#option1").hide();
 				$("#option2").hide();
 				$("#option4").hide();
-				$("#title_contentsSearch").clear();
-				$("#recipePriceSearch").clear();
-				$("#itemSearch").clear();
+				 document.getElementById("recipePriceSearch").value ='';
+			 	 document.getElementById("title_contentsSearch").value ='';
+				 document.getElementById("itemSearch").value ='';
+				 document.getElementById("recipePriceSearchMax").value ='';
 			} else if ($("#postSearchOpt").val() == "itemSearch") {
 				$("#option4").show();
 				$("#option1").hide();
 				$("#option2").hide();
 				$("#option3").hide();
-				$("#title_contentsSearch").clear();
-				$("#recipePriceSearch").clear();
-				$("#nickNameSearch").clear();
+				 document.getElementById("recipePriceSearch").value ='';
+				 document.getElementById("nickNameSearch").value ='';
+				 document.getElementById("title_contentsSearch").value ='';
+				 document.getElementById("recipePriceSearchMax").value ='';
 			}
 
 		});
