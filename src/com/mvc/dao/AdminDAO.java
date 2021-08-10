@@ -859,8 +859,8 @@ public class AdminDAO {
 			ps.executeUpdate();
 			rs = ps.getGeneratedKeys();
 			if(rs.next()) {
-				productId = rs.getString(1); // ps에서 String배열의 1번째 값(postId) 가져오기
-				System.out.println("작성된 postId:" + productId);			
+				productId = rs.getString(1); 
+				System.out.println("작성된 productId:" + productId);			
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

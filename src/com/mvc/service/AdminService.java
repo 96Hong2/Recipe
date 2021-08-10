@@ -538,8 +538,7 @@ public class AdminService {
 		}
 		if(img != null) {// 첨부가 있으면,
 			memberdao.setImgField(productId, img);
-		}
-		memberdao.getPoint(productId, "새 레시피 작성", 10);
+		}		
 
 		dao.resClose(); //자원닫기
 		return productId;	
