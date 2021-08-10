@@ -47,9 +47,9 @@
 							<th>획득점수</th>
 							<th>총합</th>
 						</tr>
-						<c:if test="${pointList eq null || pointList eq ''}">
+						<c:if test='${pointList eq "[]"}'>
 							<tr>
-								<td colspan='4'>명예 획득 내역이 없습니다.</td>
+								<td colspan='4'><br>명예 획득 내역이 없습니다.<br>&nbsp;</td>
 							</tr>
 						</c:if>
 						<c:forEach items='${pointList}' var='item'>

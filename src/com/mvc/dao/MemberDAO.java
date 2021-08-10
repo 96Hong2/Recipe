@@ -251,6 +251,7 @@ public class MemberDAO {
 		String item = "로드실패"; // 재료
 		int recipePrice = 0; // 예산
 		String nickName = ""; // 작성자닉네임
+		String imgNewName = ""; //썸네일파일명
 
 		String commentid = ""; // 댓글 또는 대댓글 id
 		String comment_content = "로드실패"; // 댓글 또는 대댓글 내용
@@ -258,10 +259,10 @@ public class MemberDAO {
 
 		try {
 			// 좋아요 불러오기
-			sql = "SELECT postId,likes,title,hits,item,recipePrice,"
-					+ "(SELECT nickName FROM member WHERE userid=p.userid) nickName "
-					+ "FROM (SELECT * FROM post WHERE postid "
-					+ "IN (SELECT postId FROM (SELECT postId FROM postLike WHERE userId=? ORDER BY likedate DESC) WHERE ROWNUM < 4) ORDER BY postdate DESC) p";
+			sql = "SELECT i.imgNewName, u.* FROM (SELECT postId,likes,title,hits,item,recipePrice,(SELECT nickName FROM member WHERE userid=p.userid) nickName"
+					+ " FROM (SELECT * FROM post WHERE postid IN (SELECT postId FROM "
+					+ "(SELECT postId FROM postLike WHERE userId=? ORDER BY likedate DESC) WHERE ROWNUM < 4) ORDER BY postdate DESC) p) u "
+					+ "LEFT OUTER JOIN image i ON u.postId=i.fieldid AND i.imgfield='post_th'";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, userId);
 			rs = ps.executeQuery();
@@ -286,7 +287,8 @@ public class MemberDAO {
 
 				recipePrice = rs.getInt("recipePrice");
 				nickName = rs.getString("nickName");
-
+				imgNewName = rs.getString("imgNewName");
+				
 				dto = new MainDTO();
 				dto.setPostId(postId);
 				dto.setLike(like);
@@ -295,10 +297,11 @@ public class MemberDAO {
 				dto.setItem(item);
 				dto.setRecipePrice(recipePrice);
 				dto.setNickName(nickName);
+				dto.setImgNewName(imgNewName);
 				likeList.add(dto);
 			}
-			System.out.println("마지막줄 postId/like/title/hits/item/recipePrice/nickname : " + postId + "/" + like + "/"
-					+ title + "/" + hits + "/" + item + "/" + recipePrice + "/" + nickName);
+			System.out.println("마지막줄 postId/like/title/hits/item/recipePrice/nickname/imgNewName : " + postId + "/" + like + "/"
+					+ title + "/" + hits + "/" + item + "/" + recipePrice + "/" + nickName + "/" + imgNewName);
 			System.out.println("likeList size : " + likeList.size());
 			map.put("likeList", likeList);
 			System.out.println("map안에서 likeList size : " + map.get("likeList").size());
@@ -309,9 +312,10 @@ public class MemberDAO {
 
 		try {
 			// 내가 쓴 글 불러오기
-			sql = "SELECT postId,likes,title,hits,item,recipePrice,"
+			sql = "SELECT i.imgNewName, u.* FROM (SELECT postId,likes,title,hits,item,recipePrice,"
 					+ "(SELECT nickname FROM member WHERE userid=u.userid) nickname "
-					+ "FROM (SELECT * FROM post WHERE userId=? ORDER BY postdate DESC) u WHERE ROWNUM<4";
+					+ "FROM (SELECT * FROM post WHERE userId=? ORDER BY postdate DESC) u WHERE ROWNUM<4) u"
+					+ " LEFT OUTER JOIN image i ON u.postId=i.fieldid AND i.imgfield='post_th'";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, userId);
 			rs = ps.executeQuery();
@@ -336,6 +340,7 @@ public class MemberDAO {
 
 				recipePrice = rs.getInt("recipePrice");
 				nickName = rs.getString("nickName");
+				imgNewName = rs.getString("imgNewName");
 
 				dto = new MainDTO();
 				dto.setPostId(postId);
@@ -345,10 +350,11 @@ public class MemberDAO {
 				dto.setItem(item);
 				dto.setRecipePrice(recipePrice);
 				dto.setNickName(nickName);
+				dto.setImgNewName(imgNewName);
 				postList.add(dto);
 			}
-			System.out.println("마지막줄 postId/like/title/hits/item/recipePrice/nickname : " + postId + "/" + like + "/"
-					+ title + "/" + hits + "/" + item + "/" + recipePrice + "/" + nickName);
+			System.out.println("마지막줄 postId/like/title/hits/item/recipePrice/nickname/imgNewName : " + postId + "/" + like + "/"
+					+ title + "/" + hits + "/" + item + "/" + recipePrice + "/" + nickName+ "/" + imgNewName);
 			System.out.println("postList size : " + postList.size());
 			map.put("postList", postList);
 			System.out.println("map안에서 postListsize : " + map.get("postList").size());

@@ -72,24 +72,23 @@
 				<div id="like">
 					<h4>♥ 좋아요한 레시피</h4>
 					<div class="recipeContainer">
-						<c:if test="${myPage_Like eq null || myPage_Like eq ''}">
-							<div>좋아요한 레시피가 없습니다.</div>
-
+						<c:if test="${myPage_Like eq '[]'}">
+							<div style='height:100px'>좋아요한 레시피가 없습니다.</div>
 						</c:if>
 						<c:forEach items='${myPage_Like}' var='likeItem'>
 							<div style="width: 280px; height: 252px;">
-								<a href="postDetail?postId=${likeItem.postId}">
+								<a href="./postDetail?postId=${likeItem.postId}">
 									<figure class="recipeFigure">
-										<c:set var="imgNewName" value="${post.imgNewName}" />
+										<c:set var="imgNewName" value="${likeItem.imgNewName}" />
 										<c:if test="${imgNewName eq null }">
 											<img class="img" src="./defaultThum.png"
 												style="height: 100px; width: 180px; margin: 10px;"
-												onclick="location.href='postDetail?postId=${post.postId}'" />
+												onclick="location.href='./postDetail?postId=${likeItem.postId}'" />
 										</c:if>
-										<c:if test="${imgNewName ne null }">
-											<img class="img" src="/photo/${post.imgNewName}"
+										<c:if test="${imgNewName ne null}">
+											<img class="img" src="/photo/${likeItem.imgNewName}"
 												style="height: 100px; width: 180px; margin: 10px;"
-												onclick="location.href='postDetail?postId=${post.postId}'" />
+												onclick="location.href='./postDetail?postId=${likeItem.postId}'" />
 
 
 										</c:if>
@@ -136,25 +135,23 @@
 				<div id="myRecipe">
 					<h4>♥ 내 레시피</h4>
 					<div class="recipeContainer">
-						<c:if test="${myPage_Post eq null || myPage_Post eq ''}">
-							<b>작성한 레시피가 없습니다.</b>
+						<c:if test="${myPage_Post eq '[]'}">
+							<div style='height:100px'>작성한 레시피가 없습니다.</div>
 						</c:if>
 						<c:forEach items='${myPage_Post}' var='postItem'>
 							<div style="width: 280px; height: 252px;">
-								<a href="postDetail?postId=${likeItem.postId}">
+								<a href="./postDetail?postId=${postItem.postId}">
 									<figure class="recipeFigure">
 										<c:set var="imgNewName" value="${postItem.imgNewName}" />
 										<c:if test="${imgNewName eq null }">
 											<img class="img" src="./defaultThum.png"
 												style="height: 100px; width: 180px; margin: 10px;"
-												onclick="location.href='postDetail?postId=${postItem.postId}'" />
+												onclick="location.href='./postDetail?postId=${postItem.postId}'" />
 										</c:if>
 										<c:if test="${imgNewName ne null }">
-											<img class="img" src="/photo/${post.imgNewName}"
+											<img class="img" src="/photo/${postItem.imgNewName}"
 												style="height: 100px; width: 180px; margin: 10px;"
-												onclick="location.href='postDetail?postId=${postItem.postId}'" />
-
-
+												onclick="location.href='./postDetail?postId=${postItem.postId}'" />
 										</c:if>
 										<figcaption>
 											<div style="margin: 0 5px 5px 5px;">
@@ -191,8 +188,7 @@
 							</div>
 						</c:forEach>
 					</div>
-					<button style="margin-bottom: 10px;"
-						onclick="href.location='./myWrite'">내가 작성한 레시피 더보기</button>
+					<button style="margin-bottom: 10px;" onclick="href.location='./myWrite'">내가 작성한 레시피 더보기</button>
 				</div>
 
 				<div id="myComment">
@@ -203,9 +199,9 @@
 							<th style="width:600px;">댓글내용</th>
 							<th>작성날짜</th>
 						</tr>
-						<c:if test="${myPage_Comment eq null || myPage_Comment eq ''}">
+						<c:if test="${myPage_Comment eq '[]'}">
 							<tr>
-								<td colspan='7'>작성한 댓글이 없습니다.</td>
+								<td colspan='7'><br>작성한 댓글이 없습니다.<br>&nbsp;</td>
 							</tr>
 						</c:if>
 						<c:forEach items='${myPage_Comment}' var='commentItem'>

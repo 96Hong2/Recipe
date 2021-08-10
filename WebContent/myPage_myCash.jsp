@@ -43,9 +43,9 @@
 							<th style="width:400px;">변동 사유</th>
 							<th>총합</th>
 						</tr>
-						<c:if test="${cashList eq null || cashList eq ''}">
+						<c:if test='${cashList eq "[]"}'>
 							<tr>
-								<td colspan='4'>캐시 내역이 없습니다.</td>
+								<td colspan='4'><br>캐시 내역이 없습니다.<br>&nbsp;</td>
 							</tr>
 						</c:if>
 						<c:forEach items='${cashList}' var='item'>
