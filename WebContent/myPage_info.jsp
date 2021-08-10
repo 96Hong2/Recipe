@@ -13,7 +13,7 @@
 		<ul>
 			<li><p>RANK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</p><p id='rankArea'></p></li>
 			<li><p>명예 점수&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><p id='pointArea'></p><p>점</p></li>
-			<li><p>보유 캐시&nbsp;|&nbsp;&nbsp;&nbsp;</p><p id='cashArea'></p><p>원</p></li>
+			<li><p>보유 캐시&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><p id='cashArea'></p><p>원</p></li>
 		</ul>
 	</div>
 </body>
