@@ -22,7 +22,7 @@ div.commentInputBox {
 }
 
 textarea {
-	width: 70%;
+	width: 55%;
 	height: 80px;
 	border: 2px solid #ccc;
 	margin: 5px;
@@ -46,6 +46,26 @@ div.commentAreaBox {
 
 #cmtCount {
 	display: inline;
+}
+
+.pageArea{
+	margin-top : 20px;
+	margin-left : 350px;
+}
+
+.page{
+	display : inline-block;
+	margin : 5px;
+	color : rosybrown;
+}
+
+.page a{
+	color : black;
+	text-decoration-line : none;
+}
+
+.page a:hover{
+	text-decoration-line : underline;
 }
 
 </style>
@@ -74,16 +94,19 @@ div.commentAreaBox {
 				</tr>
 			</table>
 		</div>
+		
+		<div class = "pageArea">
+		</div>
 	</div>
 
 </body>
 <script>
 	$(document).ready(function() {
-		loadComments();
+		loadComments(-1,-1);
 	});
 
-	function loadComments() { //댓글 데이터를 불러오는 함수
-		console.log("loadComments() 들어옴");
+	function loadComments(page, button) { //댓글 데이터를 불러오는 함수
+		console.log("loadComments() 들어옴 page/button : "+page+"/"+button);
 		$
 				.ajax({
 					type : "POST",
@@ -96,10 +119,14 @@ div.commentAreaBox {
 						console.log("ajax로 받아온 data :" + data);
 						console.log("ajax로 받아온 data.list :" + data.list);
 						console.log("ajax로 받아온 댓글개수 :" + data.cmtNum);
+						console.log("ajax로 받아온 totalPage :" + data.totalPage);
+						console.log("ajax로 받아온 currPage :" + data.currPage);
+						console.log("ajax로 받아온 start :" + data.start);
+						console.log("ajax로 받아온 end :" + data.end);
 						if (data.list != null) { //DB에서 댓글 데이터를 정상적으로 가져왔다면
 							$(".commentAreaBox").show(); //만약 숨겨져있으면 보이게 한다
 							$('#cmtCount').html(data.cmtNum);
-							drawComments(data.list); //댓글리스트를 브라우저에 그려준다
+							drawComments(data.list, data.totalPage, data.currPage, data.start, data.end); //댓글리스트를 브라우저에 그려준다
 						} else { //등록된 댓글이 없다면
 							$("#emptyComment")
 									.html(
@@ -114,7 +141,7 @@ div.commentAreaBox {
 
 	}
 
-		function drawComments(list) {
+		function drawComments(list, totalPage, currPage, start, end) {
 		console.log("drawComments() 들어옴");
 		var content = "";
 		var loginId = "${sessionScope.userId}";
@@ -332,6 +359,41 @@ div.commentAreaBox {
 
 		$("#commentAreaTable").empty(); //기존 내용을 비우기
 		$("#commentAreaTable").append(content);
+		
+		var i = 0;
+		content = "";
+		//페이징
+		content += "<button type='button' onclick='loadComments("+start+", 1)'>이전</button>"
+		console.log("======페이징 시작=====");
+		//console.log("typeof(totalPage) : "+typeof(totalPage));
+		console.log("start / totalPage : "+start+"/"+totalPage);
+		if(totalPage < end){
+			for(i=start; i<=totalPage; i++){
+				content += "<div class='page'>";
+				if(i == currPage){
+					content += ("<b>"+i+"</b>");
+				}else{
+					content += ("<a href='javascript:loadComments("+i+",-1)'>"+i+"</a>");					
+				}
+				console.log("totalPage<end여서 for문 끝!!");
+				content += "</div>";
+			}
+		}else{
+			for(i=start; i<end; i++){
+				content += "<div class='page'>";
+				if(i == currPage){
+					content += ("<b>"+i+"</b>");
+				}else{
+					content += ("<a href='javascript:loadComments("+i+",-1)'>"+i+"</a>");
+				}
+				content += "</div>";
+			}
+		}
+		content += "<button type='button' onclick='loadComments("+end+", 2)'>다음</button>";
+		content += "<div style='height:50px'>&nbsp;</div>";
+		
+		$(".pageArea").empty();
+		$(".pageArea").append(content);
 
 		//댓글 수정창 숨기기
 		$(".cmtUpdateTbodyClass").hide();
@@ -361,10 +423,10 @@ div.commentAreaBox {
 				if(data.success){
 					alert("댓글 등록에 성공했습니다.");
 					$("#cmtInput").val('');
-					loadComments();
+					loadComments(-1,-1);
 				}else{
 					alert("댓글 등록에 실패했습니다.");
-					loadComments();
+					loadComments(-1,-1);
 				}
 			}
 		})
@@ -412,10 +474,10 @@ div.commentAreaBox {
 			success : function(data) {
 				if(data.success){
 					alert("댓글 수정에 성공했습니다.");
-					loadComments();
+					loadComments(-1,-1);
 				}else{
 					alert("댓글 수정에 실패했습니다.");
-					loadComments();
+					loadComments(-1,-1);
 				}
 			}
 		})
@@ -456,10 +518,10 @@ div.commentAreaBox {
 			success : function(data) {
 				if(data.success){
 					alert("대댓글 작성에 성공했습니다.");
-					loadComments();
+					loadComments(-1,-1);
 				}else{
 					alert("대댓글 작성에 실패했습니다.");
-					loadComments();
+					loadComments(-1,-1);
 				}
 			}
 		})
@@ -483,10 +545,10 @@ div.commentAreaBox {
 				success : function(data) {
 					if(data.success){
 						alert("댓글 삭제에 성공했습니다.");
-						loadComments();
+						loadComments(-1,-1);
 					}else{
 						alert("댓글 삭제에 실패했습니다.");
-						loadComments();
+						loadComments(-1,-1);
 					}
 				}
 			})
@@ -507,7 +569,7 @@ div.commentAreaBox {
 		}
 		console.log("url : "+url);
 		var option = "width=650, height=500, top=500, location = no, resizable = no";
-        //window.open(url, "commentReport", option);
+        window.open(url, "commentReport", option);
 	}
 	
 	//블라인드 버튼 클릭 시
@@ -521,7 +583,7 @@ div.commentAreaBox {
 		}
         var option = "width=650, height=500, top=500, location = no, resizable = no";
         console.log("url : "+url);
-        //window.open(url, "commentBlind", option);
+        window.open(url, "commentBlind", option);
 	}
 	
 </script>

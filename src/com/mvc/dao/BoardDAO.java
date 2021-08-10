@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -730,15 +731,48 @@ public class BoardDAO {
 		return success;
 	}
 
-	public ArrayList<MainDTO> loadComments(String postId) { // 은홍
+	public HashMap<String, Object> loadComments(String postId, int page) { // 은홍
 		System.out.println("DAO loadComments() 들어옴");
 		// 댓글 및 대댓글 최신순으로 해당 페이지에 보여줄 리스트를 로드한다
-		// DTO로 가져올 데이터 : 댓글ID, 대댓글ID, 내용, 작성날짜, 작성자아이디, 작성자닉네임, 작성자등급, 부모id, 댓글/대댓글여부, 삭제여부, 블라인드여부
+		// DTO로 가져올 데이터 : 댓글ID, 대댓글ID, 내용, 작성날짜, 작성자아이디, 작성자닉네임, 작성자등급, 부모id, 댓글/대댓글여부,
+		// 삭제여부, 블라인드여부
 		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
-		sql = "SELECT * FROM(SELECT * FROM (SELECT * FROM ((SELECT a.*, (SELECT blindId FROM blind WHERE classification='C' AND fieldId=a.commentid) isblind FROM (SELECT * FROM (SELECT commentid, null recomid, comment_content, to_char(comment_date,'yyyy-mm-dd hh24:mi') comment_date, userid, (SELECT nickName FROM member WHERE userId=c.userId) nickName,(SELECT rankName FROM rank WHERE rankId=(SELECT rankId FROM member WHERE userId=c.userId)) rankName, null parentid, isdel, postid, 'comment' lev FROM postcomment c ORDER BY comment_date desc)) a) UNION (SELECT b.*, (SELECT blindId FROM blind WHERE classification='R' AND fieldId=b.recomid) isblind FROM (SELECT * FROM (SELECT null commentid, recomid, comment_content, to_char(comment_date,'yyyy-mm-dd hh24:mi') comment_date, userid, (SELECT nickName FROM member WHERE userId=r.userId) nickName,(SELECT rankName FROM rank WHERE rankId=(SELECT rankId FROM member WHERE userId=r.userId)) rankName, commentid parentid, isdel, (SELECT postid FROM postcomment WHERE commentid=r.commentid) postid, 'recomment' lev FROM recomment r ORDER BY comment_date desc)) b)) WHERE postId = ? ORDER BY comment_date DESC) START WITH lev='comment' CONNECT BY PRIOR commentid=parentid ORDER siblings BY comment_date DESC) WHERE ROWNUM <=10";
+		int start = 0;
+		int end = 0;
+		int startPage = 0;
+		int endPage = 0;
+		int pagePerCnt = 10; //한 페이지당 보여줄 댓글 수
+		int pagePerPage = 5; //한 페이지당 보여줄 페이지 수
+		
+		int total = 0;
+		try {
+			total = getCommentCount(postId);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		} //총 댓글 수
+		int pages = ((int)(total/pagePerCnt))+1; //만들 수 있는 페이지 수
+		System.out.println("DAO 총 데이터 수 : "+total+" / 페이지 수 : "+pages);
+		
+		if(page > pages) {
+			page = pages;
+		}
+		System.out.println("DAO 요청 받은 페이지 : "+page);
+		
+		end = page*pagePerCnt; //1p:1~10 2p:11~20 3p:21~30
+		start = end-(pagePerCnt-1);
+		endPage = pagePerPage*((int)((page-1)/pagePerPage)+1);
+		startPage = endPage-pagePerPage+1;
+		System.out.println("DAO startPage/endPage : "+startPage+"/"+endPage);
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		
+		sql = "SELECT * FROM (SELECT ROWNUM rnum, u.* FROM(SELECT * FROM (SELECT * FROM ((SELECT a.*, (SELECT blindId FROM blind WHERE classification='C' AND fieldId=a.commentid) isblind FROM (SELECT * FROM (SELECT commentid, null recomid, comment_content, to_char(comment_date,'yyyy-mm-dd hh24:mi') comment_date, userid,(SELECT nickName FROM member WHERE userId=c.userId) nickName,(SELECT rankName FROM rank WHERE rankId=(SELECT rankId FROM member WHERE userId=c.userId)) rankName, null parentid, isdel, postid, 'comment' lev FROM postcomment c ORDER BY comment_date desc)) a) UNION (SELECT b.*, (SELECT blindId FROM blind WHERE classification='R' AND fieldId=b.recomid) isblind FROM (SELECT * FROM (SELECT null commentid, recomid, comment_content, to_char(comment_date,'yyyy-mm-dd hh24:mi') comment_date, userid, (SELECT nickName FROM member WHERE userId=r.userId) nickName,(SELECT rankName FROM rank WHERE rankId=(SELECT rankId FROM member WHERE userId=r.userId)) rankName, commentid parentid, isdel, (SELECT postid FROM postcomment WHERE commentid=r.commentid) postid, 'recomment' lev FROM recomment r ORDER BY comment_date desc)) b)) WHERE postId = ? ORDER BY comment_date DESC) START WITH lev='comment' CONNECT BY PRIOR commentid=parentid ORDER siblings BY comment_date DESC) u) WHERE rnum BETWEEN ? AND ?";
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, postId);
+			ps.setInt(2, start);
+			ps.setInt(3, end);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				String commentId = rs.getString("commentId");
@@ -773,7 +807,13 @@ public class BoardDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return list;
+		map.put("cmtNum", total);
+		map.put("list", list);
+		map.put("totalPage", pages);
+		map.put("currPage", page);
+		map.put("start", startPage);
+		map.put("end", endPage);
+		return map;
 	}
 
 	public int getCommentCount(String postId) { // 은홍

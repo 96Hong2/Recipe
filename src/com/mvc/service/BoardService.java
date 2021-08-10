@@ -270,17 +270,30 @@ public class BoardService {
 		BoardDAO dao = new BoardDAO();
 		ArrayList<MainDTO> list = null;
 		String postId = req.getParameter("postId");
-		int cmtNum = 0;
+		String req_page = req.getParameter("page");
+		String button_str = req.getParameter("button");
+		if(button_str != "" && button_str != null && button_str != "-1") {
+			int button = Integer.parseInt(button_str);
+			System.out.println("button 클릭됨(1이면 이전, 2이면 다음) : "+button);
+			if(button == 1) {
+				req_page = String.valueOf(Integer.parseInt(req_page)-1);
+			}else if(button == 2) {
+				req_page = String.valueOf(Integer.parseInt(req_page)+1);
+			}				
+		}
+		
+		if(req_page == null || Integer.parseInt(req_page) <= 0 || req_page.equals("")) {
+			System.out.println("service 처음 요청 받은 페이지 : "+req_page);
+			req_page = "1";
+		}
+		System.out.println("service 요청 받은 페이지 : "+req_page);
 		
 		try {
-			list = dao.loadComments(postId); //댓글리스트
-			cmtNum = dao.getCommentCount(postId); //댓글개수
+			map = dao.loadComments(postId, Integer.parseInt(req_page)); //댓글리스트
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			dao.resClose();
-			map.put("list", list);
-			map.put("cmtNum", cmtNum);
 		}
 		return map;
 	}
