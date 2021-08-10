@@ -279,7 +279,7 @@ public class AdminController extends HttpServlet {
 			
 		case "/addProduct"://진후
 			System.out.println("관리자 컨트롤러 상품 등록 요청");			
-			String productId = adService.addProduct();
+			productId = adService.addProduct();
 			page = productId != null ? "./adminProductDetail?productId="+productId:"adminProductRegister.jsp";
 			resp.sendRedirect(page);
 			break;
