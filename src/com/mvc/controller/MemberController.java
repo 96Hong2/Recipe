@@ -18,7 +18,7 @@ import com.mvc.service.UploadService;
 
 import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
 
-@WebServlet({"/myPage","/myCash", "/info","/showCash", "/cashHistory", "/chargeCash", "/write", "/fileUpload", "/fileUpdate", "/test", "/clientInfo", "/updateForm", "/update", "/userDel", "/myWrite", "/myWritedetail", "/myLike", "/myComment", "/overlay", "/overlay1", "/join", "/login", "/logout", "/pointHistory"})
+@WebServlet({"/myPage","/myCash", "/info","/showCash", "/cashHistory", "/chargeCash", "/write", "/fileUpload", "/fileUpdate", "/test", "/clientInfo", "/updateForm", "/update", "/userDel", "/myWrite", "/myWritedetail", "/myLike", "/myComment", "/overlay", "/overlay1", "/join", "/login", "/logout", "/pointHistory", "/myOrderHistory"})
 public class MemberController extends HttpServlet {
 
 	@Override
@@ -295,6 +295,22 @@ public class MemberController extends HttpServlet {
 			dis.forward(req, resp);
 			break;
 			
+		case "/myOrderHistory": // 찬호
+			System.out.println("내 주문내역 요청");
+			page = req.getParameter("page");
+			userId = req.getParameter("userId");
+			if (page == null) {
+				page = "1";
+			}
+			map = service.myOrderHistory(Integer.parseInt(page), userId);
+
+			req.setAttribute("myOrderHistory", map.get("myOrderHistory"));
+			req.setAttribute("currPage", map.get("currPage"));
+			req.setAttribute("totalPage", map.get("totalPage"));
+
+			dis = req.getRequestDispatcher("myOrderHistory.jsp");
+			dis.forward(req, resp);
+			break;
 		
 
 	         

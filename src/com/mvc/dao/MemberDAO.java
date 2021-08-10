@@ -1081,6 +1081,94 @@ public class MemberDAO {
 
 	}
 	
+	public HashMap<String, Object> myOrderHistory(int page, String userId) { // 찬호
+
+		System.out.println("page : " + page);
+
+		ArrayList<MainDTO> myOrderHistory = new ArrayList<MainDTO>();
+		int start = 0;
+		int end = 0;
+		int endPage = 0;
+		int startPage = 0;
+		int pagePerCnt = 10; 
+		int pagePerPage = 5; 
+		int total = 0;
+		try {
+			total = myOrderHistoryTotalCount(userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		int pages = total % pagePerCnt == 0 ? total / pagePerCnt : (total / pagePerCnt) + 1; // 만들 수 있는 페이지 수
+		System.out.println("total pages : " + total + " / pages : " + pages);
+
+		if (page > pages) {
+			page = pages;
+		}
+		System.out.println("DAO 요청 받은 페이지 : " + page);
+
+		start = ((page - 1) * pagePerCnt) + 1;
+		end = page * pagePerCnt; 
+		endPage = pagePerPage * ((int) ((page - 1) / pagePerPage) + 1);
+		startPage = endPage - pagePerPage + 1;
+		System.out.println("DAO startPage/endPage : " + startPage + "/" + endPage);
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		String sql = "select o.productname, o.productcnt, o.price, o.productid "
+				+ "from payment p left outer join orderhistory o on p.paymentid = o.paymentid "
+				+ "where p.userid = ?";
+
+
+		myOrderHistory = new ArrayList<MainDTO>();
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, userId);
+			rs = ps.executeQuery();
+			myOrderHistory = new ArrayList<MainDTO>();
+			System.out.println("들어오는지확인");
+			
+			while (rs.next()) {
+				MainDTO dto = new MainDTO();
+				dto.setProductName(rs.getString("productName"));
+				dto.setProductCount(rs.getInt("productCnt"));
+				dto.setPrice(rs.getInt("price"));
+				dto.setProductId(rs.getString("productId"));
+				System.out.println("dto : " + dto);
+				myOrderHistory.add(dto);
+			}
+			System.out.println("들어간 userId : " + userId);
+			System.out.println("DAO myOrderHistory() size : " + myOrderHistory.size());
+
+			map.put("myOrderHistory", myOrderHistory);
+			map.put("totalPage", pages);
+			map.put("currPage", page);
+			map.put("start", startPage);
+			map.put("end", endPage);
+		} catch (Exception e) {
+			System.out.println("**DAO list()에러**");
+			e.printStackTrace();
+		}
+		return map;
+
+	}
+	
+	public int myOrderHistoryTotalCount(String userId) throws SQLException {
+
+		String sql = "select count(*) "
+				+ "from payment p left outer join orderhistory o on p.paymentid = o.paymentid where p.userid = ?";
+		
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, userId);
+		rs = ps.executeQuery();
+
+		int total = 0;
+
+		if (rs.next()) {
+			total = rs.getInt(1);
+		}
+
+		return total;
+	}
+	
 	
 /*================================================진후============================================================================= */
 	

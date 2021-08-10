@@ -50,7 +50,7 @@
 					<div class="myMenu" style="width:20%;">
 						<img src="./staticImg/catIcon.png" alt="주문아이콘" width=50px;
 							height=50px; /><br />
-						<button type='button' onclick="location.href='index.jsp'">주문조회</button>
+						<button type='button' onclick="location.href='./myOrderHistory'">주문조회</button>
 					</div>
 					<div class="myMenu" style="width:20%;">
 						<img src="./staticImg/catIcon.png" alt="장바구니아이콘" width=50px;

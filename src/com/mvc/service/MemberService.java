@@ -165,7 +165,7 @@ public class MemberService {
 
 	public MainDTO updateForm() { // 찬호
 
-		String userId = req.getParameter("userId");
+		String userId = (String) req.getSession().getAttribute("userId");
 		System.out.println("userId : " + userId);
 
 		MemberDAO dao = new MemberDAO();
@@ -179,7 +179,8 @@ public class MemberService {
 	public int update(String userId) { // 찬호
 
 		int change = 0;
-
+		
+		userId = (String) req.getSession().getAttribute("userId");
 		String pw = req.getParameter("pw");
 		String nickname = req.getParameter("nickName");
 		int tel = Integer.parseInt(req.getParameter("tel"));
@@ -198,7 +199,7 @@ public class MemberService {
 
 		// String userId = (String) req.getSession().getAttribute("userId");
 		// 원래대로 되돌릴려면 위에 주석풀고 아래 userId 지우고
-		String userId = "123123";
+		String userId = (String) req.getSession().getAttribute("userId");
 
 		System.out.println("userId : " + userId);
 		MemberDAO dao = new MemberDAO();
@@ -212,6 +213,7 @@ public class MemberService {
 
 	public HashMap<String, Object> myWrite(int page, String userId) { // 찬호
 
+		userId = (String) req.getSession().getAttribute("userId");
 		MemberDAO dao = new MemberDAO();
 		HashMap<String, Object> map = dao.myWrite(page, userId);
 		System.out.println("map : " + map.size());
@@ -224,6 +226,7 @@ public class MemberService {
 
 	public  HashMap<String, Object> myLike(int page, String userId) { // 찬호
 
+		userId = (String) req.getSession().getAttribute("userId");
 		MemberDAO dao = new MemberDAO();
 		HashMap<String, Object> map = dao.myLike(page, userId);
 		System.out.println("map : " + map.size());
@@ -237,8 +240,21 @@ public class MemberService {
 
 	public HashMap<String, Object> myComment(int page, String userId) { // 찬호
 
+		userId = (String) req.getSession().getAttribute("userId");
 		MemberDAO dao = new MemberDAO();
 		HashMap<String, Object> map = dao.myComment(page, userId);
+		System.out.println("map : " + map.size());
+
+		dao.resClose();
+
+		return map;
+	}
+	
+	public HashMap<String, Object> myOrderHistory(int page, String userId) { // 찬호
+
+		userId = (String) req.getSession().getAttribute("userId");
+		MemberDAO dao = new MemberDAO();
+		HashMap<String, Object> map = dao.myOrderHistory(page, userId);
 		System.out.println("map : " + map.size());
 
 		dao.resClose();
