@@ -49,13 +49,31 @@ div .fileUpload_wrap {
 						&nbsp;<b>▶ 미리보기</b>
 						<div id='th_preview'>
 							<p style='font-size : 13px;'>썸네일 미리보기</p>
-							<img id="th_img" src="/photo/${param.ex_thumbnail_Name}" width='150px' height='150px'/>
-							<p id='th_preview_p'><button type='button' onclick='del_ex_th()'>삭제</button></p>
+							<c:choose>
+								<c:when test='${param.ex_thumbnail_Name eq ""}'>
+									<div id='NoExThImg' style='font-size: 11px;'>기존에 등록된 썸네일이 없습니다. 썸네일을 등록해보세요! </div>
+									<img id="th_img"/>
+								</c:when>
+								<c:otherwise>
+									<img id="th_img" src="/photo/${param.ex_thumbnail_Name}" width='150px' height='150px'/>
+									<button type='button' onclick='del_ex_th()'>삭제</button>	
+								</c:otherwise>
+							</c:choose>
+							<p id='th_preview_p'></p>
 						</div>
 						<div id='con_preview'>
 							<p style='font-size : 13px;'>첨부이미지 미리보기</p>
-							<img id='con_img' src='/photo/${param.ex_contentImg_Name}' width='150px' height='150px'/>
-							<p id='preview_p'><button type='button' onclick='del_ex_img()'>삭제</button></p>
+							<c:choose>
+								<c:when test='${param.ex_contentImg_Name eq ""}'>
+									<div id='NoExImg' style='font-size: 11px;'>기존에 등록된 이미지가 없습니다.</div>
+									<img id="con_img"/>
+								</c:when>
+								<c:otherwise>
+									<img id='con_img' src='/photo/${param.ex_contentImg_Name}' width='150px' height='150px'/>
+									<button type='button' onclick='del_ex_img()'>삭제</button>
+								</c:otherwise>
+							</c:choose>
+							<p id='preview_p'></p>
 						</div>
 					</div>
 				</td>
@@ -127,6 +145,7 @@ $(document).ready(function(){
 function th_preview(e){ //썸네일 미리보기
 	flag=true; //새로 파일이 업로드되었으므로 ajax통신 필요 
 	//지울 썸네일에 기존썸네일imgId 넣기
+	$("#NoExThImg").empty();
 	$("#thImg").val('${param.ex_thumbnail}');
 
 	var files = e.target.files;
@@ -141,6 +160,7 @@ function th_preview(e){ //썸네일 미리보기
 		}
 		var reader = new FileReader();
 		reader.onload = function(e){
+			
 			$("#th_img").attr("src", e.target.result);
 			$("#th_img").attr("width", "150px;");
 			$("#th_img").attr("height", "150px;");
@@ -156,6 +176,7 @@ function preview(e){ //첨부이미지 미리보기
 	flag=true; //새로 파일이 업로드되었으므로 ajax통신 필요
 	//지울 이미지에 기존이미지imgId 넣기
 	$("#img").val('${param.ex_contentImg}');
+	$("#NoExImg").empty();
 	
 	var files = e.target.files;
 	var filesArr = Array.prototype.slice.call(files);
@@ -234,14 +255,31 @@ function img_cancel(){ //이미지 변경이 취소될 경우
 	$("#content_image").val('');
 	
 	//미리보기 초기화
+	var content = "";
+	content += "<p style='font-size : 13px;'>썸네일 미리보기</p>";
+	if('${param.ex_thumbnail_Name eq ""}'){
+		content += "<div id='NoExThImg' style='font-size: 11px;'>기존에 등록된 썸네일이 없습니다. 썸네일을 등록해보세요! </div>";
+		content += "<img id='th_img'/>";
+	}else{
+		content += "<img id='th_img' src='/photo/${param.ex_thumbnail_Name}' width='150px' height='150px'/>";
+		content += "<button type='button' onclick='del_ex_th()'>삭제</button>";
+	}
+	content += "<p id='th_preview_p'></p>"
 	$("#th_preview").empty();
-	$("#th_preview").html(
-	"<p style='font-size : 13px;'>썸네일 미리보기</p><img id='th_img' src='/photo/${param.ex_thumbnail_Name}' width='150px' height='150px'/><p id='th_preview_p'><button type='button' onclick='del_ex_th()'>삭제</button></p>"
-	);
+	$("#th_preview").html(content);
+	
+	content = "";
+	content += "<p style='font-size : 13px;'>첨부 이미지 미리보기</p>";
+	if('${param.ex_contentImg_Name eq ""}'){
+		content += "<div id='NoExImg' style='font-size: 11px;'>기존에 등록된 이미지가 없습니다. </div>";
+		content += "<img id='con_img'/>";
+	}else{
+		content += "<img id='con_img' src='/photo/${param.ex_contentImg_Name}' width='150px' height='150px'/>";
+		content += "<button type='button' onclick='del_ex_img()'>삭제</button>";
+	}
+	content += "<p id='preview_p'></p>"
 	$("#con_preview").empty();
-	$("#con_preview").html(
-	"<p style='font-size : 13px;'>첨부이미지 미리보기</p><img id='con_img' src='/photo/${param.ex_contentImg_Name}' width='150px' height='150px'/><p id='preview_p'><button type='button' onclick='del_ex_img()'>삭제</button></p>"
-	);
+	$("#con_preview").html(content);
 	
 	$("#cancelBtnArea").hide();
 }
