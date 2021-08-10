@@ -20,12 +20,17 @@ if("${sessionScope.userId}"==""){
 	}
 </script>
 <body>	
+<header>
+  <c:import url="./header_afterLogin.jsp" />
+</header>
 	<form action="postUpdate" method="post">
+	<input type='hidden' id='thImg' name='thImg'/>
+	<input type='hidden' id='img' name='img'/>
 	<input type="hidden" name="userId" value="${sessionScope.userId}" readonly="readonly"/>
 	<input type="hidden" name="postId" value="${post.postId}"/>
 	<table>
 		<tr>
-			<th>제목</th>
+			<th>제목${post.postId } ${post.th_imgid } ${post.imgid } ${post.th_imgNewName } ${post.imgNewName }</th>
 			<td><input type="text" name="title"  min="2" maxlength="20" value="${post.title}" /></td>
 		</tr>
 		<c:import url="./fileUpdate.jsp" charEncoding="utf-8">

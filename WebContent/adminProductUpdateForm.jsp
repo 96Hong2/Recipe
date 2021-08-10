@@ -35,8 +35,8 @@ if("${sessionScope.isAdmin}"!="Y"){
         <c:param name="ex_thumbnail_Name" value="${product.th_imgNewName}"/>
         <c:param name="ex_contentImg_Name" value="${product.imgNewName}"/>
       </c:import>
-      	<p>썸네일 PK : <input type='text' id='thImg' name='thImg'/></p>
-		<p>첨부이미지 PK : <input type='text' id='img' name='img'/></p>
+      	<input type="hidden" id='thImg' name='thImg'/>
+		<input type="hidden" id='img' name='img'/>
       </td>				
 		</tr>
 		<tr>

@@ -15,7 +15,9 @@ if("${sessionScope.userId}"==""){
 }
 </script>
 <body>
-
+<header>
+         <c:import url="./header_afterLogin.jsp" />
+      </header>
 	<form action="postWrite" method="post">
 	<input type='hidden' id='thImg' name='thImg'/>
 	<input type='hidden' id='img' name='img'/>

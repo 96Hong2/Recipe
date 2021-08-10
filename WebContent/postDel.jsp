@@ -8,6 +8,9 @@
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+<header>
+         <c:import url="./header_afterLogin.jsp" />
+      </header>
 <body>
 <div>삭제된 게시물 입니다.</div>
 <input type="button" name="return" onclick="history.back();" value="돌아가기"/>

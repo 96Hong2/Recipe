@@ -99,6 +99,7 @@
 	}
 </script>
 <body>
+
 	<div class="container">
 		<h2>게시글 상세보기</h2>
 		<div class="tableArea">
