@@ -261,7 +261,7 @@ public class MemberDAO {
 			sql = "SELECT postId,likes,title,hits,item,recipePrice,"
 					+ "(SELECT nickName FROM member WHERE userid=p.userid) nickName "
 					+ "FROM (SELECT * FROM post WHERE postid "
-					+ "IN (SELECT postId FROM (SELECT postId FROM postLike WHERE userId=? ORDER BY likedate DESC) WHERE ROWNUM < 5) ORDER BY postdate DESC) p";
+					+ "IN (SELECT postId FROM (SELECT postId FROM postLike WHERE userId=? ORDER BY likedate DESC) WHERE ROWNUM < 4) ORDER BY postdate DESC) p";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, userId);
 			rs = ps.executeQuery();
@@ -311,7 +311,7 @@ public class MemberDAO {
 			// 내가 쓴 글 불러오기
 			sql = "SELECT postId,likes,title,hits,item,recipePrice,"
 					+ "(SELECT nickname FROM member WHERE userid=u.userid) nickname "
-					+ "FROM (SELECT * FROM post WHERE userId=? ORDER BY postdate DESC) u WHERE ROWNUM<5";
+					+ "FROM (SELECT * FROM post WHERE userId=? ORDER BY postdate DESC) u WHERE ROWNUM<4";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, userId);
 			rs = ps.executeQuery();
@@ -367,7 +367,7 @@ public class MemberDAO {
 					+ "FROM (SELECT commentid, comment_content, userid, comment_date "
 					+ "FROM recomment WHERE userid=? " + "UNION "
 					+ "SELECT commentid, comment_content, userid, comment_date FROM postcomment "
-					+ "WHERE userid=?)) WHERE rnum<=4) c, post p "
+					+ "WHERE userid=?)) WHERE rnum<=3) c, post p "
 					+ "WHERE p.postid IN(SELECT postid FROM postcomment WHERE commentid=c.commentid)";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, userId);
