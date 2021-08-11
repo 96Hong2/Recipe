@@ -48,8 +48,7 @@
 	height: 460px;
 	background-color: #f7f7f7;
 	/* display: inline-block; */
-	position: absolute;
-	
+	position: fixed;
 	margin-left: 920px;
 	border-radius: 10px;
 }
