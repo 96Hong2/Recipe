@@ -9,6 +9,7 @@
 <style>
 div.cmt_wrap {
 	background-color: snow;
+	width: 1112.360px;
 }
 
 div.commentInputBox {
@@ -22,10 +23,11 @@ div.commentInputBox {
 }
 
 textarea {
-	width: 55%;
+	width: 850px;
 	height: 80px;
 	border: 2px solid #ccc;
 	margin: 5px;
+	resize: none;
 }
 
 #cmtContentUser {
@@ -50,7 +52,7 @@ div.commentAreaBox {
 
 .pageArea{
 	margin-top : 20px;
-	margin-left : 350px;
+	margin-left : 47%;
 }
 
 .page{
@@ -66,6 +68,20 @@ div.commentAreaBox {
 
 .page a:hover{
 	text-decoration-line : underline;
+}
+
+button{
+	padding: 5px 7px;
+	background-color: white;
+	color: grey;
+	font-size: x-small;
+	border: 1px solid;
+	margin-left: 4px;
+}
+
+button:hover{
+	background-color: grey;
+	color: white;
 }
 
 </style>

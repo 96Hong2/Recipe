@@ -34,6 +34,11 @@
 	padding: 5px 5px;
 }
 
+#secTr th, #secTr td{
+	height: 10px;
+	padding: 5px 5px;
+}
+
 #itemWhat td{
 	text-align: left;
 	height: 20%;
@@ -41,13 +46,14 @@
 
 .bigContainer {
 	margin-left: 13.5%;
+	width: 1111px;
 	background-color: ligthgrey;
 	display: inline-block;
 }
 
 .tableArea {
 	display: inline-block;
-	width: 70%;
+	width: 1111px;
 	left: 50%;
 	margin-top: 40px;
 }
@@ -56,11 +62,11 @@
 	width: 160px;
 	height: 460px;
 	background-color: #f7f7f7;
-	/* display: inline-block; */
+	display: inline-block;
+	float: right;
 	position: fixed;
-	margin-top: -29%;
-	margin-left: 1133px;
 	border-radius: 10px;
+	margin-left: 14px;
 }
 
 #showArea{
@@ -197,6 +203,15 @@ figcaption{
 #blindBtn:hover, #reportBtn:hover{
 	background-color: red;
 }
+
+#imgBtn{
+	background-color: white;
+	border: 1px solid;
+}
+
+#imgBtn:hover{
+	background-color: lightgrey;
+}
 </style>
 </head>
 
@@ -228,7 +243,7 @@ figcaption{
 					<th>조회수</th>
 					<td>${post.hits}</td>
 				</tr>
-				<tr>
+				<tr id="secTr">
 					<th>카테고리</th>
 					<td colspan='5'>${post.categoryName}</td>
 					<th>예상금액</th>
@@ -256,7 +271,7 @@ figcaption{
 						<c:if test="${sessionScope.userId eq post.userId}"><input type="button" value="삭제" onclick="button_evert()"  class="btns"/></c:if>
 						<button onclick="location.href='./category?categoryId=${post.categoryId }'" class="btns">리스트</button>
 						<button onclick="location.href='./postList'" class="btns">전체 목록</button>
-						<button type="button" onclick="postLike();"><img id="likeImg" class="img" src="./likeButton.png">${post.likes}</button>
+						<button type="button" onclick="postLike();" id="imgBtn"><img id="likeImg" class="img" src="./likeButton.png">${post.likes}</button>
 					</td>
 				</tr>
 			</table>
