@@ -157,7 +157,7 @@ public class MemberDAO {
 		int cash_total = 0;
 		String cash_details = "로드실패";
 		try {
-			sql = "SELECT * FROM (SELECT ROWNUM rnum, changedPrice, to_char(changedTime,'yyyy-mm-dd hh24:mi') time, total FROM cash WHERE userId=? ORDER BY time DESC) WHERE rnum BETWEEN ? AND ?";
+			sql = "SELECT * FROM (SELECT ROWNUM rnum, changedPrice, to_char(changedTime,'yyyy-mm-dd hh24:mi:ss') time, total FROM cash WHERE userId=? ORDER BY time DESC) WHERE rnum BETWEEN ? AND ?";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, userId);
 			ps.setInt(2, start);
@@ -191,6 +191,7 @@ public class MemberDAO {
 		map.put("currPage", page);
 		map.put("start", startPage);
 		map.put("end", endPage);
+		changeCash(-500, "test1");
 		return map;
 	}
 	
