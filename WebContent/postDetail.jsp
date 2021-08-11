@@ -248,7 +248,7 @@ figcaption {
 						</tr>
 						<tr>
 							<th>Recipe</th>
-							<td colspan="14" style="text-align: left;">${post.contents}</td>
+							<td colspan="14" style="text-align: left; white-space:pre-line;">${post.contents}</td>
 						</tr>
 						<tr>
 							<td colspan="14"><c:if
