@@ -133,7 +133,7 @@
 					</div>
 
 					<button style="margin-bottom: 10px;"
-						onclick="href.location='index.jsp'">좋아요한 레시피 더보기</button>
+						onclick="location.href='index.jsp'">좋아요한 레시피 더보기</button>
 				</div>
 
 				<div style='margin:10px'>&nbsp;</div>
@@ -193,7 +193,7 @@
 							</div>
 						</c:forEach>
 					</div>
-					<button style="margin-bottom: 10px;" onclick="href.location='./myWrite'">내가 작성한 레시피 더보기</button>
+					<button style="margin-bottom: 10px;" onclick="location.href='./myWrite'">내가 작성한 레시피 더보기</button>
 				</div>
 
 				<div style='margin:10px'>&nbsp;</div>
@@ -219,12 +219,11 @@
 						</c:forEach>
 					</table>
 					<button style="margin-bottom: 10px;"
-						onclick="href.location='./myComment'">내가 작성한 댓글 더보기</button>
+						onclick="location.href='./myComment'">내가 작성한 댓글 더보기</button>
 				</div>
 
 				<div style='margin:10px'>&nbsp;</div>
-				<button style="margin-top: 10px;" id='delAccount'
-					onclick="href.location='index.jsp'">회원 탈퇴</button>
+				<button style="margin-top: 10px;" id='delAccount' onclick="location.href='./userDel'">회원 탈퇴</button>
 			</div>
 		</main>
 		<footer> </footer>

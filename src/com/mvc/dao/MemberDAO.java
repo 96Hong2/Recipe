@@ -728,10 +728,10 @@ public class MemberDAO {
 
 	}
 
-	public int update(String pw, String nickName, int tel, String address) { // 찬호
+	public int update(String pw, String nickName, int tel, String address, String userId) { // 찬호
 
 		int change = 0;
-		String sql = "UPDATE member SET pw = ?, nickname = ?, tel = ?, address = ?";
+		String sql = "UPDATE member SET pw = ?, nickname = ?, tel = ?, address = ? WHERE userId=?";
 
 		try {
 			ps = conn.prepareStatement(sql);
@@ -739,6 +739,7 @@ public class MemberDAO {
 			ps.setString(2, nickName);
 			ps.setInt(3, tel);
 			ps.setString(4, address);
+			ps.setString(5, userId);
 			change = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

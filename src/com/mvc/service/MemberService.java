@@ -147,7 +147,6 @@ public class MemberService {
 	
 	public MainDTO clientInfo() throws IOException { // 찬호
 		String userId = (String) req.getSession().getAttribute("userId");
-		req.getSession().setAttribute("userId", "123123");
 
 		System.out.println("userId : " + userId);
 
@@ -186,9 +185,9 @@ public class MemberService {
 		int tel = Integer.parseInt(req.getParameter("tel"));
 		String address = req.getParameter("address");
 
-		System.out.println(pw + "/" + nickname + "/" + tel + "/" + address);
+		System.out.println(pw + "/" + nickname + "/" + tel + "/" + address+"/"+userId);
 		MemberDAO dao = new MemberDAO();
-		change = dao.update(pw, nickname, tel, address);
+		change = dao.update(pw, nickname, tel, address, userId);
 		System.out.println("update change : " + change);
 		dao.resClose();
 
