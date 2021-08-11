@@ -50,6 +50,7 @@ public class BoardService {
 		item=item.replace(" ", "");
 		
 		String contents = req.getParameter("contents");
+
 		System.out.println("writeForm에서 받아온 파라메터 :"+"title:"+title+"/"+"categoryId:"+categoryId+"/"+"recipePrice:"+recipePrice+"/"+"item:"+item+"/"+"contents:"+contents);
 
 		dto.setTitle(title);
@@ -197,7 +198,7 @@ public class BoardService {
 
 	public HashMap<String, Object> categoryList(int postPage) { //영환
 		System.out.println("BoardService categoryList() 실행");
-		String notAll = "notAll";
+
 		BoardDAO dao = new BoardDAO();
 		ArrayList<MainDTO> list = null;
 		HashMap<String, Object> map1 = new HashMap<String, Object>();
@@ -242,8 +243,7 @@ public class BoardService {
 
 	public HashMap<String, Object> postSearch(int postPage) { //영환
 		System.out.println("BoardServic postSearch() 실행 ");
-		String notAll = "notAll";
-		String all = "all";
+
 		String searchPage = "searchPage";
 		ArrayList<MainDTO> list = null;
 		HashMap<String, Object> map2 = new HashMap<String, Object>();

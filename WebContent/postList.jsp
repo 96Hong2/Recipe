@@ -100,7 +100,7 @@
 													<div style="font-size: 0.5em; float: left; width: 30px;">
 														좋아요<br />${post.likes}</div>
 													<div
-														style="float: left;  width: 122px; margin: 0 4px 0 4px;">
+														style="font-weight: bold; float: left;  width: 122px; margin: 0 4px 0 4px; text-align: left;">
 														<small>${post.title}</small>
 													</div>
 													<div style="font-size: 0.5em; float: left; width: 30px;">
