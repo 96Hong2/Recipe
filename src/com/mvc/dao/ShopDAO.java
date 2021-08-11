@@ -76,7 +76,7 @@ public class ShopDAO {
 	}
 
 	public ArrayList<MainDTO> shopSearch(String keyword) { // 의건
-		String sql = "SELECT productid, productname, price, stock, isdel FROM product WHERE productname LIKE ?";
+		String sql = "select p.productid productid, p.productname productname, p.price price, p.stock stock, i.imgnewname imgnewname from product p, image i where isdel='N' AND p.productid=i.fieldid AND i.imgfield='product_th' AND productname LIKE ?";
 		ArrayList<MainDTO> list = null;
 		MainDTO dto = null;
 		String keywords = '%' + keyword + '%';
@@ -91,7 +91,7 @@ public class ShopDAO {
 				dto.setProductName(rs.getString("productname"));
 				dto.setPrice(rs.getInt("price"));
 				dto.setStock(rs.getInt("stock"));
-				dto.setIsDel(rs.getString("isdel"));
+				dto.setImgNewName(rs.getString("imgnewname"));
 				list.add(dto);
 			}
 		} catch (Exception e) {
