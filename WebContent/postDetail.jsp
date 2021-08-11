@@ -32,19 +32,24 @@
 #slideBarParent {
 	width: 160px;
 	height: 460px;
-	background-color: grey;
+	background-color: #f7f7f7;
 	display: inline-block;
 	position: fixed;
 	margin-left: 50px;
-	
+	border-radius: 10px;
+}
+
+#showArea{
+	width: 160px;
+	height: 387px;
+	overflow: hidden;  
 }
 
 #slideBar{
-	width: 160px;
-	height: 390px;
-	background-color: grey;
-	/* overflow: hidden;  */
-	margin-top: 10px;
+	width: 120px;
+	height: 600px;
+	background-color: #f7f7f7;
+	margin-top: 0px;
 }
 
 .cont {
@@ -68,11 +73,10 @@
 	height: 118px;
 	background-color: #D5D5D5;
 	border-radius: 10px;
-	margin-left: 10px;
+	/* margin-left: 10px; */
 }
 
 .image_item {
-	margin-top: 1px;
 	width: 110px;
 	height: 80px;
 }
@@ -84,21 +88,45 @@
 
 .addBtn{
 	background-color: white;
-	width: 57px;
-	height: 20px;
+	width: 60px;
+	height: 33px;
 	font-size: xx-small;
+	font-weight: bold;
+	color: grey;
+	border: 1px solid grey;
+	border-radius: 5px;
+	float: right;
+	margin-right: 14px;
+	margin-top: -18px;
+}
+
+.addBtn:hover{
+	color: white;
+	background-color: grey;
 }
 
 .btn_wrap{
 	clear: both;
 	text-align: center;
+	margin-top: 0px;
 }
 
 .btn_wrap a{
 	font-weight: bolder;
 	font-size: 25px;
 	text-decoration: none;
-	color: white;
+	color: grey;
+}
+
+li{
+	list-style-type: none;
+	margin-left: -69px;
+}
+
+figcaption{
+	text-align: left;
+	margin-left: 19px;
+	margin-top: 4px;
 }
 </style>
 </head>
@@ -162,11 +190,14 @@
 			</table>
 		</div>
 		<div id="slideBarParent">
-			<div id="slideBar">
-			<!-- 아이템리스트 -->
+			<div id="showArea">
+				<ul id="slideBar">
+				<!-- 아이템리스트 -->
+				</ul>
 			</div>
 			<p class='btn_wrap'>
-				<a href='#' id='before_btn'>&lt;</a> <a href='#' id='next_btn'>&gt;</a>
+				<a href='#' id='before_btn'>△</a> <br/>
+				<a href='#' id='next_btn'>▽</a>
 			</p>
 		</div>
 	</div>
@@ -245,18 +276,47 @@
 						console.log("리스트 뿌리기" + idx, item);
 
 						//content += "<div class='cont' id='cont"+idx+"'>";
+						content += "<li>"
 						content += "<figure class='itemFigure' id='fig_"+idx+"'>";
 						content += "<a href='./shopDetail?productId="+item.productId+ "'><img class='image_item' src='/photo/"+item.imgNewName+"'></a>";
 						content += "<figcaption>" + item.productName + "<br/>"+ item.price +"원";
 						content += '<button class="addBtn" onclick="cartAdd(\''+item.productId+'\', \''+ item.productName+ '\', '+item.price+')">장바구니</button>';
 						content +=  "</figcaption>";
 						content += "</figure>";
+						content += "</li>"
 						//content += "</div>";
 					});
 		}
 		$("#slideBar").append(content);
 		
 	}
+	
+	
+	
+	
+	var m_num = 0;
+	//var childNode = $("#slideBar").children();
+	
+	$("#next_btn").click(function(){
+		console.log("버튼 누르고 : "+ $("#slideBar").children().length);
+		if(m_num >= $("#slideBar").children().length-3)
+				return false;
+			m_num++;
+			$("#slideBar").css("margin-top", -128*m_num);
+			return false;
+	});
+	
+	$("#before_btn").click(function(){
+		if(m_num <= 0)
+				return false;
+			m_num--;
+			$("#slideBar").css("margin-top", -128*m_num);
+			return false;
+		});
+	
+	
+	
+	
 
 	function button_evert() {
 		var result = confirm("정말 삭제하시겠습니까?");

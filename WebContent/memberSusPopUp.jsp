@@ -105,7 +105,7 @@ if("${sessionScope.isAdmin}"!="Y"){
 			<td style="color:#aaa;" id="counter" colspan="2">0/500</td>
 		</tr>
 		<tr>
-			<td colspan="2" id="textarea"><textarea placeholder="정지 상세 사유를 1~500자로 입력해주세요. 입력한 사유는 회원에게 직접 노출되지 않습니다." maxlength="500" id="textArea" name="textArea"></textarea></td>
+			<td colspan="2" id="textarea"><textarea placeholder="정지 상세 사유를 1~500자로 입력해주세요. 입력한 사유는 회원에게 직접 노출되지 않습니다." maxlength="499" id="textArea" name="textArea"></textarea></td>
 		</tr>
 		<tr>
 			<td colspan="2" id="alert">사유를 입력하고 제출하면 해당 회원은 바로 정지됩니다. 신중하게 제출해주세요.</td>
