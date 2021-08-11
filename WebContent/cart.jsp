@@ -72,6 +72,7 @@ if("${sessionScope.userId}"==""){
 <script>
 	listCall();
 	var $dis = 0;
+	
 
 	function listCall() {
 		console.log("리스트");
@@ -169,7 +170,7 @@ if("${sessionScope.userId}"==""){
 		param.pCnt = $pCnt;
 
 		console.log(param);
-		if($pCnt < 0) {
+		if($pCnt <= 0) {
 			alert('수량을 다시 선택해주세요');
 		} else {
 
@@ -199,6 +200,7 @@ if("${sessionScope.userId}"==""){
 				}
 			});
 		}
+		window.location.reload();
 	}
 
 	function deldel(clicked) {
@@ -279,6 +281,7 @@ if("${sessionScope.userId}"==""){
 		} else {
 			alert("삭제할 상품을 선택해 주세요.");
 		}
+		window.location.reload();
 	}
 	function order() {
 		var $chk = $("input[name='chkBox']:checked");
@@ -366,6 +369,7 @@ if("${sessionScope.userId}"==""){
 		$("tbody").empty();
 		$("tbody").append(content);
 	}
+
 
 	function drawList(list) {
 		var content = "";
