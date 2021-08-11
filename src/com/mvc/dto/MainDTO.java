@@ -86,6 +86,7 @@ public class MainDTO {
    private String imgPath;
    private String field;
    private String searchResult;
+   private String bestDate;
    public Date getRegDate() {
       return regDate;
    }
@@ -583,6 +584,12 @@ public Date getPaymentDate() {
 }
 public void setPaymentDate(Date paymentDate) {
 	this.paymentDate = paymentDate;
+}
+public String getBestDate() {
+	return bestDate;
+}
+public void setBestDate(String bestDate) {
+	this.bestDate = bestDate;
 }
 
    

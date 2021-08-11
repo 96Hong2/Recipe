@@ -15,7 +15,7 @@ import com.mvc.dto.MainDTO;
 import com.mvc.service.BoardService;
 import com.mvc.service.MemberService;
 
-@WebServlet({"/postWriteForm","/postWrite","/postDetail","/postUpdateForm","/postUpdate","/postDel","/postList","/category","/postSearch","/writeComment", "/loadComments", "/updateComment", "/writeRecomment", "/deleteComment","/itemListCall","/postLike","/postLikeCheck"})
+@WebServlet({"/postWriteForm","/postWrite","/postDetail","/postUpdateForm","/postUpdate","/postDel","/postList","/category","/postSearch","/writeComment", "/loadComments", "/updateComment", "/writeRecomment", "/deleteComment","/itemListCall","/postLike","/postLikeCheck", "/bestPost", "/bestWeek", "/bestMonth", "/bestSearch"})
 public class BoardController extends HttpServlet {
 
 	@Override
@@ -304,6 +304,72 @@ public class BoardController extends HttpServlet {
 			resp.getWriter().println(obj);
 			
 			break;	
+			
+		case "/bestPost": // 찬호
+			System.out.println("내가작성한 글 리스트 보기 요청");
+			page = req.getParameter("page");
+			if (page == null) {
+				page = "1";
+			}
+			HashMap<String, Object> map11 = service.bestPost(Integer.parseInt(page));
+
+			req.setAttribute("bestPost", map11.get("bestPost"));
+			req.setAttribute("currPage", map11.get("currPage"));
+			req.setAttribute("totalPage", map11.get("totalPage"));
+
+			dis = req.getRequestDispatcher("bestPost.jsp");
+			dis.forward(req, resp);
+			break;
+			
+		case "/bestMonth": // 찬호
+			System.out.println("내가작성한 글 리스트 보기 요청");
+			page = req.getParameter("page");
+			if (page == null) {
+				page = "1";
+			}
+			HashMap<String, Object> map12 = service.bestMonth(Integer.parseInt(page));
+
+			req.setAttribute("bestMonth", map12.get("bestMonth"));
+			req.setAttribute("currPage", map12.get("currPage"));
+			req.setAttribute("totalPage", map12.get("totalPage"));
+
+			dis = req.getRequestDispatcher("bestMonth.jsp");
+			dis.forward(req, resp);
+			break;
+			
+		case "/bestWeek": // 찬호
+			System.out.println("내가작성한 글 리스트 보기 요청");
+			page = req.getParameter("page");
+			if (page == null) {
+				page = "1";
+			}
+			HashMap<String, Object> map13 = service.bestWeek(Integer.parseInt(page));
+
+			req.setAttribute("bestWeek", map13.get("bestWeek"));
+			req.setAttribute("currPage", map13.get("currPage"));
+			req.setAttribute("totalPage", map13.get("totalPage"));
+
+			dis = req.getRequestDispatcher("bestWeek.jsp");
+			dis.forward(req, resp);
+			break;
+			
+		case "/bestSearch": // 찬호
+			System.out.println("베스트게시판 글 리스트 보기 요청");
+			page = req.getParameter("page");
+			if (page == null) {
+				page = "1";
+			}
+			HashMap<String, Object> map14 = service.bestSearch(Integer.parseInt(page));
+
+			req.setAttribute("bestSearch", map14.get("bestSearch"));
+			req.setAttribute("currPage", map14.get("currPage"));
+			req.setAttribute("totalPage", map14.get("totalPage"));
+			req.setAttribute("startDate", req.getParameter("startDate"));
+			req.setAttribute("endDate", req.getParameter("endDate"));
+
+			dis = req.getRequestDispatcher("bestSearch.jsp");
+			dis.forward(req, resp);
+			break;
 			
 		}
 	}

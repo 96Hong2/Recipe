@@ -15,6 +15,10 @@
 		location.href = "./";
 	}
 </script>
+<script>
+	function popUp()
+	{ window.open("popUp.jsp", "회원 탈퇴", "width=600, height=200, left=100, top=50"); }
+</script>
 <body>
 	<div class="wrap">
 	
@@ -133,7 +137,7 @@
 					</div>
 
 					<button style="margin-bottom: 10px;"
-						onclick="location.href='index.jsp'">좋아요한 레시피 더보기</button>
+						onclick="location.href='./myLike'">좋아요한 레시피 더보기</button>
 				</div>
 
 				<div style='margin:10px'>&nbsp;</div>
@@ -223,7 +227,8 @@
 				</div>
 
 				<div style='margin:10px'>&nbsp;</div>
-				<button style="margin-top: 10px;" id='delAccount' onclick="location.href='./userDel'">회원 탈퇴</button>
+				<!-- <button style="margin-top: 10px;" id='delAccount' onclick="location.href='./userDel'">회원 탈퇴</button> -->
+				<input type="button" value="회원 탈퇴" style="margin-top: 10px;" id='delAccount' onclick="popUp();" />
 			</div>
 		</main>
 		<footer> </footer>

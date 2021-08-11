@@ -16,8 +16,6 @@ import com.mvc.dto.MainDTO;
 import com.mvc.service.MemberService;
 import com.mvc.service.UploadService;
 
-import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
-
 @WebServlet({"/myPage","/myCash", "/info","/showCash", "/cashHistory", "/chargeCash", "/write", "/fileUpload", "/fileUpdate", "/test", "/clientInfo", "/updateForm", "/update", "/userDel", "/myWrite", "/myWritedetail", "/myLike", "/myComment", "/overlay", "/overlay1", "/join", "/login", "/logout", "/pointHistory", "/myOrderHistory"})
 public class MemberController extends HttpServlet {
 

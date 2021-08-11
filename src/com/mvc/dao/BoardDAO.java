@@ -1108,6 +1108,507 @@ public class BoardDAO {
 		return total;
 	
 	}
+	
+	public HashMap<String, Object> bestPost(int page) { // 찬호
+
+		System.out.println("page : " + page);
+
+		ArrayList<MainDTO> bestPost = new ArrayList<MainDTO>();
+		String item = "로드실패";
+		int start = 0;
+		int end = 0;
+		int endPage = 0;
+		int startPage = 0;
+		int pagePerCnt = 9; // 한 페이지당 보여줄 게시글 수
+		int pagePerPage = 5; // 한 페이지당 보여줄 페이지 수
+		int total = 0;
+		try {
+			total = bestPostTotalCount();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // 총 게시글 수
+		int pages = total % pagePerCnt == 0 ? total / pagePerCnt : (total / pagePerCnt) + 1; // 만들 수 있는 페이지 수
+		System.out.println("total pages : " + total + " / pages : " + pages);
+
+		if (page > pages) {
+			page = pages;
+		}
+		System.out.println("DAO 요청 받은 페이지 : " + page);
+
+		start = ((page - 1) * pagePerCnt) + 1;
+		end = page * pagePerCnt; 
+		endPage = pagePerPage * ((int) ((page - 1) / pagePerPage) + 1);
+		startPage = endPage - pagePerPage + 1;
+		System.out.println("DAO startPage/endPage : " + startPage + "/" + endPage);
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+
+		String sql = "SELECT rnum, postid, title, recipePrice, hits , likes, userid, item, bestdate "
+				+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, p.postid, p.title, p.recipePrice, p.hits , p.likes, p.userid, p.item, b.bestdate "
+				+ "FROM post p left outer join bestpost b on p.postid = b.postid ORDER BY p.likes desc, p.hits desc) "
+				+ "where bestdate is not null and rnum between ? and ?";
+
+		bestPost = new ArrayList<MainDTO>();
+		System.out.println("DAO bestPost() size : " + bestPost.size());
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, start);
+			ps.setInt(2, end);
+			rs = ps.executeQuery();
+			bestPost = new ArrayList<MainDTO>();
+			System.out.println("들어오는지확인");
+			while (rs.next()) {
+				MainDTO dto = new MainDTO();
+				item = rs.getString("item");
+				dto.setPostId(rs.getString("postId"));
+				dto.setTitle(rs.getString("title"));
+				dto.setRecipePrice(rs.getInt("recipePrice"));
+				dto.setHits(rs.getInt("hits"));
+				dto.setLikes(rs.getInt("likes"));
+				dto.setUserId(rs.getString("userId"));
+				// 재료 3개만 가져오기
+	            String[] itemArr = item.split(",");
+	            item = "";
+	            int i = 0;
+	            while (i < 3 && itemArr.length > i) {
+	               // 재료가 3개 미만일 경우 itemArr.length < i 에 걸린다
+	               item += (",#" + itemArr[i]);
+	               i += 1;
+	               System.out.println("i : " + i);
+	            }
+	            item = item.substring(1);
+	            // System.out.println("재료(item)3개만 : "+item);
+				dto.setItem(item);
+				System.out.println("dto : " + dto);
+				bestPost.add(dto);
+			}
+			System.out.println("bestPost() size : " + bestPost.size());
+
+			map.put("bestPost", bestPost);
+			map.put("totalPage", pages);
+			map.put("currPage", page);
+			map.put("start", startPage);
+			map.put("end", endPage);
+		} catch (Exception e) {
+			System.out.println("DAO list()에러");
+			e.printStackTrace();
+		}
+		return map;
+	}
+
+	public int bestPostTotalCount() throws SQLException { // 찬호
+
+		String sql = "SELECT count(*) "
+				+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, p.postid, p.title, p.recipePrice, p.hits , p.likes, p.userid, p.item "
+				+ "FROM post p left outer join bestpost b on p.postid = b.postid ORDER BY p.likes desc, p.hits desc)";
+		
+		
+		ps = conn.prepareStatement(sql);
+		rs = ps.executeQuery();
+
+		int total = 0;
+
+		if (rs.next()) {
+			total = rs.getInt(1);
+		}
+
+		return total;
+	}
+	
+	public HashMap<String, Object> bestMonth(int page) { // 찬호
+
+		System.out.println("page : " + page);
+
+		ArrayList<MainDTO> bestMonth = new ArrayList<MainDTO>();
+		String item = "로드실패";
+		int start = 0;
+		int end = 0;
+		int endPage = 0;
+		int startPage = 0;
+		int pagePerCnt = 9; // 한 페이지당 보여줄 게시글 수
+		int pagePerPage = 5; // 한 페이지당 보여줄 페이지 수
+		int total = 0;
+		try {
+			total = bestMonthTotalCount();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // 총 게시글 수
+		int pages = total % pagePerCnt == 0 ? total / pagePerCnt : (total / pagePerCnt) + 1; // 만들 수 있는 페이지 수
+		System.out.println("total pages : " + total + " / pages : " + pages);
+
+		if (page > pages) {
+			page = pages;
+		}
+		System.out.println("DAO 요청 받은 페이지 : " + page);
+
+		start = ((page - 1) * pagePerCnt) + 1;
+		end = page * pagePerCnt; 
+		endPage = pagePerPage * ((int) ((page - 1) / pagePerPage) + 1);
+		startPage = endPage - pagePerPage + 1;
+		System.out.println("DAO startPage/endPage : " + startPage + "/" + endPage);
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+
+		String sql = "SELECT rnum, postid, title, recipePrice, hits , likes, userid, item, bestdate, bestclassification "
+				+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, p.postid, p.title, p.recipePrice, p.hits , p.likes, p.userid, p.item, b.bestdate, b.bestclassification "
+				+ "FROM post p left outer join bestpost b on p.postid = b.postid ORDER BY p.likes desc, p.hits desc) "
+				+ "where bestclassification = '월간베스트' and rnum between 1 and 9 order by bestdate desc";
+
+
+		bestMonth = new ArrayList<MainDTO>();
+		System.out.println("DAO bestMonth() size : " + bestMonth.size());
+		try {
+			ps = conn.prepareStatement(sql);
+			// ps.setInt(1, start);
+			// ps.setInt(2, end);
+			rs = ps.executeQuery();
+			bestMonth = new ArrayList<MainDTO>();
+			System.out.println("들어오는지확인");
+			while (rs.next()) {
+				MainDTO dto = new MainDTO();
+				item = rs.getString("item");
+				dto.setPostId(rs.getString("postId"));
+				dto.setTitle(rs.getString("title"));
+				dto.setRecipePrice(rs.getInt("recipePrice"));
+				dto.setHits(rs.getInt("hits"));
+				dto.setLikes(rs.getInt("likes"));
+				dto.setUserId(rs.getString("userId"));
+				// 재료 3개만 가져오기
+	            String[] itemArr = item.split(",");
+	            item = "";
+	            int i = 0;
+	            while (i < 3 && itemArr.length > i) {
+	               // 재료가 3개 미만일 경우 itemArr.length < i 에 걸린다
+	               item += (",#" + itemArr[i]);
+	               i += 1;
+	               System.out.println("i : " + i);
+	            }
+	            item = item.substring(1);
+	            // System.out.println("재료(item)3개만 : "+item);
+				dto.setItem(item);
+				System.out.println("dto : " + dto);
+				bestMonth.add(dto);
+			}
+			System.out.println("bestPost() size : " + bestMonth.size());
+
+			map.put("bestMonth", bestMonth);
+			map.put("totalPage", pages);
+			map.put("currPage", page);
+			map.put("start", startPage);
+			map.put("end", endPage);
+		} catch (Exception e) {
+			System.out.println("DAO list()에러");
+			e.printStackTrace();
+		}
+		return map;
+	}
+
+	public int bestMonthTotalCount() throws SQLException { // 찬호
+
+		String sql = "SELECT count(*) "
+				+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, post.* "
+				+ "FROM post ORDER BY likes desc, hits desc) WHERE rnum BETWEEN 1 AND 9";
+		
+		ps = conn.prepareStatement(sql);
+		rs = ps.executeQuery();
+
+		int total = 0;
+
+		if (rs.next()) {
+			total = rs.getInt(1);
+		}
+
+		return total;
+	}
+	
+	public HashMap<String, Object> bestWeek(int page) { // 찬호
+
+		System.out.println("page : " + page);
+
+		ArrayList<MainDTO> bestWeek = new ArrayList<MainDTO>();
+		String item = "로드실패";
+		int start = 0;
+		int end = 0;
+		int endPage = 0;
+		int startPage = 0;
+		int pagePerCnt = 9; // 한 페이지당 보여줄 게시글 수
+		int pagePerPage = 5; // 한 페이지당 보여줄 페이지 수
+		int total = 0;
+		try {
+			total = bestWeekTotalCount();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // 총 게시글 수
+		int pages = total % pagePerCnt == 0 ? total / pagePerCnt : (total / pagePerCnt) + 1; // 만들 수 있는 페이지 수
+		System.out.println("total pages : " + total + " / pages : " + pages);
+
+		if (page > pages) {
+			page = pages;
+		}
+		System.out.println("DAO 요청 받은 페이지 : " + page);
+
+		start = ((page - 1) * pagePerCnt) + 1;
+		end = page * pagePerCnt; 
+		endPage = pagePerPage * ((int) ((page - 1) / pagePerPage) + 1);
+		startPage = endPage - pagePerPage + 1;
+		System.out.println("DAO startPage/endPage : " + startPage + "/" + endPage);
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+
+		String sql = "SELECT rnum, postid, title, recipePrice, hits , likes, userid, item, bestdate, bestclassification "
+				+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, "
+				+ "p.postid, p.title, p.recipePrice, p.hits , p.likes, p.userid, p.item, b.bestdate, b.bestclassification "
+				+ "FROM post p left outer join bestpost b on p.postid = b.postid ORDER BY p.likes desc, p.hits desc) "
+				+ "where bestclassification = '주간베스트' and rnum between 1 and 9 order by bestdate desc";
+
+
+		bestWeek = new ArrayList<MainDTO>();
+		System.out.println("DAO bestWeek() size : " + bestWeek.size());
+		try {
+			ps = conn.prepareStatement(sql);
+			// ps.setInt(1, start);
+			// ps.setInt(2, end);
+			rs = ps.executeQuery();
+			bestWeek = new ArrayList<MainDTO>();
+			System.out.println("들어오는지확인");
+			while (rs.next()) {
+				MainDTO dto = new MainDTO();
+				item = rs.getString("item");
+				dto.setPostId(rs.getString("postId"));
+				dto.setTitle(rs.getString("title"));
+				dto.setRecipePrice(rs.getInt("recipePrice"));
+				dto.setHits(rs.getInt("hits"));
+				dto.setLikes(rs.getInt("likes"));
+				dto.setUserId(rs.getString("userId"));
+				// 재료 3개만 가져오기
+	            String[] itemArr = item.split(",");
+	            item = "";
+	            int i = 0;
+	            while (i < 3 && itemArr.length > i) {
+	               // 재료가 3개 미만일 경우 itemArr.length < i 에 걸린다
+	               item += (",#" + itemArr[i]);
+	               i += 1;
+	               System.out.println("i : " + i);
+	            }
+	            item = item.substring(1);
+	            // System.out.println("재료(item)3개만 : "+item);
+				dto.setItem(item);
+				System.out.println("dto : " + dto);
+				bestWeek.add(dto);
+			}
+			System.out.println("bestPost() size : " + bestWeek.size());
+
+			map.put("bestWeek", bestWeek);
+			map.put("totalPage", pages);
+			map.put("currPage", page);
+			map.put("start", startPage);
+			map.put("end", endPage);
+		} catch (Exception e) {
+			System.out.println("DAO list()에러");
+			e.printStackTrace();
+		}
+		return map;
+	}
+	
+	public void setBestWeek() { // 찬호
+		
+		String sql = "SELECT rnum, postid FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, post.postid "
+				+ "FROM post ORDER BY likes desc, hits desc) WHERE rnum BETWEEN 1 AND 9";
+		
+		try {
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				String postId = rs.getString("postId");
+				
+				sql = "Insert into bestpost (BESTCLASSIFICATION, BESTDATE, POSTID) values ('주간베스트', sysdate, ?)";
+				ps = conn.prepareStatement(sql);
+				ps.setString(1, postId);
+				
+				ps.executeUpdate();
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
+	
+	public void setBestMonth() { // 찬호
+		
+		String sql = "SELECT rnum, postid FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, post.postid "
+				+ "FROM post ORDER BY likes desc, hits desc) WHERE rnum BETWEEN 1 AND 9";
+		
+		try {
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				String postId = rs.getString("postId");
+				
+				sql = "insert into bestpost (BESTCLASSIFICATION, BESTDATE, POSTID) values ('월간베스트', sysdate, postId)";
+				ps = conn.prepareStatement(sql);
+				ps.executeUpdate();
+				
+				if(ps.executeUpdate() > 0) {
+					
+				}else{
+					System.out.println("잘못돌고있음");
+					
+				}
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
+
+	public int bestWeekTotalCount() throws SQLException { // 찬호
+
+		String sql = "SELECT count(*) "
+				+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, post.* "
+				+ "FROM post ORDER BY likes desc, hits desc) WHERE rnum BETWEEN 1 AND 9";
+		
+		ps = conn.prepareStatement(sql);
+		rs = ps.executeQuery();
+		
+		
+		
+		int total = 0;
+
+		if (rs.next()) {
+			total = rs.getInt(1);
+		}
+
+		return total;
+	}
+	
+	public HashMap<String, Object> bestSearch(int page, String startDate, String endDate) { // 찬호
+
+		System.out.println("베스트검색 page : " + page);
+
+		ArrayList<MainDTO> bestSearch = new ArrayList<MainDTO>();
+		String item = "로드실패";
+		int start = 0;
+		int end = 0;
+		int endPage = 0;
+		int startPage = 0;
+		int pagePerCnt = 9; // 한 페이지당 보여줄 게시글 수
+		int pagePerPage = 5; // 한 페이지당 보여줄 페이지 수
+		int total = 0;
+		try {
+			total = bestSearchTotalCount(startDate, endDate);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // 총 게시글 수
+		int pages = total % pagePerCnt == 0 ? total / pagePerCnt : (total / pagePerCnt) + 1; // 만들 수 있는 페이지 수
+		System.out.println("total pages : " + total + " / pages : " + pages);
+
+		if (page > pages) {
+			page = pages;
+		}
+		System.out.println("베스트검색DAO 요청 받은 페이지 : " + page);
+
+		start = ((page - 1) * pagePerCnt) + 1;
+		end = page * pagePerCnt; 
+		endPage = pagePerPage * ((int) ((page - 1) / pagePerPage) + 1);
+		startPage = endPage - pagePerPage + 1;
+		System.out.println("베스트검색DAO startPage/endPage : " + startPage + "/" + endPage);
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		
+
+		String sql = "SELECT rnum, postid, title, recipePrice, hits , likes, userid, item, bestdate "
+				+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, p.postid, p.title, p.recipePrice, p.hits , p.likes, p.userid, p.item, b.bestdate "
+				+ "FROM post p left outer join bestpost b on p.postid = b.postid ORDER BY p.likes desc, p.hits desc) "
+				+ "where to_char(bestdate, 'YYYY-MM-DD') between ? and ? and rnum between ? and ?";
+
+
+		bestSearch = new ArrayList<MainDTO>();
+		System.out.println("DAO bestSearch() size : " + bestSearch.size());
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, startDate);
+			ps.setString(2, endDate);
+			ps.setInt(3, start);
+			ps.setInt(4, end);
+			System.out.println("startDate : " + startDate);
+			System.out.println("endDate : " + endDate);
+			rs = ps.executeQuery();
+			bestSearch = new ArrayList<MainDTO>();
+			System.out.println("들어오는지확인");
+			System.out.println("startDate값 : " + startDate);
+			System.out.println("endDate값 : " + endDate);
+
+			while (rs.next()) {
+				MainDTO dto = new MainDTO();
+				dto.setPostId(rs.getString("postId"));
+				dto.setTitle(rs.getString("title"));
+				dto.setRecipePrice(rs.getInt("recipePrice"));
+				dto.setHits(rs.getInt("hits"));
+				dto.setLikes(rs.getInt("likes"));
+				dto.setUserId(rs.getString("userId"));
+				item = rs.getString("item");
+				// 재료 3개만 가져오기
+	            String[] itemArr = item.split(",");
+	            item = "";
+	            int i = 0;
+	            while (i < 3 && itemArr.length > i) {
+	               // 재료가 3개 미만일 경우 itemArr.length < i 에 걸린다
+	               item += (",#" + itemArr[i]);
+	               i += 1;
+	               System.out.println("i : " + i);
+	            }
+	            item = item.substring(1);
+	            // System.out.println("재료(item)3개만 : "+item);
+				dto.setItem(item);
+				dto.setBestDate(rs.getString("bestDate"));
+				System.out.println("dto : " + dto);
+				bestSearch.add(dto);
+			}
+			System.out.println("bestSearch() size : " + bestSearch.size());
+
+			map.put("bestSearch", bestSearch);
+			map.put("totalPage", pages);
+			map.put("currPage", page);
+			map.put("start", startPage);
+			map.put("end", endPage);
+		} catch (Exception e) {
+			System.out.println("DAO list()에러");
+			e.printStackTrace();
+		}
+		return map;
+	}
+	
+	public int bestSearchTotalCount(String startDate, String endDate) throws SQLException { // 찬호
+		
+		String sql = "SELECT count(*) "
+				+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, p.postid, p.title, p.recipePrice, p.hits , p.likes, p.userid, p.item, b.bestdate "
+				+ "FROM post p left outer join bestpost b on p.postid = b.postid ORDER BY p.likes desc, p.hits desc) "
+				+ "where to_char(bestdate, 'YYYY-MM-DD') between ? and ?";
+		
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, startDate);
+		ps.setString(2, endDate);
+		
+		rs = ps.executeQuery();
+		
+		
+		
+		int total = 0;
+
+		if (rs.next()) {
+			total = rs.getInt(1);
+		}
+
+		return total;
+	}
+	
 
 }
 

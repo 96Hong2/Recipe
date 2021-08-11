@@ -6,9 +6,19 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src = "https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+if("${sessionScope.userId}"==""){
+   alert("로그인이 필요한 서비스입니다.");
+   location.href = "./";
+}
+</script>
+	<header>
+		<%@include file="header_afterLogin.jsp"%>
+	</header>
 </head>
 <body>
-<button onclick = "location.href = './myPage'">MY PAGE로 돌아가기</button>
+<!-- <button onclick = "location.href = './myPage'">MY PAGE로 돌아가기</button> -->
+<a href='./myPage' id='backToMyPage'><h4 style="border:2px solid #bbb; border-radius:10px; text-align:center; width:230px;"> ← MY PAGE로 돌아가기</h4></a>
 <h3>${sessionScope.nickName}님의 주문 내역</h3>
 <table>
 	<c:if test="${empty myOrderHistory}">

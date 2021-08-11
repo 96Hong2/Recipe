@@ -474,6 +474,58 @@ public class BoardService {
 		dao.resClose();
 		return success;
     }
+	
+	public HashMap<String, Object> bestPost(int page) { // 찬호
+
+		BoardDAO dao = new BoardDAO();
+		HashMap<String, Object> map = dao.bestPost(page);
+		System.out.println("map : " + map.size());
+		System.out.println("map : " + map);
+
+		dao.resClose();
+
+		return map;
+	}
+	
+	public HashMap<String, Object> bestMonth(int page) { // 찬호
+
+		BoardDAO dao = new BoardDAO();
+		HashMap<String, Object> map = dao.bestMonth(page);
+		System.out.println("map : " + map.size());
+		System.out.println("map : " + map);
+
+		dao.resClose();
+
+		return map;
+	}
+	
+	public HashMap<String, Object> bestWeek(int page) { // 찬호
+
+		BoardDAO dao = new BoardDAO();
+		HashMap<String, Object> map = dao.bestWeek(page);
+		System.out.println("map : " + map.size());
+		System.out.println("map : " + map);
+
+		dao.resClose();
+
+		return map;
+	}
+	
+	public HashMap<String, Object> bestSearch(int page) { // 찬호
+
+		BoardDAO dao = new BoardDAO();
+		String startDate = req.getParameter("startDate");
+		String endDate = req.getParameter("endDate");
+		System.out.println("start : " + startDate);
+		System.out.println("end : " + endDate);
+		HashMap<String, Object> map = dao.bestSearch(page, startDate, endDate);
+		System.out.println("map : " + map.size());
+		System.out.println("map : " + map);
+
+		dao.resClose();
+
+		return map;
+	}
 
 	
 

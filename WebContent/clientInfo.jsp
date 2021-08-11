@@ -6,10 +6,26 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src = "https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+if("${sessionScope.userId}"==""){
+   alert("로그인이 필요한 서비스입니다.");
+   location.href = "./";
+}
+</script>
+	<header>
+		<%@include file="header_afterLogin.jsp"%>
+	</header>
 </head>
 <body>
-	<h2>회원정보 보기</h2>
-	<button onclick = "location.href = './myPage'">MY PAGE로 돌아가기</button>
+	<div style="width: 900px; display: flex; margin-bottom: 20px;">
+	<div>
+	<h2>${sessionScope.nickName} 님의회원정보 보기</h2>
+	</div>
+	<div>
+	<!-- <button onclick = "location.href = './myPage'">MY PAGE로 돌아가기</button> -->
+	<a href='./myPage' id='backToMyPage'><h4 style="border:2px solid #bbb; border-radius:10px; text-align:center; width:230px;"> ← MY PAGE로 돌아가기</h4></a>
+	</div>
+	<div>
 	<table>
 		<tr>
 			<td>항목</td>
@@ -58,6 +74,8 @@
 			</td>
 		</tr>
 	</table>
+	</div>
+	</div>
 </body>
 <script>
    var msg = "${msg}";
