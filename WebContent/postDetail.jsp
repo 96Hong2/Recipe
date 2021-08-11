@@ -8,34 +8,58 @@
 <title>레시피 게시글 상세보기</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
-#board, #board th, #board td {
-	border: 1px solid;
+.board{
+	width: 1111px;
+	border-top: none;
+	border-bottom: none;
+}
+
+.board, .board th, .board td {
+	/* border: 1px solid; */
 	border-collapse: collapse;
 	padding: 5px 10px;
 }
 
-#board td {
+.board td, .board td {
 	text-align: center;
+	font-size: small;
 }
 
-.container {
-	margin-left: 20%;
+.board tr{
+	border: 1px solid grey;
+}
+
+#firstTr th, #firstTr td{
+	height: 4%;
+	padding: 5px 5px;
+}
+
+#itemWhat td{
+	text-align: left;
+	height: 20%;
+}
+
+.bigContainer {
+	margin-left: 13.5%;
 	background-color: ligthgrey;
+	display: inline-block;
 }
 
 .tableArea {
 	display: inline-block;
 	width: 70%;
 	left: 50%;
+	margin-top: 40px;
 }
 
 #slideBarParent {
 	width: 160px;
 	height: 460px;
 	background-color: #f7f7f7;
-	display: inline-block;
+	/* display: inline-block; */
 	position: fixed;
-	margin-left: 50px;
+	margin-top: -29%;
+	margin-left: 1133px;
 	border-radius: 10px;
 }
 
@@ -62,8 +86,9 @@
 
 .commentArea {
 	display: inline-block;
-	margin-left: 18%;
-	width: 60%;
+	margin-left: 13.4%;
+	margin-top: 30px;
+	width: 74%;
 }
 
 .itemFigure {
@@ -116,6 +141,7 @@
 	font-size: 25px;
 	text-decoration: none;
 	color: grey;
+	margin-left: 69px;
 }
 
 .btn_wrap a:hover{
@@ -125,7 +151,7 @@
 	color: black;
 }
 
-li{
+#remote{
 	list-style-type: none;
 	margin-left: -69px;
 }
@@ -134,6 +160,42 @@ figcaption{
 	text-align: left;
 	margin-left: 19px;
 	margin-top: 4px;
+}
+
+#blankSpace{
+	margin: 200px;
+}
+
+#titleHere{
+	font-size: xx-large;
+	font-weight: bold;
+	padding: 20px;
+}
+
+.btns{
+	padding: 5px 7px;
+	background-color: white;
+	color: grey;
+	font-size: x-small;
+	width: 60px;
+	height: 25px;
+	border: 1px solid;
+	float: left;
+	margin-left: 4px;
+	margin-top: 25px;
+}
+
+.btns:hover{
+	background-color: grey;
+	color: white;
+}
+
+#blindBtn, #reportBtn{
+	float: right;
+}
+
+#blindBtn:hover, #reportBtn:hover{
+	background-color: red;
 }
 </style>
 </head>
@@ -148,33 +210,33 @@ figcaption{
 <header>
          <c:import url="./header_afterLogin.jsp" />
       </header>
-	<div class="container">
-
+	<div class="bigContainer">
 		<div class="tableArea">
-			<table id="board">
+			<table class="board">
 				<tr>
+					<td id="titleHere" colspan='12'>${post.title}</td>
+				</tr>
+				<tr id="firstTr">
 					<th>글번호</th>
 					<td>${post.postId}</td>
 					<th>작성자</th>
 					<td>${post.nickName}</td>
 					<th>등급</th>
 					<td>${post.rankName}</td>
-					<th>제목</th>
-					<td>${post.title}</td>
 					<th>작성날짜</th>
 					<td>${post.postDate}</td>
-					<th>좋아요</th>
-					<td>${post.likes}</td>
 					<th>조회수</th>
 					<td>${post.hits}</td>
 				</tr>
 				<tr>
 					<th>카테고리</th>
-					<td>${post.categoryName}</td>
+					<td colspan='5'>${post.categoryName}</td>
 					<th>예상금액</th>
-					<td>${post.recipePrice}￦</td>
-					<th>재료</th>
-					<td colspan="9">${post.item}</td>
+					<td colspan='7'>${post.recipePrice}￦</td>
+				</tr>
+				<tr>
+					<th id='itemWhat'>재료</th>
+					<td colspan="14">${post.item}</td>
 				</tr>
 				<tr>
 					<th>첨부 이미지</th>
@@ -188,13 +250,13 @@ figcaption{
 				</tr>
 				<tr>
 					<td colspan="14">
-						<c:if test="${sessionScope.userId ne null && sessionScope.userId ne post.userId}"><button onclick="reportPopUp(${post.postId},'${post.nickName}')">신고</button></c:if> 
-						<c:if test="${sessionScope.isAdmin eq 'Y' || sessionScope.userId eq admin}"><button onclick="blindPopUp(${post.postId},'${post.nickName}')">블라인드</button></c:if> 
+						<c:if test="${sessionScope.userId ne null && sessionScope.userId ne post.userId}"><button onclick="reportPopUp(${post.postId},'${post.nickName}')"  class="btns" id="reportBtn">신고</button></c:if> 
+						<c:if test="${sessionScope.isAdmin eq 'Y' || sessionScope.userId eq admin}"><button onclick="blindPopUp(${post.postId},'${post.nickName}')"  class="btns" id="blindBtn">블라인드</button></c:if> 
 						<c:if test="${sessionScope.userId eq post.userId}"><button onclick="location.href='./postUpdateForm?postId=${post.postId}'">수정</button></c:if> 
-						<c:if test="${sessionScope.userId eq post.userId}"><input type="button" value="삭제" onclick="button_evert()"/></c:if>
-						<button onclick="location.href='./category?categoryId=${post.categoryId }'">리스트</button>
-						<button onclick="location.href='./postList'">전체 목록</button>
-						<button type="button" onclick="postLike();"><img id="likeImg" class="img" src="./likeButton.png"></button>
+						<c:if test="${sessionScope.userId eq post.userId}"><input type="button" value="삭제" onclick="button_evert()"  class="btns"/></c:if>
+						<button onclick="location.href='./category?categoryId=${post.categoryId }'" class="btns">리스트</button>
+						<button onclick="location.href='./postList'" class="btns">전체 목록</button>
+						<button type="button" onclick="postLike();"><img id="likeImg" class="img" src="./likeButton.png">${post.likes}</button>
 					</td>
 				</tr>
 			</table>
@@ -218,7 +280,8 @@ figcaption{
 			<c:param name="postId" value="${post.postId}" />
 		</c:import>
 	</div>
-
+	<div id="blankSpace">
+	</div>
 </body>
 <script>
 	itemCall("${post.item}", "${post.postId}");
@@ -283,7 +346,7 @@ figcaption{
 						//console.log("상품있음");
 						//console.log("리스트 뿌리기" + idx, item);
 
-						content += "<li>"
+						content += "<li id='remote'>"
 						content += "<figure class='itemFigure' id='fig_"+idx+"'>";
 						content += "<a href='./shopDetail?productId="+item.productId+ "'><img class='image_item' src='/photo/"+item.imgNewName+"'></a>";
 						content += "<figcaption>" + item.productName + "<br/>"+ item.price +"원";
@@ -328,14 +391,14 @@ figcaption{
 	function reportPopUp(postId, nickName) {
 		var url = "./memberReport?classification=P&&postId=" + postId
 				+ "&&nickName=" + nickName;
-		var option = "width=650, height=500, top=500, location = no, resizable = no";
+		var option = "width=650, height=530, top=500, location = no, resizable = no";
 		window.open(url, "reportPopUp", option);
 
 	}
 	function blindPopUp(postId, nickName) {
 		var url = "./memberBlind?classification=P&&postId=" + postId
 				+ "&&nickName=" + nickName;
-		var option = "width=650, height=500, top=500, location = no, resizable = no";
+		var option = "width=650, height=530, top=500, location = no, resizable = no";
 		window.open(url, "blindPopUp", option);
 	}
 	function reloadPage() {
