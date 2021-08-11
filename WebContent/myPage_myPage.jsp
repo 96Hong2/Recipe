@@ -89,8 +89,6 @@
 											<img class="img" src="/photo/${likeItem.imgNewName}"
 												style="height: 100px; width: 180px; margin: 10px;"
 												onclick="location.href='./postDetail?postId=${likeItem.postId}'" />
-
-
 										</c:if>
 										<figcaption>
 											<div style="margin: 0 5px 5px 5px;">
