@@ -8,10 +8,9 @@
 
 
 <style>
-.wrapper {
-  position:relative;
-  left:45%;
-  top:10%;
+table {
+  width :60%;
+  margin:auto;
   text-align:center;
   line-height:200%;   
   }
@@ -25,7 +24,6 @@ h1{ text-align:center;}
 </head>
 <body>
    <h1>회원가입</h1>
-<div class="wrapper">
    <table>
       <tr>
          <th>아이디</th>
@@ -77,7 +75,7 @@ h1{ text-align:center;}
          </td>
       </tr>
    </table>
-</div>
+
 </body>
 <script>
 var overChk = false;
