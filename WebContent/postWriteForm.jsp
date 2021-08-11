@@ -18,7 +18,7 @@ if("${sessionScope.userId}"==""){
 <header>
          <c:import url="./header_afterLogin.jsp" />
       </header>
-	<form action="postWrite" method="post">
+	<form action="postWrite" name="postWrite" method="post">
 	<input type='hidden' id='thImg' name='thImg'/>
 	<input type='hidden' id='img' name='img'/>
 	
@@ -26,7 +26,7 @@ if("${sessionScope.userId}"==""){
 	<table>
 		<tr>
 			<th>제목</th>
-			<td><input type="text" id="postTitle" name="title" autofocus="autofocus" min="2" maxlength="20" /></td>
+			<td><input type="text" id="postTitle" name="title" autofocus="autofocus" maxlength="20" placeholder="제목을 입력하세요." /></td>
 		</tr>
 		<tr>
 			<td colspan="2">
@@ -59,23 +59,46 @@ if("${sessionScope.userId}"==""){
 			</tr>
 		<tr>
 			<th>예산</th>
-			<td><input type="number" id="postRecipePrice" max="10000000" name="recipePrice"/>￦</td>
+			<td><input type="number" id="postRecipePrice" name="recipePrice"  min="100" max="10000000" placeholder="예산을 입력하세요."/>￦</td>
 		</tr>
 		<tr>
 			<th>재료</th>
-			<td><textarea name="item" maxlength="1000" id="postItem"></textarea></td>
+			<td><textarea name="item" maxlength="1000" id="postItem"  placeholder="재료는 쉼표(,)로 구분하여 입력하세요."></textarea></td>
 		</tr>	
 		<tr>
 			<th>Recipe</th>
-			<td><textarea name="contents" maxlength="2000"  id="postContents"></textarea></td>
+			<td><textarea name="contents" maxlength="2000"  id="postContents"  placeholder="내용을 입력하세요."></textarea></td>
 		</tr>
 		<tr>
 			<td colspan="2">
 				<input type="button" onclick="history.back();" value="취소"/> 
-				<button id='submitBtn' type='button' onclick='javascript:save()'>저장</button> 
+				 <button id='submitBtn' type='button' onclick='javascript:checkfield()'>저장</button>
+				
 			</td>
 		</tr>
 	</table>
 	</form>
 </body>
+<script>
+function checkfield(){
+	if(document.postWrite.postTitle.value ==""){
+		alert("제목을 입력하세요.");
+		document.postWrite.postTitle.focus();
+		return;
+	}else if(document.postWrite.postRecipePrice.value ==""){
+		alert("예산을 입력하세요.");
+		document.postWrite.postRecipePrice.focus();
+		return;
+	}else if(document.postWrite.postItem.value ==""){
+		alert("재료를 입력하세요.");
+		document.postWrite.postItem.focus();
+		return;
+    }else if(document.postWrite.postContents.value ==""){
+		alert("Recipe를 작성하세요.");
+		document.postWrite.postContents.focus();
+		return;
+    }
+	save();
+}	
+</script>
 </html>

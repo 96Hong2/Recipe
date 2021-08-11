@@ -47,6 +47,8 @@ public class BoardService {
 		String categoryId = req.getParameter("categoryId");
 		String recipePrice = req.getParameter("recipePrice");
 		String item = req.getParameter("item");
+		item=item.replace(" ", "");
+		
 		String contents = req.getParameter("contents");
 		System.out.println("writeForm에서 받아온 파라메터 :"+"title:"+title+"/"+"categoryId:"+categoryId+"/"+"recipePrice:"+recipePrice+"/"+"item:"+item+"/"+"contents:"+contents);
 

@@ -23,15 +23,15 @@ if("${sessionScope.userId}"==""){
 <header>
   <c:import url="./header_afterLogin.jsp" />
 </header>
-	<form action="postUpdate" method="post">
+	<form action="postUpdate" method="post" name="postUpdate">
 	<input type='hidden' id='thImg' name='thImg'/>
 	<input type='hidden' id='img' name='img'/>
 	<input type="hidden" name="userId" value="${sessionScope.userId}" readonly="readonly"/>
 	<input type="hidden" name="postId" value="${post.postId}"/>
 	<table>
 		<tr>
-			<th>제목${post.postId } ${post.th_imgid } ${post.imgid } ${post.th_imgNewName } ${post.imgNewName }</th>
-			<td><input type="text" name="title"  min="2" maxlength="20" value="${post.title}" /></td>
+			<th>제목</th>
+			<td><input type="text" id="postTitle" name="title" maxlength="20" placeholder="제목을 입력하세요." value="${post.title}" /></td>
 		</tr>
 		<c:import url="./fileUpdate.jsp" charEncoding="utf-8">
   		 <c:param name="field" value="post"/>
@@ -65,20 +65,20 @@ if("${sessionScope.userId}"==""){
 			</tr>
 		<tr>
 			<th>예산</th>
-			<td><input type="number" name="recipePrice"  max="10000000" value="${post.recipePrice}"/>￦</td>
+			<td><input type="number" id="recipePrice" name="recipePrice" min="100" max="10000000" placeholder="예산을 입력하세요." value="${post.recipePrice}" />￦</td>
 		</tr>
 		<tr>
 			<th>재료</th>
-			<td><textarea name="item" >${post.item}</textarea></td>
+			<td><textarea name="item" id="postItem" maxlength="1000" placeholder="재료는 쉼표(,)로 구분하여 입력하세요." >${post.item}</textarea></td>
 		</tr>	
 		<tr>
 			<th>Recipe</th>
-			<td><textarea name="contents" autofocus="autofocus">${post.contents}</textarea></td>
+			<td><textarea name="contents" id="postContents"  maxlength="2000" autofocus="autofocus" placeholder="내용을 입력하세요.">${post.contents}</textarea></td>
 		</tr>
 		<tr>
 			<td colspan="2">
 				<input type="button" onclick="location.href='./postDetail?postId=${post.postId}'" value="취소"/> 
-				<button id='submitBtn' type='button' onclick='javascript:save()'>저장</button>
+				<button id='submitBtn' type='button' onclick='javascript:checkfield()'>저장</button>
 			</td>
 		</tr>
 	</table>
@@ -87,5 +87,27 @@ if("${sessionScope.userId}"==""){
 </body>
 <script>
 $('[name=categoryId]:radio[value="'+'${post.categoryId}'+'"]').prop('checked', true );
+
+
+function checkfield(){
+	if(document.postUpdate.postTitle.value ==""){
+		alert("제목을 입력하세요.");
+		document.postUpdate.postTitle.focus();
+		return;
+	}else if(document.postUpdate.recipePrice.value ==""){
+		alert("예산을 입력하세요.");
+		document.postUpdate.recipePrice.focus();
+		return;
+	}else if(document.postUpdate.postItem.value ==""){
+		alert("재료를 입력하세요.");
+		document.postUpdate.postItem.focus();
+		return;
+    }else if(document.postUpdate.postContents.value ==""){
+		alert("Recipe를 작성하세요.");
+		document.postUpdate.postContents.focus();
+		return;
+    }
+	save();
+}	
 </script>
 </html>
