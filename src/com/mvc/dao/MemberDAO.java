@@ -191,7 +191,6 @@ public class MemberDAO {
 		map.put("currPage", page);
 		map.put("start", startPage);
 		map.put("end", endPage);
-		changeCash(-500, "test1");
 		return map;
 	}
 	
