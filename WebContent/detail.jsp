@@ -157,8 +157,6 @@
 		if ("${sessionScope.userId}" == "") {
 			alert("로그인이 필요한 서비스입니다.");
 			location.href = "login.jsp";
-		} else if($tPrice < 0) {
-			alert("다시 선택 해주세요.");
 		} else {
 			var $pId = new String("${product.productId}");
 			//var $pId = ${product.productId};
@@ -189,6 +187,8 @@
 
 			if ($tPrice == 0 || $("input[name='totalPrice']").val() == "0원") {
 				alert("수량 선택을 먼저 해주세요.");
+			} else if($tPrice < 0) {
+				alert("다시 선택 해주세요.");
 			} else {
 				isOrder = confirm("상품을 주문하시겠습니까?");
 				if (isOrder) {
