@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.mvc.dao.MemberDAO;
 import com.mvc.dao.ShopDAO;
 import com.mvc.dto.MainDTO;
 
@@ -285,7 +286,8 @@ public class ShopService {
 			int use = resultPrice;
 
 			System.out.println("사용금액 : " + use + " 원, userId : " + uId);
-			int result = dao.changeCash(-use, uId);
+			MemberDAO memDao = new MemberDAO();
+			int result = memDao.changeCash((int)(-use), uId);
 			System.out.println("???__" + result);
 
 			list = dao.payCart(uId, productList, countList, paymentId);
