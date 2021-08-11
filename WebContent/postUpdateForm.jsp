@@ -83,7 +83,7 @@ if("${sessionScope.userId}"==""){
 		</tr>	
 		<tr>
 			<th>Recipe</th>
-			<td><textarea style="resize: none; white-space: pre-line;" rows="30" cols="80" name="contents" id="postContents"  maxlength="2000" autofocus="autofocus" placeholder="내용을 입력하세요.">${post.contents}</textarea></td>
+			<td><textarea wrap="hard" style="resize: none; white-space: pre-line;" rows="30" cols="80" name="contents" id="postContents"  maxlength="2000" autofocus="autofocus" placeholder="내용을 입력하세요.">${post.contents}</textarea></td>
 		</tr>
 		<tr>
 			<td colspan="2" style="float: left; margin:8px 5px 10px 30px;">
