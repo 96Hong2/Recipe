@@ -54,8 +54,7 @@ div.commentAreaBox {
 }
 
 .pageArea {
-	margin-top: 20px;
-	margin-left: 350px;
+	text-align: center;
 }
 
 .page {
@@ -469,7 +468,7 @@ div.commentAreaBox {
 		}
 		content += "<button type='button' onclick='loadComments(" + end
 				+ ", 2)'>다음</button>";
-		content += "<div style='height:50px'>&nbsp;</div>";
+		content += "<div style='height:5px'>&nbsp;</div>";
 
 		$(".pageArea").empty();
 		$(".pageArea").append(content);
