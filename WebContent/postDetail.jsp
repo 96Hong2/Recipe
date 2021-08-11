@@ -214,7 +214,7 @@ figcaption{
 	itemCall("${post.item}", "${post.postId}");
 
 	function itemCall(item, postId) {
-		console.log("item / postId : " + item + "/" + postId);
+		//console.log("item / postId : " + item + "/" + postId);
 		if (item != "") {
 			$.ajax({
 				type : 'get',
@@ -235,9 +235,9 @@ figcaption{
 	}
 
 	function cartAdd(productId, productName, price) {
-		console.log(productId + "/" + productName + "/" + price);
+		//console.log(productId + "/" + productName + "/" + price);
 		if (confirm("해당 상품을 장바구니에 담으시겠습니까?")) {
-			console.log("장바구니에 담기 함수 실행");
+			//console.log("장바구니에 담기 함수 실행");
 			$.ajax({
 				type : 'get',
 				url : 'cartAdd',
@@ -260,22 +260,19 @@ figcaption{
 	}
 
 	function drawItemList(list) {
-		console.log("상품리스트 출력");
+		//console.log("상품리스트 출력");
 		var content = "";
 		var btnArea = "";
 
 		if (list.length == 0) {
-			console.log("상품 없음");
-			//content += "<div class='itemNoDiv'>";
-			//content += "검색된 상품이 없습니다.";
-			//content += "</div>";
+			//console.log("상품 없음");
+			$("#slideBarParent").hide();
 
 		} else {
 			list.forEach(function(item, idx) {
-						console.log("상품있음");
-						console.log("리스트 뿌리기" + idx, item);
+						//console.log("상품있음");
+						//console.log("리스트 뿌리기" + idx, item);
 
-						//content += "<div class='cont' id='cont"+idx+"'>";
 						content += "<li>"
 						content += "<figure class='itemFigure' id='fig_"+idx+"'>";
 						content += "<a href='./shopDetail?productId="+item.productId+ "'><img class='image_item' src='/photo/"+item.imgNewName+"'></a>";
@@ -284,21 +281,15 @@ figcaption{
 						content +=  "</figcaption>";
 						content += "</figure>";
 						content += "</li>"
-						//content += "</div>";
 					});
 		}
 		$("#slideBar").append(content);
 		
 	}
-	
-	
-	
-	
+
 	var m_num = 0;
-	//var childNode = $("#slideBar").children();
 	
 	$("#next_btn").click(function(){
-		console.log("버튼 누르고 : "+ $("#slideBar").children().length);
 		if(m_num >= $("#slideBar").children().length-3)
 				return false;
 			m_num++;
@@ -313,10 +304,7 @@ figcaption{
 			$("#slideBar").css("margin-top", -128*m_num);
 			return false;
 		});
-	
-	
-	
-	
+
 
 	function button_evert() {
 		var result = confirm("정말 삭제하시겠습니까?");
@@ -341,7 +329,7 @@ figcaption{
 		window.open(url, "blindPopUp", option);
 	}
 	function reloadPage() {
-		console.log("새로고침");
+		//console.log("새로고침");
 		location.reload();
 	}
 	
@@ -350,9 +338,9 @@ figcaption{
 	});	
 	
 	function postLike(){
-		console.log("좋아요");
-		console.log("${param.postId}");
-		console.log("${sessionScope.userId}");
+		//console.log("좋아요");
+		//console.log("${param.postId}");
+		//console.log("${sessionScope.userId}");
 		
 		 $.ajax({
 			type : "post",
@@ -362,7 +350,7 @@ figcaption{
 			},
 			dataType : 'JSON',
 			success : function(data){
-				console.log(data.success);
+				//console.log(data.success);
 				if(data.success){ 
 					document.getElementById("likeImg").src = './likeOnClick.png'
 				}
@@ -373,9 +361,9 @@ figcaption{
 	} 
 		
 	function postLikeCheck(){
-		console.log("좋아요");
-		console.log("${param.postId}");
-		console.log("${sessionScope.userId}");
+		//console.log("좋아요");
+		//console.log("${param.postId}");
+		//console.log("${sessionScope.userId}");
 		
 		 $.ajax({
 			type : "post",
@@ -385,7 +373,7 @@ figcaption{
 			},
 			dataType : 'JSON',
 			success : function(data){
-				console.log(data.success);
+				//console.log(data.success);
 				if(data.success){
 					document.getElementById("likeImg").src = './likeOnClick.png'
 					$("#likeImg").removeAttr("onclick");
