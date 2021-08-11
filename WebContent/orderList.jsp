@@ -188,6 +188,9 @@ if("${sessionScope.userId}"==""){
 					if (data.success) {
 						alert("주문 완료");
 						location.href = './';
+					} else {
+						alert("주문 실패");
+						location.href ="./";
 					}
 				},
 				error : function(e) {

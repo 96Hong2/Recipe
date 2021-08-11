@@ -179,7 +179,7 @@ public class ShopDAO {
 	public ArrayList<MainDTO> cartList(String uId) { // 의건
 		String sql = "select c.productcount productCount, c.totalprice totalPrice, c.productid productId, c.userid userId, c.productName productName, c.price price, p.stock stock from cart c, product p where userid = ? AND c.productid=p.productid";
 		String sql_cart = "select c.productcount productCount, c.totalprice totalPrice, c.productid productId, c.userid userId, c.productName productName, c.price price, p.stock stock, i.imgnewname imgnewname,  i.imgfield from cart c, product p LEFT OUTER JOIN image i on p.productid = i.fieldid WHERE i.imgfield='product' AND c.userid=? AND c.productid=p.productid";
-		
+
 		ArrayList<MainDTO> list = null;
 		MainDTO dto = null;
 
@@ -288,7 +288,7 @@ public class ShopDAO {
 		int cnt = 0;
 		for (String productId : delList) {
 			ps = conn.prepareStatement(sql);
-			System.out.println("pId/uId : " + productId +"/"+uId);
+			System.out.println("pId/uId : " + productId + "/" + uId);
 			ps.setString(1, productId);
 			ps.setString(2, uId);
 			cnt += ps.executeUpdate();
@@ -384,7 +384,6 @@ public class ShopDAO {
 
 	public ArrayList<MainDTO> payCart(String uId, String[] productList, String[] stockList, String paymentId) { // 의건
 
-
 		// String sql_order = "INSERT INTO orderHistory (productName, productCnt, price,
 		// paymentId, productId) VALUES (?,?,?,?,?)";
 
@@ -392,7 +391,6 @@ public class ShopDAO {
 		String sql_order = "INSERT INTO orderHistory (productName, price, productCnt, paymentId, productId) VALUES (?,?,?,?,?)";
 		String sql_del = "DELETE FROM cart WHERE userId = ? AND productId = ? AND productCount = ?";
 		String sql_product = "UPDATE product SET stock = stock - ? WHERE productId = ?";
-		
 
 		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
 		MainDTO dto = null;
@@ -402,23 +400,24 @@ public class ShopDAO {
 		int pListLen = productList.length;
 		int sListLen = stockList.length;
 		System.out.println();
-		if(pListLen == sListLen) {
-			for(int i = 0 ; i<pListLen; i++) {
+		if (pListLen == sListLen) {
+			for (int i = 0; i < pListLen; i++) {
 				try {
-					//String sql = "SELECT productName, price FROM product WHERE productId = ?";
-					ps = conn.prepareStatement(sql); //product 테이블에서 name, price 가져오기
+					// String sql = "SELECT productName, price FROM product WHERE productId = ?";
+					ps = conn.prepareStatement(sql); // product 테이블에서 name, price 가져오기
 					ps.setString(1, productList[i]);
 					System.out.println("productId : " + productList[i]);
 					rs = ps.executeQuery();
-					
-					if (rs.next()) { //가져온 정보를
+
+					if (rs.next()) { // 가져온 정보를
 						dto = new MainDTO();
 						dto.setProductName(rs.getString("productName"));
 						dto.setPrice(rs.getInt("price"));
-						
+
 						list.add(dto);
-						
-						//String sql_order = "INSERT INTO orderHistory (productName, price, productCount, paymentId, productId) VALUES (?,?,?,?,?)";
+
+						// String sql_order = "INSERT INTO orderHistory (productName, price,
+						// productCount, paymentId, productId) VALUES (?,?,?,?,?)";
 						ps = conn.prepareStatement(sql_order); // 주문한 상품들 정보 orderHistory(주문내역)에 추가
 						ps.setString(1, dto.getProductName());
 						ps.setInt(2, dto.getPrice());
@@ -426,17 +425,18 @@ public class ShopDAO {
 						ps.setString(4, paymentId);
 						ps.setString(5, productList[i]);
 						cnt += ps.executeUpdate();
-						System.out.println("productId/productCount " + productList[i] +"/" + stockList[i]);
-						
-						//String sql_product = "UPDATE product SET stock = stock - ? WHERE productId = ?";
+						System.out.println("productId/productCount " + productList[i] + "/" + stockList[i]);
+
+						// String sql_product = "UPDATE product SET stock = stock - ? WHERE productId =
+						// ?";
 						ps = conn.prepareStatement(sql_product);
 						ps.setInt(1, Integer.parseInt(stockList[i]));
 						ps.setString(2, productList[i]);
-						System.out.println("productCount/productId " +"/" + stockList[i]+ productList[i] );
+						System.out.println("productCount/productId " + "/" + stockList[i] + productList[i]);
 						stock += ps.executeUpdate();
-						
-						
-						//String sql_del = "DELETE FROM cart WHERE userId = ? AND productId = ? AND productCount = ?";
+
+						// String sql_del = "DELETE FROM cart WHERE userId = ? AND productId = ? AND
+						// productCount = ?";
 						ps = conn.prepareStatement(sql_del);
 						ps.setString(1, uId);
 						ps.setString(2, productList[i]);
@@ -446,15 +446,15 @@ public class ShopDAO {
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}// 주문내역에 넣을 상품명, 상품가격
+				} // 주문내역에 넣을 상품명, 상품가격
 			}
-			
+
 		}
-		System.out.println("주문내역 추가_" + cnt + "/" + "상품재고수정_" + stock +"/" + "장바구니에서 시켰으면 삭제" + del);
-		
+		System.out.println("주문내역 추가_" + cnt + "/" + "상품재고수정_" + stock + "/" + "장바구니에서 시켰으면 삭제" + del);
+
 		return list;
 	}
-	
+
 	public int showCash(String userId) { // 은홍
 		System.out.println("MemberDAO showCash() 들어옴");
 		sql = "SELECT total FROM (SELECT total FROM cash WHERE userId=? ORDER BY changedTime DESC) WHERE ROWNUM=1";
@@ -472,14 +472,19 @@ public class ShopDAO {
 		}
 		return cash;
 	}
+
 	public int changeCash(int amount, String userId) { // 은홍
 		// 캐시 충전 또는 상품 구매로 캐시 히스토리를 추가하는 메소드, amount는 변동액
-		System.out.println("changeCash() 들어옴");
+		System.out.println("MemberDAO changeCash() 들어옴");
 		int success = 0; // 쿼리성공여부
 		int total = 0; // 변동으로 인한 캐시총합
 		int currCash = showCash(userId);
-		total = currCash - amount;
+		total = currCash + amount;
 		System.out.println("amount/currCash/total/userId : " + amount + "/" + currCash + "/" + total + "/" + userId);
+		if(total < 0) {
+			System.out.println("DAO 캐시 부족으로 상품 구매 불가 ");
+			return success;
+		}
 		sql = "INSERT INTO cash(changedPrice,total,userId) VALUES(?,?,?)";
 		try {
 			ps = conn.prepareStatement(sql);
@@ -488,8 +493,49 @@ public class ShopDAO {
 			ps.setString(3, userId); // 유저 아이디
 			success = ps.executeUpdate();
 		} catch (Exception e) {
-			System.out.println("**에러 : changeCash()");
+			System.out.println("**에러 : MemberDAO changeCash()");
 			e.printStackTrace();
+		}
+		return success;
+	}
+
+	public boolean productChk(String[] productList, String[] countList) {
+		// String sql_order = "INSERT INTO orderHistory (productName, productCnt, price,
+		// paymentId, productId) VALUES (?,?,?,?,?)";
+
+		String sql = "SELECT stock FROM product WHERE productId = ?";
+		
+
+		boolean success = false;
+		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
+		MainDTO dto = null;
+
+		int pListLen = productList.length;
+		int sListLen = countList.length;
+		System.out.println();
+		if (pListLen == sListLen) {
+			for (int i = 0; i < pListLen; i++) {
+				try {
+					// String sql = "SELECT productName, price FROM product WHERE productId = ?";
+					ps = conn.prepareStatement(sql); // product 테이블에서 name, price 가져오기
+					ps.setString(1, productList[i]);
+					System.out.println("productId : " + productList[i]);
+					rs = ps.executeQuery();
+
+					if (rs.next()) { // 가져온 정보를
+						dto = new MainDTO();
+						dto.setStock(rs.getInt("stock"));
+
+						if (Integer.parseInt(countList[i]) <= dto.getStock()) {
+							success = true;
+						}
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+			}
+
 		}
 		return success;
 	}

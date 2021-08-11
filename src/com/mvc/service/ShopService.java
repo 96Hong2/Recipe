@@ -209,8 +209,8 @@ public class ShopService {
 		return list;
 	}
 
-	public ArrayList<MainDTO> order(String pId, String pName, String pPrice, String pCnt, String tPrice, String imgNewName)
-			throws IOException {
+	public ArrayList<MainDTO> order(String pId, String pName, String pPrice, String pCnt, String tPrice,
+			String imgNewName) throws IOException {
 
 		String uId = (String) req.getSession().getAttribute("userId");
 		System.out.println("주문한 회원 : " + uId);
@@ -243,6 +243,7 @@ public class ShopService {
 		String[] orderList = req.getParameterValues("orderList[]");
 		String uId = (String) req.getSession().getAttribute("userId");
 		int size = orderList.length;
+		
 		ShopDAO dao = new ShopDAO();
 		ArrayList<MainDTO> list = null;
 		String[] productList = new String[(size - 3) / 3];
@@ -264,33 +265,37 @@ public class ShopService {
 				productList[i] = orderList[i];
 				System.out.println("productList : " + productList[i]);
 
-			} else if ((size - 3) / 3 <= i && i <((size-3)/3)*2) { // 3 <= i, i<6 
+			} else if ((size - 3) / 3 <= i && i < ((size - 3) / 3) * 2) { // 3 <= i, i<6
 				countList[i - (size - 3) / 3] = orderList[i];
 				System.out.println("stockList : " + countList[i - (size - 3) / 3]);
 			} else {
-				priceList[i - ((size-3)/3)*2] = orderList[i];
-				System.out.println("priceList : " + priceList[i - ((size-3)/3)*2]);
+				priceList[i - ((size - 3) / 3) * 2] = orderList[i];
+				System.out.println("priceList : " + priceList[i - ((size - 3) / 3) * 2]);
 			}
 		}
 
-		System.out.println(resultPrice);
-		System.out.println(orderPrice);
-		System.out.println(discount);
-		paymentId = dao.payment(uId, resultPrice, orderPrice, discount);
-		System.out.println("생성된 paymentId : " + paymentId);
-		
-		int use = resultPrice;
-		
-		System.out.println("사용금액 : "+use+" 원, userId : "+uId);
-		int result = dao.changeCash(-use, uId); 
-		System.out.println("???__"+result);
-		
-		list = dao.payCart(uId, productList, countList, paymentId);
+		success = dao.productChk(productList, countList);
+		if (success) {
+			System.out.println(resultPrice);
+			System.out.println(orderPrice);
+			System.out.println(discount);
+			paymentId = dao.payment(uId, resultPrice, orderPrice, discount);
+			System.out.println("생성된 paymentId : " + paymentId);
 
-		if(result * list.size() > 0) {
-			success = true;
+			int use = resultPrice;
+
+			System.out.println("사용금액 : " + use + " 원, userId : " + uId);
+			int result = dao.changeCash(-use, uId);
+			System.out.println("???__" + result);
+
+			list = dao.payCart(uId, productList, countList, paymentId);
+
+			if (result * list.size() > 0) {
+				success = true;
+			} else {
+				success = false;
+			}
 		}
-		
 		map.put("success", success);
 		dao.resClose();
 		resp.getWriter().print(new Gson().toJson(map));
