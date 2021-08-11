@@ -314,7 +314,7 @@ if("${sessionScope.userId}"==""){
 
 						if (data.cnt > 0) {
 							console.log("여기는 왜..?");
-							alert(data.cnt + '건 주문.');
+							//alert(data.cnt + '건 주문.');
 							//console.log(data.orderList);
 							location.href = './orderList';
 							//console.log(list);
