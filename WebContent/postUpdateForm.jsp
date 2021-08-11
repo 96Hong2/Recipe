@@ -23,25 +23,35 @@ if("${sessionScope.userId}"==""){
 <header>
   <c:import url="./header_afterLogin.jsp" />
 </header>
+<div class="postUpdate">
 	<form action="postUpdate" method="post" name="postUpdate">
 	<input type='hidden' id='thImg' name='thImg'/>
 	<input type='hidden' id='img' name='img'/>
 	<input type="hidden" name="userId" value="${sessionScope.userId}" readonly="readonly"/>
 	<input type="hidden" name="postId" value="${post.postId}"/>
-	<table>
+	
+	
+	<table style="position:relative; left: 565px;">
+	<tr>
+	<td colspan="2"><h2>레시피 수정</h2></td>
+	</tr>
 		<tr>
 			<th>제목</th>
-			<td><input type="text" id="postTitle" name="title" maxlength="20" placeholder="제목을 입력하세요." value="${post.title}" /></td>
+			<td><input style="float: left; margin:8px 10px 10px 30px;" type="text" id="postTitle" name="title" maxlength="20" placeholder="제목을 입력하세요." value="${post.title}" /></td>
 		</tr>
-		<c:import url="./fileUpdate.jsp" charEncoding="utf-8">
-  		 <c:param name="field" value="post"/>
-  		 <c:param name="fieldId" value="${post.postId }"/>
-  		 <c:param name="ex_thumbnail" value="${post.th_imgid }"/>
-  		 <c:param name="ex_contentImg" value="${post.imgid }"/>
- 		 <c:param name="ex_thumbnail_Name" value="${post.th_imgNewName }"/>
- 		 <c:param name="ex_contentImg_Name" value="${post.imgNewName }"/>
-		</c:import>
-			<tr>
+		<tr>
+			<td colspan="2">
+				<c:import url="./fileUpdate.jsp" charEncoding="utf-8">
+  					 <c:param name="field" value="post"/>
+  					 <c:param name="fieldId" value="${post.postId }"/>
+  					 <c:param name="ex_thumbnail" value="${post.th_imgid }"/>
+  					 <c:param name="ex_contentImg" value="${post.imgid }"/>
+ 					 <c:param name="ex_thumbnail_Name" value="${post.th_imgNewName }"/>
+ 					 <c:param name="ex_contentImg_Name" value="${post.imgNewName }"/>
+				</c:import>
+			</td>
+		</tr>
+		<tr>
 			<th>카테고리 설정</th>
 			<td>
 				<input type="radio" name="categoryId" value="2" />한식
@@ -62,28 +72,30 @@ if("${sessionScope.userId}"==""){
 				&nbsp;
 				<input type="radio" name="categoryId" value="1" />기타
 			</td>
-			</tr>
+		</tr>
 		<tr>
 			<th>예산</th>
-			<td><input type="number" id="recipePrice" name="recipePrice" min="100" max="10000000" placeholder="예산을 입력하세요." value="${post.recipePrice}" />￦</td>
+			<td style="float: left; margin:8px 10px 10px 30px;"><input type="number" id="recipePrice" name="recipePrice" min="100" max="10000000" placeholder="예산을 입력하세요." value="${post.recipePrice}" />￦</td>
 		</tr>
 		<tr>
 			<th>재료</th>
-			<td><textarea name="item" id="postItem" maxlength="1000" placeholder="재료는 쉼표(,)로 구분하여 입력하세요." >${post.item}</textarea></td>
+			<td><textarea style="resize: none;" rows="2" cols="80" name="item" id="postItem" maxlength="1000" placeholder="재료는 쉼표(,)로 구분하여 입력하세요." >${post.item}</textarea></td>
 		</tr>	
 		<tr>
 			<th>Recipe</th>
-			<td><textarea name="contents" id="postContents"  maxlength="2000" autofocus="autofocus" placeholder="내용을 입력하세요.">${post.contents}</textarea></td>
+			<td><textarea style="resize: none; white-space: pre-line;" rows="30" cols="80" name="contents" id="postContents"  maxlength="2000" autofocus="autofocus" placeholder="내용을 입력하세요.">${post.contents}</textarea></td>
 		</tr>
 		<tr>
-			<td colspan="2">
+			<td colspan="2" style="float: left; margin:8px 5px 10px 30px;">
 				<input type="button" onclick="location.href='./postDetail?postId=${post.postId}'" value="취소"/> 
+			</td>
+			<td colspan="2"  style=" position: relative; left:280px; right: 10px;">
 				<button id='submitBtn' type='button' onclick='javascript:checkfield()'>저장</button>
 			</td>
 		</tr>
 	</table>
 	</form>
-	
+</div>
 </body>
 <script>
 $('[name=categoryId]:radio[value="'+'${post.categoryId}'+'"]').prop('checked', true );
