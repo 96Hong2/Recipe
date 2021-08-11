@@ -50,13 +50,8 @@ if("${sessionScope.userId}"==""){
 					<tr>
 						<td style="width:180px; height:100px;"><a href='shopDetail?productId=${payment.productId}'>
 						<c:set var="imgNewName" value="${payment.imgNewName}" />
-								<c:if test="${imgNewName eq null }">
-									<img class="img" src="./defaultThum.png"
-										style="float: left; height: 100px; width: 180px; border-radius: 10px; margin: 15px;" />
-								</c:if> <c:if test="${imgNewName ne null }">
-									<img class="img" src="/photo/${payment.imgNewName}"
-										style="float: left; height: 100px; width: 180px; border-radius: 10px; margin: 15px;" />
-								</c:if>
+							<img class="img" src="/photo/${imgNewName}"
+								style="float: left; height: 100px; width: 180px; border-radius: 10px; margin: 15px;" />
 						</a> <input name="pId" type="hidden" value="${payment.productId}" />
 						</td>
 						<td class='info' colspan="3">

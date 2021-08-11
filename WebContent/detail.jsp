@@ -22,14 +22,10 @@
 					<div style="border-radius:10px; height: 210px; margin: 15px; background-color: #D5D5D5; color:white;">
 						
 						<c:set var="imgNewName" value="${product.imgNewName}" />
-								<c:if test="${imgNewName eq null }">
-									<img class="img" src="./defaultProduct.png"
-										style="float: left;  height: 150px; width: 150px; border-radius:10px; margin: 15px;"/>
-								</c:if>
-								<c:if test="${imgNewName ne null }">
-									<img class="img" src="/photo/${product.imgNewName}"
+								
+									<img class="img" src="/photo/${imgNewName}"
 										style="float: left;  height: 150px; width: 150px; border-radius:10px; margin: 15px;" />
-								</c:if>
+								
 					
 						<input type="hidden" name="productId" value="${product.productId}" />
 						<div style="margin-left:180px;">
@@ -171,12 +167,14 @@
 			var $pCnt = $("input[name='productCnt']").val();
 			var $tPrice = $pCnt * $pPrice;
 			var $stock = ${product.stock};
+			var $imgName = new String("${imgNewName}");
 
 			console.log("id_" + $pId);
 			console.log("name_" + $pName);
 			console.log("price_" + $pPrice);
 			console.log("cnt_" + $pCnt);
 			console.log("tprice_" + $tPrice);
+			console.log("imgName_" + $imgName);
 
 			var param = {};
 			param.pId = $pId;
@@ -184,6 +182,7 @@
 			param.pPrice = $pPrice;
 			param.pCnt = $pCnt;
 			param.tPrice = $tPrice;
+			param.imgName = $imgName;
 
 			console.log("??????????");
 			console.log(param);
