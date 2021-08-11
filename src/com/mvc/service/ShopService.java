@@ -209,7 +209,7 @@ public class ShopService {
 		return list;
 	}
 
-	public ArrayList<MainDTO> order(String pId, String pName, String pPrice, String pCnt, String tPrice)
+	public ArrayList<MainDTO> order(String pId, String pName, String pPrice, String pCnt, String tPrice, String imgNewName)
 			throws IOException {
 
 		String uId = (String) req.getSession().getAttribute("userId");
@@ -228,8 +228,9 @@ public class ShopService {
 		dto.setPrice(Integer.parseInt(pPrice));
 		dto.setProductCount(Integer.parseInt(pCnt));
 		dto.setTotalPrice(Integer.parseInt(tPrice));
+		dto.setImgNewName(imgNewName);
 		System.out.println(dto.getProductId() + "/" + dto.getProductName() + "/" + dto.getPrice() + "/"
-				+ dto.getProductCount() + "/" + dto.getPrice());
+				+ dto.getProductCount() + "/" + dto.getPrice() + "/" + dto.getImgNewName());
 		list.add(dto);
 
 		resp.getWriter().println(new Gson().toJson(map));
@@ -278,7 +279,7 @@ public class ShopService {
 		paymentId = dao.payment(uId, resultPrice, orderPrice, discount);
 		System.out.println("생성된 paymentId : " + paymentId);
 		
-		int use = orderPrice;
+		int use = resultPrice;
 		
 		System.out.println("사용금액 : "+use+" 원, userId : "+uId);
 		int result = dao.changeCash(use, uId); 

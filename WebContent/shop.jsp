@@ -19,7 +19,8 @@
 
 			<div class="searchShop">
 				<form action="shopSearch" method="get" id="searchShop">
-					<input type="text" name="shopKeyword" id="keyword" placeholder="상품입력" />
+					<input type="text" name="shopKeyword" id="keyword"
+						placeholder="상품입력" />
 					<button>검색</button>
 				</form>
 			</div>
@@ -31,16 +32,22 @@
 				</c:if>
 				<c:forEach items="${shop}" var="product">
 					<div style="width: 280px; height: 232px;">
-						<a href="shopDetail?productId=${product.productId}"	style="background-color: black">
+						<a href="shopDetail?productId=${product.productId}"
+							style="background-color: black">
 							<figure class="figure">
 								<c:if test="${product.stock eq 0}">
-									<label style="color: white !important; position: absolute; background: red; ">품절</label>
+									<label
+										style="color: white !important; position: absolute; background: red;">품절</label>
 								</c:if>
 
-								<img class="img" src="logo.png" style="height: 100px; width: 180px; margin: 10px;">
+								<c:set var="imgNewName" value="${product.imgNewName}" />
+
+								<img class="img" src="/photo/${product.imgNewName}"
+									style="height: 100px; width: 180px; margin: 10px;" />
+
+
 								<figcaption>
-									${product.productName}<br />
-									${product.price}원
+									${product.productName}<br /> ${product.price}원
 								</figcaption>
 
 							</figure>
@@ -51,5 +58,5 @@
 		</main>
 		<footer></footer>
 	</div>
-	</body>
+</body>
 </html>

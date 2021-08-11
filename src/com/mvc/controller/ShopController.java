@@ -115,11 +115,12 @@ public class ShopController extends HttpServlet {
 			pPrice = req.getParameter("pPrice");
 			pCnt = req.getParameter("pCnt");
 			tPrice = req.getParameter("tPrice");
+			String imgNewName = req.getParameter("imgName");
 			
 			if(pId == null) {
 				req.getSession().setAttribute("paymentList", service.order());
 			} else {
-				req.getSession().setAttribute("paymentList", service.order(pId, pName, pPrice, pCnt, tPrice));
+				req.getSession().setAttribute("paymentList", service.order(pId, pName, pPrice, pCnt, tPrice, imgNewName));
 			}
 			// dis = req.getRequestDispatcher("orderList.jsp");
 			// dis.forward(req, resp);

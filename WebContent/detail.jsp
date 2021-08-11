@@ -20,8 +20,16 @@
 				<button onclick="location.href='./shop'">뒤로가기</button>
 				<div style="height: 660px; border-radius:10px;">
 					<div style="border-radius:10px; height: 210px; margin: 15px; background-color: #D5D5D5; color:white;">
-						<img src="logo.png"
-							style="float: left;  height: 150px; width: 150px; border-radius:10px; margin: 15px; height: 150px; width: 150px;">
+						
+						<c:set var="imgNewName" value="${product.imgNewName}" />
+								<c:if test="${imgNewName eq null }">
+									<img class="img" src="./defaultProduct.png"
+										style="float: left;  height: 150px; width: 150px; border-radius:10px; margin: 15px;"/>
+								</c:if>
+								<c:if test="${imgNewName ne null }">
+									<img class="img" src="/photo/${product.imgNewName}"
+										style="float: left;  height: 150px; width: 150px; border-radius:10px; margin: 15px;" />
+								</c:if>
 					
 						<input type="hidden" name="productId" value="${product.productId}" />
 						<div style="margin-left:180px;">

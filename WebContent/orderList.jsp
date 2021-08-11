@@ -9,6 +9,12 @@
 <title>알다시피</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" type="text/css" href="css/common.css" media="all" />
+<script>
+if("${sessionScope.userId}"==""){
+	alert("로그인이 필요한 서비스입니다.");
+	location.href = "login.jsp";
+}
+</script>
 </head>
 
 <body>
@@ -19,12 +25,14 @@
 
 		<main id="body">
 
-			<h1 style="border:2px solid #bbb; border-radius:10px; text-align:center; width:200px;"> 주문하기 </h1>
+			<h1
+				style="border: 2px solid #bbb; border-radius: 10px; text-align: center; width: 200px;">
+				주문하기</h1>
 			<div>
 				<h2>배송정보</h2>
 				이름 : ${member.name} <br /> 배송주소 : ${member.address}<br /> 연락처 :
-				${member.tel}
-				<input type="hidden" name="memberCash" value="${member.cash}"/>
+				${member.tel} <input type="hidden" name="memberCash"
+					value="${member.cash}" />
 			</div>
 
 			<h2>주문상품</h2>
@@ -40,14 +48,23 @@
 				<c:forEach items="${list}" var="payment">
 
 					<tr>
-						<td><a href='shopDetail?productId=${payment.productId}'><img
-								src='logo.png' style='width: 80px; height: 80px;' /></a> <input
-							name="pId" type="hidden" value="${payment.productId}" /></td>
+						<td style="width:180px; height:100px;"><a href='shopDetail?productId=${payment.productId}'>
+						<c:set var="imgNewName" value="${payment.imgNewName}" />
+								<c:if test="${imgNewName eq null }">
+									<img class="img" src="./defaultThum.png"
+										style="float: left; height: 100px; width: 180px; border-radius: 10px; margin: 15px;" />
+								</c:if> <c:if test="${imgNewName ne null }">
+									<img class="img" src="/photo/${payment.imgNewName}"
+										style="float: left; height: 100px; width: 180px; border-radius: 10px; margin: 15px;" />
+								</c:if>
+						</a> <input name="pId" type="hidden" value="${payment.productId}" />
+						</td>
 						<td class='info' colspan="3">
 							<div>
 								<div>
-									<input type="hidden" name="pName"
-										value="${payment.productName}" />${payment.productName}</div>
+									<a href='shopDetail?productId=${payment.productId}'>
+									<input type="hidden" name="pName" value="${payment.productName}" />${payment.productName}
+									</a></div>
 								<hr />
 								<div>
 									<input type="hidden" name="pCount"
@@ -105,7 +122,7 @@
 		var $price = $("input[name='price']");
 		var $memberCash = $("input[name='memberCash']").val();
 		console.log($memberCash);
-		
+
 		var $pppp = $product.length;
 		var proArr = [];
 
@@ -117,7 +134,7 @@
 			//console.log(productid);
 			console.log($(this).val());
 			proArr.push($(this).val());
-			
+
 			//param.productId+"idx" = $(this).val();
 		});
 		$pCount.each(function(idx, item) {//item 은 자바스크립트 객체
@@ -127,7 +144,7 @@
 			//console.log(productid);
 			console.log($(this).val());
 			proArr.push($(this).val());
-			
+
 			//param.productId+"idx" = $(this).val();
 		});
 		$price.each(function(idx, item) {//item 은 자바스크립트 객체
@@ -137,7 +154,7 @@
 			//console.log(productid);
 			console.log($(this).val());
 			proArr.push($(this).val());
-			
+
 			//param.productId+"idx" = $(this).val();
 		});
 		console.log("-----------------------------");
@@ -150,7 +167,7 @@
 		proArr.push($resultPrice);
 		proArr.push($orderPrice);
 		proArr.push($discount);
-		
+
 		param.resultPrice = $resultPrice;
 		param.orderPrice = $orderPrice;
 		param.discount = $discount;
@@ -158,12 +175,12 @@
 		console.log(proArr);
 
 		console.log($memberCash);
-		if($memberCash < $resultPrice) {
+		if ($memberCash < $resultPrice) {
 			isCharge = confirm("캐시가 부족합니다. 충전 페이지로 이동하시겠습니까?");
-			if(isCharge) {
-				location.href='myPage_chargeCash.jsp';
+			if (isCharge) {
+				location.href = 'myPage_chargeCash.jsp';
 			}
-			
+
 		} else {
 			$.ajax({
 				type : 'post',
@@ -173,9 +190,9 @@
 				},
 				dataType : 'JSON',
 				success : function(data) {
-					if(data.success) {
+					if (data.success) {
 						alert("주문 완료");
-						location.href='./';
+						location.href = './';
 					}
 				},
 				error : function(e) {

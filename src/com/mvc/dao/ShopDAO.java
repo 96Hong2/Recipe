@@ -52,11 +52,12 @@ public class ShopDAO {
 
 	public ArrayList<MainDTO> shopList() { // 의건
 		String sql = "SELECT productid, productname, price, stock FROM product WHERE isDel = 'N' ORDER BY productid DESC";
+		String sql_shop = "select p.productid productid, p.productname productname, p.price price, p.stock stock, i.imgnewname imgnewname from product p, image i where isdel='N' AND p.productid=i.fieldid AND i.imgfield='product_th'";
 		ArrayList<MainDTO> list = null;
 		MainDTO dto = null;
 
 		try {
-			ps = conn.prepareStatement(sql);
+			ps = conn.prepareStatement(sql_shop);
 			rs = ps.executeQuery();
 			list = new ArrayList<MainDTO>();
 			while (rs.next()) {
@@ -65,6 +66,7 @@ public class ShopDAO {
 				dto.setProductName(rs.getString("productname"));
 				dto.setPrice(rs.getInt("price"));
 				dto.setStock(rs.getInt("stock"));
+				dto.setImgNewName(rs.getString("imgnewname"));
 				list.add(dto);
 			}
 		} catch (Exception e) {
@@ -100,7 +102,7 @@ public class ShopDAO {
 
 	public MainDTO shopDetail(String productid) { // 의건
 		MainDTO dto = null;
-		String sql = "SELECT * FROM product WHERE productid = ?";
+		String sql = "SELECT p.*, i.imgnewname FROM product p, image i WHERE p.productid = ? AND p.productid=i.fieldid AND i.imgfield='product'";
 
 		try {
 			ps = conn.prepareStatement(sql);
@@ -115,6 +117,7 @@ public class ShopDAO {
 				dto.setStock(rs.getInt("stock"));
 				dto.setProductDetail(rs.getString("productdetail"));
 				dto.setIsDel(rs.getString("isdel"));
+				dto.setImgNewName(rs.getString("imgnewname"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -175,11 +178,13 @@ public class ShopDAO {
 
 	public ArrayList<MainDTO> cartList(String uId) { // 의건
 		String sql = "select c.productcount productCount, c.totalprice totalPrice, c.productid productId, c.userid userId, c.productName productName, c.price price, p.stock stock from cart c, product p where userid = ? AND c.productid=p.productid";
+		String sql_cart = "select c.productcount productCount, c.totalprice totalPrice, c.productid productId, c.userid userId, c.productName productName, c.price price, p.stock stock, i.imgnewname imgnewname,  i.imgfield from cart c, product p LEFT OUTER JOIN image i on p.productid = i.fieldid WHERE i.imgfield='product' AND c.userid=? AND c.productid=p.productid";
+		
 		ArrayList<MainDTO> list = null;
 		MainDTO dto = null;
 
 		try {
-			ps = conn.prepareStatement(sql);
+			ps = conn.prepareStatement(sql_cart);
 			ps.setString(1, uId);
 			rs = ps.executeQuery();
 			list = new ArrayList<MainDTO>();
@@ -192,6 +197,7 @@ public class ShopDAO {
 				dto.setProductId(rs.getString("productId"));
 				dto.setUserId(rs.getString("userid"));
 				dto.setStock(rs.getInt("stock"));
+				dto.setImgNewName(rs.getString("imgnewname"));
 				list.add(dto);
 			}
 		} catch (Exception e) {
@@ -293,12 +299,13 @@ public class ShopDAO {
 	public ArrayList<MainDTO> paymentList(String uId, String[] orderList) { // 의건
 		// 장바구니에서 선택해서 주문
 		String sql = "SELECT productcount, totalprice, productId, userid, productname, price FROM cart WHERE productid = ? AND userId = ?";
+		String sql_payment = "select c.productcount productCount, c.totalprice totalPrice, c.productid productId, c.userid userId, c.productName productName, c.price price, i.imgnewname imgnewname from cart c, product p, image i WHERE p.productid =? AND c.userid=? AND c.productid=p.productid AND p.productid = i.fieldid AND i.imgfield='product_th'";
 		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
 		MainDTO dto = null;
 
 		for (String productId : orderList) {
 			try {
-				ps = conn.prepareStatement(sql);
+				ps = conn.prepareStatement(sql_payment);
 				ps.setString(1, productId);
 				ps.setString(2, uId);
 				rs = ps.executeQuery();
@@ -310,6 +317,7 @@ public class ShopDAO {
 					dto.setPrice(rs.getInt("price"));
 					dto.setUserId(rs.getString("userid"));
 					dto.setProductName(rs.getString("productname"));
+					dto.setImgNewName(rs.getString("imgnewname"));
 					System.out.println(dto.getProductName());
 					list.add(dto);
 				}
