@@ -497,4 +497,28 @@ public class ShopDAO {
 		return success;
 	}
 
+	public boolean cashChk(String uId, int resultPrice) {
+		MainDTO dto = null;
+		boolean success = false;
+		String sql = "select total from (select total from cash WHERE userid=? order by changedtime desc) where rownum = 1";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, uId);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				dto = new MainDTO();
+				dto.setTotalPoint(rs.getInt("total"));
+				if(resultPrice <= dto.getTotalPoint()) {
+					success = true;
+				}
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} // product 테이블에서 name, price 가져오기
+		return success;
+		
+	}
+
 }

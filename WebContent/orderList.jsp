@@ -186,10 +186,18 @@ if("${sessionScope.userId}"==""){
 				dataType : 'JSON',
 				success : function(data) {
 					if (data.success) {
-						alert("주문 완료");
-						location.href = './';
+						if(data.cashChk) {
+							alert("주문이 완료 되었습니다.");
+							location.href = './';	
+						} else {
+							isCharge = confirm("캐시가 부족합니다. 충전 페이지로 이동하시겠습니까?");
+							if (isCharge) {
+								location.href = 'myPage_chargeCash.jsp';
+							}
+						}
+						
 					} else {
-						alert("주문 실패");
+						alert("주문에 실패 하셨습니다.");
 						location.href ="./";
 					}
 				},

@@ -244,7 +244,7 @@ public class ShopService {
 		String[] orderList = req.getParameterValues("orderList[]");
 		String uId = (String) req.getSession().getAttribute("userId");
 		int size = orderList.length;
-		
+
 		ShopDAO dao = new ShopDAO();
 		ArrayList<MainDTO> list = null;
 		String[] productList = new String[(size - 3) / 3];
@@ -252,6 +252,7 @@ public class ShopService {
 		String[] priceList = new String[(size - 3) / 3];
 		String paymentId = "";
 		boolean success = false;
+		boolean cashChk = false;
 		HashMap<String, Object> map = new HashMap<String, Object>();
 
 		int resultPrice = Integer.parseInt(orderList[size - 3]);
@@ -276,29 +277,34 @@ public class ShopService {
 		}
 
 		success = dao.productChk(productList, countList);
+		cashChk = dao.cashChk(uId, resultPrice);
+
 		if (success) {
-			System.out.println(resultPrice);
-			System.out.println(orderPrice);
-			System.out.println(discount);
-			paymentId = dao.payment(uId, resultPrice, orderPrice, discount);
-			System.out.println("생성된 paymentId : " + paymentId);
+			if (cashChk) {
+				System.out.println(resultPrice);
+				System.out.println(orderPrice);
+				System.out.println(discount);
+				paymentId = dao.payment(uId, resultPrice, orderPrice, discount);
+				System.out.println("생성된 paymentId : " + paymentId);
 
-			int use = resultPrice;
+				int use = resultPrice;
 
-			System.out.println("사용금액 : " + use + " 원, userId : " + uId);
-			MemberDAO memDao = new MemberDAO();
-			int result = memDao.changeCash((int)(-use), uId);
-			System.out.println("???__" + result);
+				System.out.println("사용금액 : " + use + " 원, userId : " + uId);
+				MemberDAO memDao = new MemberDAO();
+				int result = memDao.changeCash((int) (-use), uId);
+				System.out.println("???__" + result);
 
-			list = dao.payCart(uId, productList, countList, paymentId);
+				list = dao.payCart(uId, productList, countList, paymentId);
 
-			if (result * list.size() > 0) {
-				success = true;
-			} else {
-				success = false;
+				if (result * list.size() > 0) {
+					success = true;
+				} else {
+					success = false;
+				}
 			}
 		}
 		map.put("success", success);
+		map.put("cashChk", cashChk);
 		dao.resClose();
 		resp.getWriter().print(new Gson().toJson(map));
 		System.out.println("-----------------------------");
