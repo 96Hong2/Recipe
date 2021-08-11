@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>알다시피 관리자 페이지 - 관리자 리스트</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 if("${sessionScope.isAdmin}"!="Y" && "${sessionScope.userId}"!="admin"){
@@ -53,11 +53,14 @@ p {
 </style>
 </head>
 <body>
+	<header>
+         <c:import url="./header_afterLogin.jsp" />
+      </header>
 	<h3>
 		<a href="./adminList.jsp" id="memberView">관리자 관리</a>
 	</h3>
 	<div id="wrap">
-		<input type="text" id="adminSet" size=50 style="height: 25px;" placeholder= "지정할 관리자 이름을 적어주세요." /> 
+		<input type="text" id="adminSet" size=50 style="height: 25px;" placeholder= "지정할 관리자 아이디를 적어주세요." /> 
 		<button onclick="adminSet()" style="width: 100px; height:30px; font-size: 15px; padding: 3px;">관리자 지정</button>
 	</div>
 	<br />

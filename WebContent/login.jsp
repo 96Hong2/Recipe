@@ -3,26 +3,45 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>알다시피 로그인</title>
+<style>
+.wrapper {
+  position:absolute;
+  left:45%;
+  top:10%;
+  text-align:center;
+  line-height:200%; 
+}
+
+
+h1{ text-align:center;}
+</style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-	<h3>알다시피</h3>	
+<div class="wrapper">
+	<h1>알다시피</h1>	
+	
 		<table>
 			<tr>
 				<td>아이디</td>
 				<td><input type="text" name="userId"/></td>
 			</tr>
+			
 			<tr>
 				<td>비밀번호</td>
 				<td><input type="password" name="pw"/></td>
 			</tr>
+			
 			<tr>
 				<td colspan="2">
-					<button>로그인</button>					
+				<div class="button">
+					<button onclick="location.href='./joinForm.jsp'">회원가입</button>&nbsp; &nbsp;<button name="login">로그인</button>	
+				</div>				
 				</td>
 			</tr>
 		</table>	
+</div>
 </body>
 <script>
 var msg = "${msg}";

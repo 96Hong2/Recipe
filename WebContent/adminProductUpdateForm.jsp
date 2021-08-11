@@ -6,16 +6,29 @@
 <meta charset="UTF-8">
 <title>알다시피 관리자 페이지 - 상품 수정</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="css/common.css" type="text/css">
 <script>
 if("${sessionScope.isAdmin}"!="Y"){
    alert("해당 서비스 접근 권한이 없습니다.");
    location.href = "../";
 }
 </script>
-<link rel="stylesheet" href="css/common.css" type="text/css">
+<style>
+.wrapper {
+  position:absolute;
+  left:35%;
+  top:5%;
+  text-align:center;
+  line-height:200%;  
+}
+h1{ text-align:center;}
+</style>
+
 </head>
 <body>
+<div class="wrapper">
 <form action="productUpdate" method="POST">
+	<h1>상품 수정</h1>
 	<table>
 		<tr>
 			<td>
@@ -35,8 +48,6 @@ if("${sessionScope.isAdmin}"!="Y"){
         <c:param name="ex_thumbnail_Name" value="${product.th_imgNewName}"/>
         <c:param name="ex_contentImg_Name" value="${product.imgNewName}"/>
       </c:import>
-      	<input type="hidden" id='thImg' name='thImg'/>
-		<input type="hidden" id='img' name='img'/>
       </td>				
 		</tr>
 		<tr>
@@ -54,6 +65,7 @@ if("${sessionScope.isAdmin}"!="Y"){
 		</tr>
 	</table>
 </form>
+</div>
 </body>
 <script>
 	var msg = "${msg}";

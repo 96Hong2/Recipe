@@ -7,75 +7,77 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
-<!--ID 이메일형식해야함!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-
 <style>
+.wrapper {
+  position:relative;
+  left:45%;
+  top:10%;
+  text-align:center;
+  line-height:200%;   
+  }
 td {
    text-align: center;
    padding: 5px 10px;
 }
-
-th, h3 {
-   padding: 5px 10px;
-}
+th{ padding: 5px 10px;}
+h1{ text-align:center;}
 </style>
 </head>
 <body>
-   <h3>회원가입</h3>
+   <h1>회원가입</h1>
+<div class="wrapper">
    <table>
       <tr>
          <th>아이디</th>
       </tr>
       <tr>
-         <td><input type="text" name="userId" maxlength="30"   placeholder="이메일을 입력해주세요." /> </td>
-         <td><input type="button" id="overlay" value="중복 확인" /></td>
-
+        <td> &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
+        <input type="text" name="userId" maxlength="30" style="width:300px;"  placeholder="이메일을 입력해주세요." /> &nbsp; 
+         <input type="button" id="overlay" value="중복 확인" /></td>
       </tr>
+      
       <tr>
-
          <th>비밀번호</th>
       </tr>
       <tr>
-         <td><input type="text" name="pw" maxlength="20"   placeholder="6~20 글자를 입력해주세요" /></td>
+         <td><input type="text" name="pw" maxlength="20" style="width:300px;"  placeholder="6~20 글자를 입력해주세요" /></td>
       </tr>
       <tr>
          <th>이름</th>
       </tr>
       <tr>
-         <td><input type="text" name="name" maxlength="10" placeholder="이름을 입력해주세요." /></td>
+         <td><input type="text" name="name" maxlength="10" style="width:300px;" placeholder="이름을 입력해주세요." /></td>
       </tr>
       <tr>
-
          <th>닉네임</th>
       </tr>
       <tr>
-         <td>
-         <input type="text" name="nickName" maxlength="10" placeholder="1~10 글자를 입력해주세요." /> </td>
-         <td><input type="button" id="overlay1" value="중복 확인" /></td>
-         
-
+         <td>&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
+         <input type="text" name="nickName" maxlength="10" style="width:300px;" placeholder="1~10 글자를 입력해주세요." /> &nbsp;
+         <input type="button" id="overlay1" value="중복 확인" /></td>
       </tr>
-
       <tr>
          <th>주소</th>
       </tr>
       <tr>
-         <td><input type="text" name="address" maxlength="50" placeholder="주소를 입력해주세요." /></td>
+         <td><input type="text" name="address" maxlength="50" style="width:300px;" placeholder="주소를 입력해주세요." /></td>
       </tr>
       <tr>
       <tr>
          <th>연락처</th>
       </tr>
       <tr>
-         <td><input type="text" name="tel" maxlength="11" placeholder="-제외 핸드폰 번호를 입력해주세요." /></td>
+         <td><input type="text" name="tel" maxlength="11" style="width:300px;" placeholder="-제외 폰번호를 입력해주세요." /></td>
       </tr>
       <tr>
          <td colspan="2">
-            <button onclick="join()">가입하기</button>
+         <div class="button">
+            <button onclick="location.href='./index.jsp'">돌아가기</button>&nbsp; &nbsp;<button onclick="join()">가입하기</button>
+         </div>
          </td>
       </tr>
    </table>
-
+</div>
 </body>
 <script>
 var overChk = false;

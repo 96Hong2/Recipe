@@ -4,8 +4,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>알다시피 관리자 페이지 - 관리자 정보</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="css/common.css" type="text/css">
 <script>
 if("${sessionScope.isAdmin}"!="Y" && "${sessionScope.userId}"!="admin"){
    alert("해당 서비스 접근 권한이 없습니다.");
