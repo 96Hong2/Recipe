@@ -6,10 +6,10 @@
 <head>
 <meta charset="UTF-8">
 <title>레시피 게시글 상세보기</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/common.css" media="all" />
 <style>
-.board{
-	width: 1111px;
+.board {
+	width: 100%;
 	border-top: none;
 	border-bottom: none;
 }
@@ -25,36 +25,21 @@
 	font-size: small;
 }
 
-.board tr{
+.board tr {
 	border: 1px solid grey;
 }
 
-#firstTr th, #firstTr td{
+#firstTr th, #firstTr td {
 	height: 4%;
 	padding: 5px 5px;
 }
 
-#secTr th, #secTr td{
-	height: 10px;
-	padding: 5px 5px;
-}
-
-#itemWhat td{
+#itemWhat td {
 	text-align: left;
 	height: 20%;
 }
 
-.bigContainer {
-	margin-left: 13.5%;
-	width: 1111px;
-	background-color: ligthgrey;
-	display: inline-block;
-}
-
 .tableArea {
-	display: inline-block;
-	width: 1111px;
-	left: 50%;
 	margin-top: 40px;
 }
 
@@ -62,20 +47,20 @@
 	width: 160px;
 	height: 460px;
 	background-color: #f7f7f7;
-	display: inline-block;
-	float: right;
-	position: fixed;
+	/* display: inline-block; */
+	position: absolute;
+	
+	margin-left: 920px;
 	border-radius: 10px;
-	margin-left: 14px;
 }
 
-#showArea{
+#showArea {
 	width: 160px;
 	height: 387px;
-	overflow: hidden;  
+	overflow: hidden;
 }
 
-#slideBar{
+#slideBar {
 	width: 120px;
 	height: 600px;
 	background-color: #f7f7f7;
@@ -91,10 +76,7 @@
 }
 
 .commentArea {
-	display: inline-block;
-	margin-left: 13.4%;
 	margin-top: 30px;
-	width: 74%;
 }
 
 .itemFigure {
@@ -117,7 +99,7 @@
 	color: white;
 }
 
-.addBtn{
+.addBtn {
 	background-color: white;
 	width: 60px;
 	height: 33px;
@@ -131,18 +113,18 @@
 	margin-top: -18px;
 }
 
-.addBtn:hover{
+.addBtn:hover {
 	color: white;
 	background-color: grey;
 }
 
-.btn_wrap{
+.btn_wrap {
 	clear: both;
 	text-align: center;
 	margin-top: 0px;
 }
 
-.btn_wrap a{
+.btn_wrap a {
 	font-weight: bolder;
 	font-size: 25px;
 	text-decoration: none;
@@ -150,35 +132,35 @@
 	margin-left: 69px;
 }
 
-.btn_wrap a:hover{
+.btn_wrap a:hover {
 	font-weight: bolder;
 	font-size: 25px;
 	text-decoration: none;
 	color: black;
 }
 
-#remote{
+#remote {
 	list-style-type: none;
 	margin-left: -69px;
 }
 
-figcaption{
+figcaption {
 	text-align: left;
 	margin-left: 19px;
 	margin-top: 4px;
 }
 
-#blankSpace{
+#blankSpace {
 	margin: 200px;
 }
 
-#titleHere{
+#titleHere {
 	font-size: xx-large;
 	font-weight: bold;
 	padding: 20px;
 }
 
-.btns{
+.btns {
 	padding: 5px 7px;
 	background-color: white;
 	color: grey;
@@ -191,29 +173,20 @@ figcaption{
 	margin-top: 25px;
 }
 
-.btns:hover{
+.btns:hover {
 	background-color: grey;
 	color: white;
 }
 
-#blindBtn, #reportBtn{
+#blindBtn, #reportBtn {
 	float: right;
 }
 
-#blindBtn:hover, #reportBtn:hover{
+#blindBtn:hover, #reportBtn:hover {
 	background-color: red;
 }
-
-#imgBtn{
-	background-color: white;
-	border: 1px solid;
-}
-
-#imgBtn:hover{
-	background-color: lightgrey;
-}
 </style>
-</head>
+
 
 <script>
 	if ("${sessionScope.userId}" == "") {
@@ -221,81 +194,101 @@ figcaption{
 		alert("로그인이 필요한 서비스입니다.");
 	}
 </script>
+</head>
 <body>
-<header>
-         <c:import url="./header_afterLogin.jsp" />
-      </header>
-	<div class="bigContainer">
-		<div class="tableArea">
-			<table class="board">
-				<tr>
-					<td id="titleHere" colspan='12'>${post.title}</td>
-				</tr>
-				<tr id="firstTr">
-					<th>글번호</th>
-					<td>${post.postId}</td>
-					<th>작성자</th>
-					<td>${post.nickName}</td>
-					<th>등급</th>
-					<td>${post.rankName}</td>
-					<th>작성날짜</th>
-					<td>${post.postDate}</td>
-					<th>조회수</th>
-					<td>${post.hits}</td>
-				</tr>
-				<tr id="secTr">
-					<th>카테고리</th>
-					<td colspan='5'>${post.categoryName}</td>
-					<th>예상금액</th>
-					<td colspan='7'>${post.recipePrice}￦</td>
-				</tr>
-				<tr>
-					<th id='itemWhat'>재료</th>
-					<td colspan="14">${post.item}</td>
-				</tr>
-				<tr>
-					<th>첨부 이미지</th>
-					<td colspan="14"><c:if test="${post.imgNewName ne null }">
-							<img src="/photo/${post.imgNewName}" width="500px" height="500px" />
-						</c:if></td>
-				</tr>
-				<tr>
-					<th>Recipe</th>
-					<td colspan="14" style="text-align: left;"><pre>${post.contents}</pre></td>
-				</tr>
-				<tr>
-					<td colspan="14">
-						<c:if test="${sessionScope.userId ne null && sessionScope.userId ne post.userId}"><button onclick="reportPopUp(${post.postId},'${post.nickName}')"  class="btns" id="reportBtn">신고</button></c:if> 
-						<c:if test="${sessionScope.isAdmin eq 'Y' || sessionScope.userId eq admin}"><button onclick="blindPopUp(${post.postId},'${post.nickName}')"  class="btns" id="blindBtn">블라인드</button></c:if> 
-						<c:if test="${sessionScope.userId eq post.userId}"><button onclick="location.href='./postUpdateForm?postId=${post.postId}'">수정</button></c:if> 
-						<c:if test="${sessionScope.userId eq post.userId}"><input type="button" value="삭제" onclick="button_evert()"  class="btns"/></c:if>
-						<button onclick="location.href='./category?categoryId=${post.categoryId }'" class="btns">리스트</button>
-						<button onclick="location.href='./postList'" class="btns">전체 목록</button>
-						<button type="button" onclick="postLike();" id="imgBtn"><img id="likeImg" class="img" src="./likeButton.png">${post.likes}</button>
-					</td>
-				</tr>
-			</table>
-		</div>
+	<div class="wrap">
+		<header>
+			<c:import url="./header_afterLogin.jsp" />
+		</header>
 		<div id="slideBarParent">
 			<div id="showArea">
 				<ul id="slideBar">
-				<!-- 아이템리스트 -->
+					<!-- 아이템리스트 -->
 				</ul>
 			</div>
 			<p class='btn_wrap'>
-				<a href='#' id='before_btn'>△</a> <br/>
-				<a href='#' id='next_btn'>▽</a>
+				<a href='#' id='before_btn'>△</a> <br /> <a href='#' id='next_btn'>▽</a>
 			</p>
 		</div>
-	</div>
+		<main id="body">
+			<div style="display: inline;">
+				<div class="tableArea">
+					<table class="board">
+						<tr>
+							<td id="titleHere" colspan='12'>${post.title}</td>
+						</tr>
+						<tr id="firstTr">
+							<th>글번호</th>
+							<td>${post.postId}</td>
+							<th>작성자</th>
+							<td>${post.nickName}</td>
+							<th>등급</th>
+							<td>${post.rankName}</td>
+							<th>작성날짜</th>
+							<td>${post.postDate}</td>
+							<th>조회수</th>
+							<td>${post.hits}</td>
+						</tr>
+						<tr>
+							<th>카테고리</th>
+							<td colspan='5'>${post.categoryName}</td>
+							<th>예상금액</th>
+							<td colspan='7'>${post.recipePrice}￦</td>
+						</tr>
+						<tr>
+							<th id='itemWhat'>재료</th>
+							<td colspan="14">${post.item}</td>
+						</tr>
+						<tr>
+							<th>첨부 이미지</th>
+							<td colspan="14"><c:if test="${post.imgNewName ne null }">
+									<img src="/photo/${post.imgNewName}" width="500px"
+										height="500px" />
+								</c:if></td>
+						</tr>
+						<tr>
+							<th>Recipe</th>
+							<td colspan="14" style="text-align: left;"><pre>${post.contents}</pre></td>
+						</tr>
+						<tr>
+							<td colspan="14"><c:if
+									test="${sessionScope.userId ne null && sessionScope.userId ne post.userId}">
+									<button
+										onclick="reportPopUp(${post.postId},'${post.nickName}')"
+										class="btns" id="reportBtn">신고</button>
+								</c:if> <c:if
+									test="${sessionScope.isAdmin eq 'Y' || sessionScope.userId eq admin}">
+									<button onclick="blindPopUp(${post.postId},'${post.nickName}')"
+										class="btns" id="blindBtn">블라인드</button>
+								</c:if> <c:if test="${sessionScope.userId eq post.userId}">
+									<button
+										onclick="location.href='./postUpdateForm?postId=${post.postId}'">수정</button>
+								</c:if> <c:if test="${sessionScope.userId eq post.userId}">
+									<input type="button" value="삭제" onclick="button_evert()"
+										class="btns" />
+								</c:if>
+								<button
+									onclick="location.href='./category?categoryId=${post.categoryId }'"
+									class="btns">리스트</button>
+								<button onclick="location.href='./postList'" class="btns">전체
+									목록</button>
+								<button type="button" onclick="postLike();">
+									<img id="likeImg" class="img" src="./likeButton.png">${post.likes}</button>
+							</td>
+						</tr>
+					</table>
+				</div>
 
-	<!-- 댓글창 -->
-	<div class="commentArea">
-		<c:import url="./postComment.jsp" charEncoding="utf-8">
-			<c:param name="postId" value="${post.postId}" />
-		</c:import>
-	</div>
-	<div id="blankSpace">
+			</div>
+
+			<!-- 댓글창 -->
+			<div class="commentArea">
+				<c:import url="./postComment.jsp" charEncoding="utf-8">
+					<c:param name="postId" value="${post.postId}" />
+				</c:import>
+			</div>
+		</main>
+		
 	</div>
 </body>
 <script>
