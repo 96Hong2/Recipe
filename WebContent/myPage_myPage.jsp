@@ -31,7 +31,7 @@
 						<img src="./staticImg/user.jpeg" id='userImg' alt="유저이미지"
 							width='100px' height='100px' />
 
-						<h3>${sessionScope.nickName}님의마이페이지</h3>
+						<h3>${sessionScope.nickName} 님의 마이페이지</h3>
 						
 					</div>
 					<div id="info" style="width: 200px;">
@@ -46,29 +46,35 @@
 							height=50px; /><br />
 						<button type='button' onclick="location.href='./clientInfo'">내
 							정보 수정/보기</button>
+						<div style='margin:3px'>&nbsp;</div>
 					</div>
 					<div class="myMenu" style="width:20%;">
 						<img src="./staticImg/catIcon.png" alt="주문아이콘" width=50px;
 							height=50px; /><br />
 						<button type='button' onclick="location.href='./myOrderHistory'">주문조회</button>
+						<div style='margin:3px'>&nbsp;</div>
 					</div>
 					<div class="myMenu" style="width:20%;">
 						<img src="./staticImg/catIcon.png" alt="장바구니아이콘" width=50px;
 							height=50px; /><br />
 						<button type='button' onclick="location.href='cart.jsp'">장바구니</button>
+						<div style='margin:3px'>&nbsp;</div>
 					</div>
 					<div class="myMenu" style="width:20%;">
 						<img src="./staticImg/catIcon.png" alt="캐시아이콘" width=50px;
 							height=50px; /><br />
 						<button type='button' onclick='location.href="./cashHistory"'>마이캐시</button>
+						<div style='margin:3px'>&nbsp;</div>
 					</div>
 					<div class="myMenu" style="width:20%;">
 						<img src="./staticImg/catIcon.png" alt="명예아이콘" width=50px;
 							height=50px; /><br />
 						<button type='button' onclick="location.href='./pointHistory'">명예조회</button>
+						<div style='margin:3px'>&nbsp;</div>
 					</div>
 				</div>
-
+				
+				<div style='margin:10px'>&nbsp;</div>
 				<div id="like">
 					<h4>♥ 좋아요한 레시피</h4>
 					<div class="recipeContainer">
@@ -130,6 +136,7 @@
 						onclick="href.location='index.jsp'">좋아요한 레시피 더보기</button>
 				</div>
 
+				<div style='margin:10px'>&nbsp;</div>
 				<div id="myRecipe">
 					<h4>♥ 내 레시피</h4>
 					<div class="recipeContainer">
@@ -189,6 +196,7 @@
 					<button style="margin-bottom: 10px;" onclick="href.location='./myWrite'">내가 작성한 레시피 더보기</button>
 				</div>
 
+				<div style='margin:10px'>&nbsp;</div>
 				<div id="myComment">
 					<h4>♥ 내가 쓴 댓글</h4>
 					<table id="commentTable">
@@ -214,6 +222,7 @@
 						onclick="href.location='./myComment'">내가 작성한 댓글 더보기</button>
 				</div>
 
+				<div style='margin:10px'>&nbsp;</div>
 				<button style="margin-top: 10px;" id='delAccount'
 					onclick="href.location='index.jsp'">회원 탈퇴</button>
 			</div>
