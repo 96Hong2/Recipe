@@ -9,7 +9,7 @@
 <link rel="stylesheet" type="text/css" href="css/common.css" media="all" />
 <style>
 .board {
-	width: 100%;
+	width: 900px;
 	border-top: none;
 	border-bottom: none;
 }
@@ -248,7 +248,7 @@ figcaption {
 						</tr>
 						<tr>
 							<th>Recipe</th>
-							<td colspan="14" style="text-align: left;"><pre>${post.contents}</pre></td>
+							<td colspan="14" style="text-align: left;">${post.contents}</td>
 						</tr>
 						<tr>
 							<td colspan="14"><c:if
