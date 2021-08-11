@@ -31,4 +31,10 @@
 		<footer>푸터</footer>
 	</div>
 </body>
+<script>
+	var msg = "${msg}";
+	if(msg != ""){
+		alert(msg);
+	}
+</script>
 </html>
