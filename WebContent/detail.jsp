@@ -44,7 +44,7 @@
 							<c:if test="${product.stock ne 0}">
 							남은 수량 : ${product.stock}개
 							<br/>
-							선택 수량 : <input type='text' name='productCnt' value="0" />
+							선택 수량 : <input type='number' min='0' name='productCnt' value="0" />
 								<input type="button" id="stockSelect" value="선택" />
 								<br/>
 							총 가격 : <input type="text" name="totalPrice" value="0원" readonly>
@@ -120,7 +120,10 @@
 
 			if ($tPrice == 0 || $("input[name='totalPrice']").val() == "0원") {
 				alert("수량 선택을 먼저 해주세요.");
-			} else {
+			} else if($tPrice < 0) {
+				alert("다시 선택 해주세요.");
+			} 
+			else {
 				console.log("왜지왜지왜지" + $tPrice);
 
 				$.ajax({
@@ -158,6 +161,8 @@
 		if ("${sessionScope.userId}" == "") {
 			alert("로그인이 필요한 서비스입니다.");
 			location.href = "login.jsp";
+		} else if($tPrice < 0) {
+			alert("다시 선택 해주세요.");
 		} else {
 			var $pId = new String("${product.productId}");
 			//var $pId = ${product.productId};
