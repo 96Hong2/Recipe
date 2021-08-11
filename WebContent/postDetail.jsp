@@ -118,6 +118,13 @@
 	color: grey;
 }
 
+.btn_wrap a:hover{
+	font-weight: bolder;
+	font-size: 25px;
+	text-decoration: none;
+	color: black;
+}
+
 li{
 	list-style-type: none;
 	margin-left: -69px;
@@ -130,6 +137,7 @@ figcaption{
 }
 </style>
 </head>
+
 <script>
 	if ("${sessionScope.userId}" == "") {
 		location.href = "./postList";
