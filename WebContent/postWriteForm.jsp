@@ -24,7 +24,7 @@ if("${sessionScope.userId}"==""){
 	<input type='hidden' id='img' name='img'/>
 	
 	<input type="hidden" name="userId" value="${sessionScope.userId}" readonly="readonly"/>
-	<table style="position:relative; left: 565px;">
+	<table style="margin: 0 auto 70px; width: 800px;">
 	<tr>
 	<td colspan="2"><h2>레시피 작성</h2></td>
 	</tr>
@@ -63,7 +63,7 @@ if("${sessionScope.userId}"==""){
 			</tr>   
 		<tr>
 			<th>예산</th>
-			<td style="float: left; margin:8px 10px 10px 30px;"><input type="number" id="postRecipePrice" name="recipePrice"  min="100" max="10000000" size="30" placeholder="예산 입력"/>￦</td>
+			<td style="float: left; margin:8px 10px 10px 50px;"><input type="number" id="postRecipePrice" name="recipePrice"  min="100" max="10000000"  placeholder="예산 입력"/>￦</td>
 		</tr>
 		<tr>
 			<th>재료</th>
@@ -77,8 +77,8 @@ if("${sessionScope.userId}"==""){
 			<td colspan="2" style="float: left; margin:8px 5px 10px 30px;" >
 				<input type="button" onclick="history.back();" value="취소"/>  
 			</td>
-			<td colspan="2" style=" position: relative; left:280px; right: 10px;" >
-				 <button id='submitBtn' type='button' onclick='javascript:checkfield()'>저장</button>
+			<td colspan="2"  >
+				 <button style="float: right; margin-right: 7%;" id='submitBtn' type='button' onclick='javascript:checkfield()'>저장</button>
 			</td>
 		</tr>
 	</table>

@@ -31,13 +31,13 @@ if("${sessionScope.userId}"==""){
 	<input type="hidden" name="postId" value="${post.postId}"/>
 	
 	
-	<table style="position:relative; left: 565px;">
+	<table  style="margin: 0 auto 70px; width: 800px;">
 	<tr>
 	<td colspan="2"><h2>레시피 수정</h2></td>
 	</tr>
 		<tr>
 			<th>제목</th>
-			<td><input style="float: left; margin:8px 10px 10px 30px;" type="text" id="postTitle" name="title" maxlength="20" placeholder="제목을 입력하세요." value="${post.title}" /></td>
+			<td><input  style="float: left; margin:8px 10px 10px 30px;" size="75" type="text" id="postTitle" name="title" maxlength="20" placeholder="제목을 입력하세요." value="${post.title}" /></td>
 		</tr>
 		<tr>
 			<td colspan="2">
@@ -75,7 +75,7 @@ if("${sessionScope.userId}"==""){
 		</tr>
 		<tr>
 			<th>예산</th>
-			<td style="float: left; margin:8px 10px 10px 30px;"><input type="number" id="recipePrice" name="recipePrice" min="100" max="10000000" placeholder="예산을 입력하세요." value="${post.recipePrice}" />￦</td>
+			<td  style="float: left; margin:8px 10px 10px 50px;"><input type="number" id="recipePrice" name="recipePrice" min="100" max="10000000" placeholder="예산을 입력하세요." value="${post.recipePrice}" />￦</td>
 		</tr>
 		<tr>
 			<th>재료</th>
@@ -89,8 +89,8 @@ if("${sessionScope.userId}"==""){
 			<td colspan="2" style="float: left; margin:8px 5px 10px 30px;">
 				<input type="button" onclick="location.href='./postDetail?postId=${post.postId}'" value="취소"/> 
 			</td>
-			<td colspan="2"  style=" position: relative; left:280px; right: 10px;">
-				<button id='submitBtn' type='button' onclick='javascript:checkfield()'>저장</button>
+			<td colspan="2">
+				<button style="float: right; margin-right: 7%;" id='submitBtn' type='button' onclick='javascript:checkfield()'>저장</button>
 			</td>
 		</tr>
 	</table>
