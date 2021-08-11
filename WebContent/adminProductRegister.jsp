@@ -38,7 +38,7 @@ if("${sessionScope.isAdmin}"!="Y"){
 		<td><textarea name='productDetail'  cols=85 rows=40 maxlength=2000  placeholder="상품 상세내용을 입력해주세요." ></textarea></td>
 	</tr>
 	<tr>
-		<td><button onclick="location.href='./adminProductList'">취소하기</button></td>
+		<td><input type="button" onclick="history.back();" value="취소하기"></td>
 		<td><button id='submitBtn' type='button' onclick='javascript:save()'>상품 추가하기</button></td>
 	</tr>
 	</table>
