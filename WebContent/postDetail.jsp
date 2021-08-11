@@ -145,9 +145,11 @@ figcaption{
 	}
 </script>
 <body>
-
+<header>
+         <c:import url="./header_afterLogin.jsp" />
+      </header>
 	<div class="container">
-		<h2>게시글 상세보기</h2>
+
 		<div class="tableArea">
 			<table id="board">
 				<tr>
@@ -182,7 +184,7 @@ figcaption{
 				</tr>
 				<tr>
 					<th>Recipe</th>
-					<td colspan="14">${post.contents}</td>
+					<td colspan="14" style="text-align: left;"><pre>${post.contents}</pre></td>
 				</tr>
 				<tr>
 					<td colspan="14">

@@ -17,16 +17,20 @@ if("${sessionScope.userId}"==""){
 <body>
 <header>
          <c:import url="./header_afterLogin.jsp" />
-      </header>
+ </header>
+ <div class="postWrite">
 	<form action="postWrite" name="postWrite" method="post">
 	<input type='hidden' id='thImg' name='thImg'/>
 	<input type='hidden' id='img' name='img'/>
 	
 	<input type="hidden" name="userId" value="${sessionScope.userId}" readonly="readonly"/>
-	<table>
+	<table style="position:relative; left: 565px;">
+	<tr>
+	<td colspan="2"><h2>레시피 작성</h2></td>
+	</tr>
 		<tr>
 			<th>제목</th>
-			<td><input type="text" id="postTitle" name="title" autofocus="autofocus" maxlength="20" placeholder="제목을 입력하세요." /></td>
+			<td style="float: left; margin:8px 10px 10px 30px;"><input type="text" id="postTitle" name="title" autofocus="autofocus" maxlength="20" placeholder="제목을 입력하세요." size="75"/></td>
 		</tr>
 		<tr>
 			<td colspan="2">
@@ -56,28 +60,30 @@ if("${sessionScope.userId}"==""){
 				&nbsp;
 				<input type="radio" name="categoryId" value="1" checked="checked"/>기타
 			</td>
-			</tr>
+			</tr>   
 		<tr>
 			<th>예산</th>
-			<td><input type="number" id="postRecipePrice" name="recipePrice"  min="100" max="10000000" placeholder="예산을 입력하세요."/>￦</td>
+			<td style="float: left; margin:8px 10px 10px 30px;"><input type="number" id="postRecipePrice" name="recipePrice"  min="100" max="10000000" size="30" placeholder="예산 입력"/>￦</td>
 		</tr>
 		<tr>
 			<th>재료</th>
-			<td><textarea name="item" maxlength="1000" id="postItem"  placeholder="재료는 쉼표(,)로 구분하여 입력하세요."></textarea></td>
+			<td><textarea style="resize: none;" rows="2" cols="80" name="item" maxlength="1000" id="postItem"  placeholder="재료는 쉼표(,)로 구분하여 입력하세요."></textarea></td>
 		</tr>	
 		<tr>
 			<th>Recipe</th>
-			<td><textarea name="contents" maxlength="2000"  id="postContents"  placeholder="내용을 입력하세요."></textarea></td>
+			<td><textarea style="resize: none; white-space: pre-line;" rows="30" cols="80" name="contents" maxlength="2000"  id="postContents"  placeholder="내용을 입력하세요."></textarea></td>
 		</tr>
 		<tr>
-			<td colspan="2">
-				<input type="button" onclick="history.back();" value="취소"/> 
+			<td colspan="2" style="float: left; margin:8px 5px 10px 30px;" >
+				<input type="button" onclick="history.back();" value="취소"/>  
+			</td>
+			<td colspan="2" style=" position: relative; left:280px; right: 10px;" >
 				 <button id='submitBtn' type='button' onclick='javascript:checkfield()'>저장</button>
-				
 			</td>
 		</tr>
 	</table>
 	</form>
+</div>	
 </body>
 <script>
 function checkfield(){
