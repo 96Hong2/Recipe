@@ -75,22 +75,22 @@ if("${sessionScope.userId}"==""){
 		</tr>
 		<tr>
 			<th>예산</th>
-			<td  style="float: left; margin:8px 10px 10px 50px;"><input type="number" id="recipePrice" name="recipePrice" min="100" max="10000000" placeholder="예산을 입력하세요." value="${post.recipePrice}" />￦</td>
+			<td  style="float: left; margin:8px 10px 10px 50px;"><input type="number" id="recipePrice" name="recipePrice" placeholder="예산을 입력하세요." value="${post.recipePrice}" />￦</td>
 		</tr>
 		<tr>
 			<th>재료</th>
-			<td><textarea style="resize: none;" rows="2" cols="80" name="item" id="postItem" maxlength="1000" placeholder="재료는 쉼표(,)로 구분하여 입력하세요." >${post.item}</textarea></td>
+			<td><textarea style="resize: none;" rows="2" cols="80" name="item" id="postItem" maxlength="900" placeholder="재료는 쉼표(,)로 구분하여 입력하세요." >${post.item}</textarea></td>
 		</tr>	
 		<tr>
 			<th>Recipe</th>
-			<td><textarea wrap="hard" style="resize: none; white-space: pre-line;" rows="30" cols="80" name="contents" id="postContents"  maxlength="2000" autofocus="autofocus" placeholder="내용을 입력하세요.">${post.contents}</textarea></td>
+			<td><textarea wrap="hard" style="resize: none; white-space: pre-line;" rows="30" cols="80" name="contents" id="postContents"  maxlength="1900" autofocus="autofocus" placeholder="내용을 입력하세요.">${post.contents}</textarea></td>
 		</tr>
 		<tr>
 			<td colspan="2" style="float: left; margin:8px 5px 10px 30px;">
 				<input type="button" onclick="location.href='./postDetail?postId=${post.postId}'" value="취소"/> 
 			</td>
 			<td colspan="2">
-				<button style="float: right; margin-right: 7%;" id='submitBtn' type='button' onclick='javascript:checkfield()'>저장</button>
+				<button style="float: right; margin-right: 7%;" id='submitBtn' type='button' onclick='javascript:checkfield();'>저장</button>
 			</td>
 		</tr>
 	</table>
@@ -117,6 +117,14 @@ function checkfield(){
     }else if(document.postUpdate.postContents.value ==""){
 		alert("Recipe를 작성하세요.");
 		document.postUpdate.postContents.focus();
+		return;
+    }else if(document.postUpdate.postRecipePrice.value < 0){
+    	alert("예산을 다시 입력해 주세요 (마이너스금액)");
+		document.postUpdate.postRecipePrice.focus();
+		return;
+    }else if(document.postUpdate.postRecipePrice.value > 10000000){
+    	alert("예산을 다시 입력해 주세요 (1000만원 초과)");
+		document.postUpdate.postRecipePrice.focus();
 		return;
     }
 	save();

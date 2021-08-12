@@ -63,7 +63,7 @@ if("${sessionScope.userId}"==""){
 			</tr>   
 		<tr>
 			<th>예산</th>
-			<td style="float: left; margin:8px 10px 10px 50px;"><input type="number" id="postRecipePrice" name="recipePrice"  maxlength="8"  placeholder="예산 입력"/>￦</td>
+			<td style="float: left; margin:8px 10px 10px 50px;"><input type="number" id="postRecipePrice" name="recipePrice" placeholder="예산 입력"/>￦</td>
 		</tr>
 		<tr>
 			<th>재료</th>
@@ -78,7 +78,7 @@ if("${sessionScope.userId}"==""){
 				<input type="button" onclick="history.back();" value="취소"/>  
 			</td>
 			<td colspan="2"  >
-				 <button style="float: right; margin-right: 7%;" id='submitBtn' type='button' onclick='javascript:checkfield()'>저장</button>
+				 <button style="float: right; margin-right: 7%;" id='submitBtn' type='button' onclick='javascript:checkfield();'>저장</button>
 			</td>
 		</tr>
 	</table>
@@ -102,6 +102,14 @@ function checkfield(){
     }else if(document.postWrite.postContents.value ==""){
 		alert("Recipe를 작성하세요.");
 		document.postWrite.postContents.focus();
+		return;
+    }else if(document.postWrite.postRecipePrice.value < 0){
+    	alert("예산을 다시 입력해 주세요 (마이너스금액)");
+		document.postWrite.postRecipePrice.focus();
+		return;
+    }else if(document.postWrite.postRecipePrice.value > 10000000){
+    	alert("예산을 다시 입력해 주세요 (1000만원 초과)");
+    	document.postWrite.postRecipePrice.focus();
 		return;
     }
 	save();
