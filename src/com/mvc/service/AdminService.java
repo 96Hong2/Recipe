@@ -159,16 +159,15 @@ public class AdminService {
 			change = adDao.memberSusNot(userId);
 			if(change > 0) {
 				System.out.println("정지 해제 성공 : "+change);
-			adDao.resClose();
 			map.put("msg", "성공");
 		}else {
 			System.out.println("정지 해제 실패!");
-			adDao.resClose();
 			map.put("msg", "실패");
 		}
+			adDao.resClose();
 			resp.setContentType("text/html; charset=UTF-8");
 			resp.getWriter().println(new Gson().toJson(map));
-
+		
 	}
 
 	public void nickOverlay() throws IOException {//지현
@@ -635,13 +634,12 @@ public class AdminService {
 			success = dao.adminSet(cnt);
 			if(success > 0) {
 				System.out.println("관리자 지정 성공 : "+success);
-			dao.resClose();
 			map.put("msg", "성공");
 		}else {
 			System.out.println("관리자 지정 실패!");
-			dao.resClose();
 			map.put("msg", "실패");
 		}
+			dao.resClose();
 			resp.setContentType("text/html; charset=UTF-8");
 			resp.getWriter().println(new Gson().toJson(map));
 
@@ -657,14 +655,12 @@ public class AdminService {
 			AdminDAO dao = new AdminDAO();
 			success = dao.adminNot(userId);
 			if(success > 0) {
-				System.out.println("관리자 해제 성공 : "+success);
-			dao.resClose();
-			
+				System.out.println("관리자 해제 성공 : "+success);			
 		}else {
 			System.out.println("관리자 해제 실패!");
-			dao.resClose();
 			
 		}
+			dao.resClose();
 			resp.setContentType("text/html; charset=UTF-8");
 			resp.getWriter().println(new Gson().toJson(map));
 	}
