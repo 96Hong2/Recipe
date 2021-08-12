@@ -169,7 +169,7 @@ div.commentAreaBox {
 						content += "<tr><td colspan='10'><hr/></td></tr>";
 						content += "</tbody>";
 
-					} else if (item.isBlind == "Y") { //블라인드된 댓글이라면?
+					} else if (item.isBlind != null) { //블라인드된 댓글이라면?
 						content += "<tbody class='cmtTbodyClass' id='cmtTbody"+idx+"'>";
 						content += "<tr>";
 						content += "<td rowspan='2'><img src=\"./staticImg/user.jpeg\"";
