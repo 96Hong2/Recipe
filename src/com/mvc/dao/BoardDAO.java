@@ -448,7 +448,20 @@ public class BoardDAO {
 				dto.setPostId(rs.getString("postId"));
 				dto.setTitle(rs.getString("title"));
 				dto.setRecipePrice(rs.getInt("recipePrice"));
-				dto.setItem(rs.getString("item"));
+				String item = rs.getString("item");
+				// 재료 3개만 가져오기
+	            String[] itemArr = item.split(",");
+	            item = "";
+	            int i = 0;
+	            while (i < 3 && itemArr.length > i) {
+	               // 재료가 3개 미만일 경우 itemArr.length < i 에 걸린다
+	               item += (",#" + itemArr[i]);
+	               i += 1;
+	               //System.out.println("i : " + i);
+	            }
+	            item = item.substring(1);
+	            // System.out.println("재료(item)3개만 : "+item);
+				dto.setItem(item);
 				dto.setHits(rs.getInt("hits"));
 				dto.setLikes(rs.getInt("likes"));
 				dto.setImgNewName(rs.getString("imgNewName"));
@@ -484,7 +497,20 @@ public class BoardDAO {
 					dto.setPostId(rs.getString("postId"));
 					dto.setTitle(rs.getString("title"));
 					dto.setRecipePrice(rs.getInt("recipePrice"));
-					dto.setItem(rs.getString("item"));
+					String item = rs.getString("item");
+					// 재료 3개만 가져오기
+		            String[] itemArr = item.split(",");
+		            item = "";
+		            int i = 0;
+		            while (i < 3 && itemArr.length > i) {
+		               // 재료가 3개 미만일 경우 itemArr.length < i 에 걸린다
+		               item += (",#" + itemArr[i]);
+		               i += 1;
+		               //System.out.println("i : " + i);
+		            }
+		            item = item.substring(1);
+		            // System.out.println("재료(item)3개만 : "+item);
+					dto.setItem(item);
 					dto.setHits(rs.getInt("hits"));
 					dto.setLikes(rs.getInt("likes"));
 					dto.setImgNewName(rs.getString("imgNewName"));
@@ -522,7 +548,20 @@ public class BoardDAO {
 						dto.setPostId(rs.getString("postId"));
 						dto.setTitle(rs.getString("title"));
 						dto.setRecipePrice(rs.getInt("recipePrice"));
-						dto.setItem(rs.getString("item"));
+						String item = rs.getString("item");
+						// 재료 3개만 가져오기
+			            String[] itemArr = item.split(",");
+			            item = "";
+			            int i = 0;
+			            while (i < 3 && itemArr.length > i) {
+			               // 재료가 3개 미만일 경우 itemArr.length < i 에 걸린다
+			               item += (",#" + itemArr[i]);
+			               i += 1;
+			               //System.out.println("i : " + i);
+			            }
+			            item = item.substring(1);
+			            // System.out.println("재료(item)3개만 : "+item);
+						dto.setItem(item);
 						dto.setHits(rs.getInt("hits"));
 						dto.setLikes(rs.getInt("likes"));
 						dto.setImgNewName(rs.getString("imgNewName"));
@@ -557,7 +596,20 @@ public class BoardDAO {
 					dto.setPostId(rs.getString("postId"));
 					dto.setTitle(rs.getString("title"));
 					dto.setRecipePrice(rs.getInt("recipePrice"));
-					dto.setItem(rs.getString("item"));
+					String item = rs.getString("item");
+					// 재료 3개만 가져오기
+		            String[] itemArr = item.split(",");
+		            item = "";
+		            int i = 0;
+		            while (i < 3 && itemArr.length > i) {
+		               // 재료가 3개 미만일 경우 itemArr.length < i 에 걸린다
+		               item += (",#" + itemArr[i]);
+		               i += 1;
+		               //System.out.println("i : " + i);
+		            }
+		            item = item.substring(1);
+		            // System.out.println("재료(item)3개만 : "+item);
+					dto.setItem(item);
 					dto.setHits(rs.getInt("hits"));
 					dto.setLikes(rs.getInt("likes"));
 					dto.setImgNewName(rs.getString("imgNewName"));
@@ -592,7 +644,20 @@ public class BoardDAO {
 						dto.setPostId(rs.getString("postId"));
 						dto.setTitle(rs.getString("title"));
 						dto.setRecipePrice(rs.getInt("recipePrice"));
-						dto.setItem(rs.getString("item"));
+						String item = rs.getString("item");
+						// 재료 3개만 가져오기
+			            String[] itemArr = item.split(",");
+			            item = "";
+			            int i = 0;
+			            while (i < 3 && itemArr.length > i) {
+			               // 재료가 3개 미만일 경우 itemArr.length < i 에 걸린다
+			               item += (",#" + itemArr[i]);
+			               i += 1;
+			               //System.out.println("i : " + i);
+			            }
+			            item = item.substring(1);
+			            // System.out.println("재료(item)3개만 : "+item);
+						dto.setItem(item);
 						dto.setHits(rs.getInt("hits"));
 						dto.setLikes(rs.getInt("likes"));
 						dto.setImgNewName(rs.getString("imgNewName"));
@@ -628,7 +693,20 @@ public class BoardDAO {
 					dto.setPostId(rs.getString("postId"));
 					dto.setTitle(rs.getString("title"));
 					dto.setRecipePrice(rs.getInt("recipePrice"));
-					dto.setItem(rs.getString("item"));
+					String item = rs.getString("item");
+					// 재료 3개만 가져오기
+		            String[] itemArr = item.split(",");
+		            item = "";
+		            int i = 0;
+		            while (i < 3 && itemArr.length > i) {
+		               // 재료가 3개 미만일 경우 itemArr.length < i 에 걸린다
+		               item += (",#" + itemArr[i]);
+		               i += 1;
+		               //System.out.println("i : " + i);
+		            }
+		            item = item.substring(1);
+		            // System.out.println("재료(item)3개만 : "+item);
+					dto.setItem(item);
 					dto.setHits(rs.getInt("hits"));
 					dto.setLikes(rs.getInt("likes"));
 					dto.setImgNewName(rs.getString("imgNewName"));
@@ -664,7 +742,20 @@ public class BoardDAO {
 								dto.setPostId(rs.getString("postId"));
 								dto.setTitle(rs.getString("title"));
 								dto.setRecipePrice(rs.getInt("recipePrice"));
-								dto.setItem(rs.getString("item"));
+								String item = rs.getString("item");
+								// 재료 3개만 가져오기
+					            String[] itemArr = item.split(",");
+					            item = "";
+					            int i = 0;
+					            while (i < 3 && itemArr.length > i) {
+					               // 재료가 3개 미만일 경우 itemArr.length < i 에 걸린다
+					               item += (",#" + itemArr[i]);
+					               i += 1;
+					               //System.out.println("i : " + i);
+					            }
+					            item = item.substring(1);
+					            // System.out.println("재료(item)3개만 : "+item);
+								dto.setItem(item);
 								dto.setHits(rs.getInt("hits"));
 								dto.setLikes(rs.getInt("likes"));
 								dto.setImgNewName(rs.getString("imgNewName"));
