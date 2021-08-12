@@ -48,7 +48,7 @@ div .fileUpload_wrap {
 					<div id='preview_wrap'>
 						&nbsp;<b>▶ 미리보기</b>
 						<div id='th_preview'>
-							<p style='font-size : 13px;'>썸네일 미리보기</p>
+							<div style='font-size : 13px;'>썸네일 미리보기</div>
 							<c:choose>
 								<c:when test='${param.ex_thumbnail_Name eq ""}'>
 									<div id='NoExThImg' style='font-size: 11px;'>기존에 등록된 썸네일이 없습니다. 썸네일을 등록해보세요! </div>
@@ -56,13 +56,13 @@ div .fileUpload_wrap {
 								</c:when>
 								<c:otherwise>
 									<img id="th_img" src="/photo/${param.ex_thumbnail_Name}" width='150px' height='150px'/>
-									<button type='button' onclick='del_ex_th()'>삭제</button>	
+									<button id='del_ex_th_Btn' type='button' onclick='del_ex_th()'>삭제</button>	
 								</c:otherwise>
 							</c:choose>
 							<p id='th_preview_p'></p>
 						</div>
 						<div id='con_preview'>
-							<p style='font-size : 13px;'>첨부이미지 미리보기</p>
+							<div style='font-size : 13px;'>첨부이미지 미리보기</div>
 							<c:choose>
 								<c:when test='${param.ex_contentImg_Name eq ""}'>
 									<div id='NoExImg' style='font-size: 11px;'>기존에 등록된 이미지가 없습니다.</div>
@@ -70,7 +70,7 @@ div .fileUpload_wrap {
 								</c:when>
 								<c:otherwise>
 									<img id='con_img' src='/photo/${param.ex_contentImg_Name}' width='150px' height='150px'/>
-									<button type='button' onclick='del_ex_img()'>삭제</button>
+									<button id='del_ex_img_Btn' type='button' onclick='del_ex_img()'>삭제</button>
 								</c:otherwise>
 							</c:choose>
 							<p id='preview_p'></p>
@@ -146,6 +146,7 @@ function th_preview(e){ //썸네일 미리보기
 	flag=true; //새로 파일이 업로드되었으므로 ajax통신 필요 
 	//지울 썸네일에 기존썸네일imgId 넣기
 	$("#NoExThImg").empty();
+	$("#del_ex_th_Btn").remove();
 	$("#thImg").val('${param.ex_thumbnail}');
 
 	var files = e.target.files;
@@ -176,6 +177,7 @@ function preview(e){ //첨부이미지 미리보기
 	flag=true; //새로 파일이 업로드되었으므로 ajax통신 필요
 	//지울 이미지에 기존이미지imgId 넣기
 	$("#img").val('${param.ex_contentImg}');
+	$("#del_ex_img_Btn").remove();
 	$("#NoExImg").empty();
 	
 	var files = e.target.files;
@@ -228,6 +230,7 @@ function del_ex_th(){ //기존 썸네일이 삭제될 경우
 	$("#th_img").attr("height", "0px;");
 	$("#th_img").attr("width", "0px;");
 	$("#th_preview_p").empty();
+	$("#del_ex_th_Btn").remove();
 	//변경취소 버튼 보이게 하기
 	$("#cancelBtnArea").show();
 }
@@ -239,6 +242,7 @@ function del_ex_img(){ //기존 이미지가 삭제될 경우
 	$("#con_img").attr("src", '');
 	$("#con_img").attr("height", "0px;");
 	$("#con_img").attr("width", "0px;");
+	$("#del_ex_img_Btn").remove();
 	$("#preview_p").empty();
 	//변경취소 버튼 보이게 하기
 	$("#cancelBtnArea").show();
@@ -256,8 +260,8 @@ function img_cancel(){ //이미지 변경이 취소될 경우
 	
 	//미리보기 초기화
 	var content = "";
-	content += "<p style='font-size : 13px;'>썸네일 미리보기</p>";
-	if('${param.ex_thumbnail_Name eq ""}'){
+	content += "<div style='font-size : 13px;'>썸네일 미리보기</div>";
+	if(${param.ex_thumbnail_Name eq ""}){
 		content += "<div id='NoExThImg' style='font-size: 11px;'>기존에 등록된 썸네일이 없습니다. 썸네일을 등록해보세요! </div>";
 		content += "<img id='th_img'/>";
 	}else{
@@ -269,8 +273,8 @@ function img_cancel(){ //이미지 변경이 취소될 경우
 	$("#th_preview").html(content);
 	
 	content = "";
-	content += "<p style='font-size : 13px;'>첨부 이미지 미리보기</p>";
-	if('${param.ex_contentImg_Name eq ""}'){
+	content += "<div style='font-size : 13px;'>첨부 이미지 미리보기</div>";
+	if(${param.ex_contentImg_Name eq ""}){
 		content += "<div id='NoExImg' style='font-size: 11px;'>기존에 등록된 이미지가 없습니다. </div>";
 		content += "<img id='con_img'/>";
 	}else{
