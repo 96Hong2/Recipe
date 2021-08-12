@@ -90,7 +90,7 @@ if("${sessionScope.userId}"==""){
 				<input type="button" onclick="location.href='./postDetail?postId=${post.postId}'" value="취소"/> 
 			</td>
 			<td colspan="2">
-				<button style="float: right; margin-right: 7%;" id='submitBtn' type='button' onclick='javascript:checkfield();'>저장</button>
+				<button style="float: right; margin-right: 7%;" id='submitBtn' type='button' onclick='javascript:checkfield()'>저장</button>
 			</td>
 		</tr>
 	</table>
@@ -102,32 +102,32 @@ $('[name=categoryId]:radio[value="'+'${post.categoryId}'+'"]').prop('checked', t
 
 
 function checkfield(){
-	if(document.postUpdate.postTitle.value ==""){
-		alert("제목을 입력하세요.");
-		document.postUpdate.postTitle.focus();
-		return;
-	}else if(document.postUpdate.recipePrice.value ==""){
-		alert("예산을 입력하세요.");
-		document.postUpdate.recipePrice.focus();
-		return;
-	}else if(document.postUpdate.postItem.value ==""){
-		alert("재료를 입력하세요.");
-		document.postUpdate.postItem.focus();
-		return;
-    }else if(document.postUpdate.postContents.value ==""){
-		alert("Recipe를 작성하세요.");
-		document.postUpdate.postContents.focus();
-		return;
-    }else if(document.postUpdate.postRecipePrice.value < 0){
-    	alert("예산을 다시 입력해 주세요 (마이너스금액)");
-		document.postUpdate.postRecipePrice.focus();
-		return;
-    }else if(document.postUpdate.postRecipePrice.value > 10000000){
-    	alert("예산을 다시 입력해 주세요 (1000만원 초과)");
-		document.postUpdate.postRecipePrice.focus();
-		return;
-    }
-	save();
-}	
+	   if(document.postUpdate.postTitle.value ==""){
+	      alert("제목을 입력하세요.");
+	      document.postUpdate.postTitle.focus();
+	      return;
+	   }else if(document.postUpdate.recipePrice.value ==""){
+	      alert("예산을 입력하세요.");
+	      document.postUpdate.recipePrice.focus();
+	      return;
+	   }else if(document.postUpdate.postItem.value ==""){
+	      alert("재료를 입력하세요.");
+	      document.postUpdate.postItem.focus();
+	      return;
+	    }else if(document.postUpdate.postContents.value ==""){
+	      alert("Recipe를 작성하세요.");
+	      document.postUpdate.postContents.focus();
+	      return;
+	    }else if(document.postUpdate.recipePrice.value < 0){
+		      alert("예산을 입력하세요.");
+		      document.postUpdate.recipePrice.focus();
+		      return;
+	    }else if(document.postUpdate.recipePrice.value > 10000000){
+		      alert("예산을 입력하세요.");
+		      document.postUpdate.recipePrice.focus();
+		      return;  
+	    }     
+	   save();
+	}   
 </script>
 </html>
