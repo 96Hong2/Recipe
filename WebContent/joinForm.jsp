@@ -30,8 +30,9 @@ h1{ text-align:center;}
       </tr>
       <tr>
         <td> &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
-        <input type="text" name="userId" id="userId" maxlength="30" style="width:300px;"  placeholder="이메일을 입력해주세요." /> &nbsp; 
-         <input type="button" id="overlay" value="중복 확인" /></td>
+        <input type="text" name="userId" id="userId" maxlength="30" style="width:300px;"  placeholder="이메일을 입력해주세요." /> &nbsp;
+         <input type="button" id="overlay" value="중복 확인" />
+         <div class="email regex"></div></td>
       </tr>
       
       <tr>
@@ -80,6 +81,17 @@ h1{ text-align:center;}
 <script>
 var overChk = false;
 var nickChk = false;
+
+$("#userId").on("input",function(){
+    var regex = /.+@[a-z]+(\.[a-z]+){1,2}$/;
+    var result = regex.exec($("#userId").val());
+   
+   if(result != null){
+      $(".email.regex").html("");  
+   }else{
+       $(".email.regex").html("이메일 형식이 아닙니다.");
+   }
+})
    
    function join(){
       var $userId = $("input[name='userId']");
