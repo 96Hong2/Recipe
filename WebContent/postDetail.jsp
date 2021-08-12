@@ -389,6 +389,7 @@ figcaption {
 	function button_evert() {
 		var result = confirm("정말 삭제하시겠습니까?");
 		if (result) {
+			alert("게시글이 삭제되었습니다.");
 			location.href = './postDel?postId=${post.postId}';
 		} else {
 			return;
@@ -460,7 +461,9 @@ figcaption {
 				}
 			}	
 			})	
-		} 
+		}
+	
+
 	
 </script>
 </html>

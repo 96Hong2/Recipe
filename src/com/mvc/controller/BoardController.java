@@ -62,7 +62,10 @@ public class BoardController extends HttpServlet {
 			System.out.println("레시피게시판 상세보기 요청");
 			dto = new MainDTO();
 			dto = service.detail();
-			if(dto.getIsDel().equals("Y")) {
+			System.out.println("서비스dto"+dto);
+			if(dto == null) {
+				resp.sendRedirect("postBlind.jsp");
+			}else if(dto.getIsDel().equals("Y")) {
 				resp.sendRedirect("postDel.jsp");
 			}else {
 		    req.setAttribute("post", dto);

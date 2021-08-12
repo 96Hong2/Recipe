@@ -1621,5 +1621,28 @@ public class BoardDAO {
 		return total;
 	}
 
+	public boolean blindCheck(MainDTO dto) {
+		System.out.println("boardDAO blindCheck() : 실행");
+		boolean isBlind = false;
+		int blind = 0;
+		String sql = "SELECT COUNT(postId) FROM post p, blind b WHERE b.classification = 'P' AND  p.postId = b.fieldId AND postId=?";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, dto.getPostId());
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				blind = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("blind : "+blind);
+		if(blind == 1) {
+			isBlind = true;
+		}
+		return isBlind;
+	}
+
 }
 

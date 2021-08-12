@@ -63,7 +63,7 @@ public class BoardService {
 
 		postId = dao.write(dto); 
 		
-		
+	
 		if(thImg != null) { //썸네일이 있으면,
 			memberdao.setImgField(postId, thImg);
 		}
@@ -86,11 +86,15 @@ public class BoardService {
 		int result = dao.upHits(postId);
 		if(result>0) {
 			dto = dao.detail(postId);	
+			System.out.println("디테일 dto에서 가져온 postId: "+dto.getPostId());
+			if(dao.blindCheck(dto)) { //블라인드테이블에 postid가 없으면 false
+				dto = null;
+			}
 		}else {
 			System.out.println("조회수 올리기 실패");
 		}
 		dao.isHits(dto);
-		
+		System.out.println("롤백 후 dto"+dto);
 		
 		dao.resClose();
 		return dto;

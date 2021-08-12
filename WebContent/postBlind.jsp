@@ -8,7 +8,7 @@
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <style>
-.postDel{
+.postBlind{
 	 margin: 0 auto 10px;
 	 width: 350px;
 	 
@@ -21,8 +21,8 @@
       </header>
 <body>
 
-<div class="postDel">삭제된 게시물 입니다.</div>
-<div class="postDel"><input type="button" name="return" onclick="location.href='./postList'" value="전체리스트"/></div>
+<div class="postBlind">관라자에 의해 블라인드 된 게시물 입니다.</div>
+<div class="postBlind"><input type="button" name="return" onclick="location.href='./postList'" value="전체리스트"/></div>
 
 </body>
 </html>
