@@ -16,7 +16,7 @@ if("${sessionScope.isAdmin}"!="Y"){
 <style>
 .wrapper {
   position:absolute;
-  left:35%;
+  left:25%;
   top:5%;
   text-align:center;
   line-height:200%;  
@@ -52,10 +52,10 @@ h1{ text-align:center;}
 		</tr>
 		<tr>
 		<td>개당 가격:<input type="text" name="price" id="Price" maxlength="8" value="${product.price}"> 원
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;재고 수량:<input type="text" id="Stock" name="stock" maxlength="5" value="${product.stock}">개</td> 
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;재고 수량:<input type="text" id="Stock" name="stock" maxlength="5" value="${product.stock}"> 개</td> 
 	</tr>
 		<tr>			
-			<td><textarea name='productDetail'  cols=85 rows=40 id="Detail" maxlength=2000>${product.productDetail}</textarea></td>
+			<td><textarea name='productDetail' style="resize: none; white-space: pre-line;" cols=40 rows=40 id="Detail" maxlength=2000>${product.productDetail}</textarea></td>
 		</tr>
 		<tr>
 			<td colspan="2">
@@ -80,6 +80,7 @@ h1{ text-align:center;}
 	      if($("#Detail").val().length==0){alert("상품내용을 입력하세요."); $("#Detail").focus(); return;}
 	      if($("#Price").val()<0){alert("가격이 마이너스입니다.."); $("#Price").focus(); return;}
 	      if($("#Stock").val()<0){alert("수량이 마이너스입니다."); $("#Stock").focus(); return;}
+		
 		save();
 	}
 </script>

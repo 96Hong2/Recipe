@@ -46,13 +46,13 @@ position: relative;
 					</c:import></td>
 			</tr>
 			<tr>
-				<td>개당 가격: <input type="text" name="price" id="Price" maxlength="8">원
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;재고 수량:<input type="text"
-					name="stock" id="Stock" maxlength="5">개
+				<td>개당 가격: <input type="text" name="price" id="Price" maxlength="8"> 원
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;재고 수량: <input type="text"
+					name="stock" id="Stock" maxlength="5"> 개
 				</td>
 			</tr>
 			<tr>
-				<td><textarea name='productDetail' cols=85 rows=40 id="Detail"
+				<td><textarea name='productDetail' cols=40 rows=40 id="Detail" style="resize: none; white-space: pre-line;"
 						maxlength=2000 placeholder="상품 상세내용을 입력해주세요."></textarea></td>
 			</tr>
 			<tr>
@@ -78,6 +78,7 @@ position: relative;
 	      if($("#Detail").val().length==0){alert("상품내용을 입력하세요."); $("#Detail").focus(); return;}
 	      if($("#Price").val()<0){alert("가격이 마이너스입니다.."); $("#Price").focus(); return;}
 	      if($("#Stock").val()<0){alert("수량이 마이너스입니다."); $("#Stock").focus(); return;}
+		
 		save();
 	}
 	</script>

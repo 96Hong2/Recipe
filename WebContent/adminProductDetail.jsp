@@ -64,11 +64,11 @@ position: relative;
 			</c:if>
 		</tr>
 		<tr>
-			<td>개당 가격: ${product.price}원
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;재고 수량:${product.stock}개</td>
+			<td>개당 가격: ${product.price} 원
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;재고 수량: ${product.stock} 개</td>
 		</tr>
 		<tr>
-			<td>${product.productDetail }</td>
+			<td style="text-align: left; white-space:pre-line;">${product.productDetail } </td>
 		</tr>
 		<tr>
 			<td>삭제 여부 : ${product.isDel }</td>
