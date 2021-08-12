@@ -262,15 +262,16 @@ figcaption {
 								</c:if> <c:if test="${sessionScope.userId eq post.userId}">
 									<button
 										onclick="location.href='./postUpdateForm?postId=${post.postId}'">수정</button>
-								</c:if> <c:if test="${sessionScope.userId eq post.userId}">
+								</c:if> 
+								<button
+									onclick="history.back();"
+									class="btns">뒤로가기</button>	
+								<button onclick="location.href='./postList'" class="btns">전체
+									목록</button>
+									<c:if test="${sessionScope.userId eq post.userId}">
 									<input type="button" value="삭제" onclick="button_evert()"
 										class="btns" />
 								</c:if>
-								<button
-									onclick="history.back();"
-									class="btns">리스트</button>	
-								<button onclick="location.href='./postList'" class="btns">전체
-									목록</button>
 								<button type="button" onclick="postLike();">
 									<img id="likeImg" class="img" src="./likeButton.png">${post.likes}</button>
 							</td>
