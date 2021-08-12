@@ -86,6 +86,7 @@ if("${sessionScope.userId}"==""){
 </div>	
 </body>
 <script>
+var item = /^(?:[^,\n]+,)+[^,\n]+$/gm;
 function checkfield(){
 	if(document.postWrite.postTitle.value ==""){
 		alert("제목을 입력하세요.");
@@ -111,8 +112,13 @@ function checkfield(){
     	alert("예산을 다시 입력해 주세요 (1000만원 초과)");
     	document.postWrite.postRecipePrice.focus();
 		return;
+    }if(!item.test(document.postWrite.postItem.value)){
+    	alert("재료와 재료사이는 쉼표(,)로 구분해야 합니다.");
+    	document.postWrite.postItem.focus();
+    	return;
     }
 	save();
 }	
+
 </script>
 </html>

@@ -100,7 +100,7 @@ if("${sessionScope.userId}"==""){
 <script>
 $('[name=categoryId]:radio[value="'+'${post.categoryId}'+'"]').prop('checked', true );
 
-
+var item = /^(?:[^,\n]+,)+[^,\n]+$/gm;
 function checkfield(){
 	   if(document.postUpdate.postTitle.value ==""){
 	      alert("제목을 입력하세요.");
@@ -126,7 +126,11 @@ function checkfield(){
 		      alert("예산을 입력하세요.");
 		      document.postUpdate.recipePrice.focus();
 		      return;  
-	    }     
+	    }if(!item.test(document.postUpdate.postItem.value)){
+	    	alert("재료와 재료사이는 쉼표(,)로 구분해야 합니다.");
+	    	document.postUpdate.postItem.focus();
+	    	return;
+	    }  
 	   save();
 	}   
 </script>
