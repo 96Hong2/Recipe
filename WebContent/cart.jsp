@@ -44,7 +44,7 @@ if("${sessionScope.userId}"==""){
 					<tbody></tbody>
 				</table>
 			</div>
-			<div class="table-right">
+			<div class="table-right" id="table-right">
 				<h4>결제 예정금액</h4>
 
 				<div class="cartprice">상품 금액</div>
@@ -188,6 +188,7 @@ if("${sessionScope.userId}"==""){
 						} else {
 							console.log(data);
 							alert("수정했습니다.");
+							window.location.reload();
 							listCall();
 						}
 					} else {
@@ -200,7 +201,6 @@ if("${sessionScope.userId}"==""){
 				}
 			});
 		}
-		window.location.reload();
 	}
 
 	function deldel(clicked) {
@@ -266,6 +266,7 @@ if("${sessionScope.userId}"==""){
 
 						if (data.cnt > 0) {
 							alert(data.cnt + '건 삭제에 성공 했습니다.');
+							window.location.reload();
 							//location.href='main.jsp';
 							listCall();
 						} else {
