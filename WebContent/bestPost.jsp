@@ -73,7 +73,7 @@
 													<small>${best.recipePrice}\</small>
 												</div>
 												<div style="text-align: right;">
-													<small>${best.nickName}</small>
+													<small>${best.userId}</small>
 												</div>
 											</div>
 
