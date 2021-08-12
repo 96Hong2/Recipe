@@ -30,7 +30,7 @@ h1{ text-align:center;}
       </tr>
       <tr>
         <td> &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
-        <input type="text" name="userId" maxlength="30" style="width:300px;"  placeholder="이메일을 입력해주세요." /> &nbsp; 
+        <input type="text" name="userId" id="userId" maxlength="30" style="width:300px;"  placeholder="이메일을 입력해주세요." /> &nbsp; 
          <input type="button" id="overlay" value="중복 확인" /></td>
       </tr>
       
@@ -51,7 +51,7 @@ h1{ text-align:center;}
       </tr>
       <tr>
          <td>&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;
-         <input type="text" name="nickName" maxlength="10" style="width:300px;" placeholder="1~10 글자를 입력해주세요." /> &nbsp;
+         <input type="text" name="nickName" id="nickName" maxlength="10" style="width:300px;" placeholder="1~10 글자를 입력해주세요." /> &nbsp;
          <input type="button" id="overlay1" value="중복 확인" /></td>
       </tr>
       <tr>
@@ -92,7 +92,8 @@ var nickChk = false;
       	
       if($userId.val() == ""||$pw.val()==""||$name.val() == ""||$nickName.val() == ""||$address.val() == ""||$tel.val() == ""){         
       alert("빈칸을 입력해 주세요.");   
-      
+      }if($pw.val().length < 6 ){    	  
+    	  alert("비밀번호는 6글자 이상이어야 합니다.")
       }else if(nickChk==true && overChk==true){
          console.log('save!!')
          var param = {};
@@ -189,6 +190,14 @@ $("#overlay1").click(function(){
          console.log(e);
       }         
    });
+});
+
+$("#nickName").on("change keyup paste", function(){
+	nickChk = false;
+});
+
+$("#userId").on("change keyup paste", function(){
+	overChk = false;
 });
    </script>
 </html>

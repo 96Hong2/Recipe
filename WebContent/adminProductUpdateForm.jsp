@@ -32,11 +32,11 @@ h1{ text-align:center;}
 	<table>
 		<tr>
 			<td>
-				<input type="hidden" name="productId" value="${product.productId}"/>
+				<input type="hidden" name="productId" id="Name" value="${product.productId}"/>
 			</td>
 		</tr>
 		<tr>
-			<td><input type="text" name="productName" value="${product.productName}"/></td>
+			<td><input type="text" name="productName" id="Name" value="${product.productName}"/></td>
 		</tr>
 		<tr>
 			<td>
@@ -51,16 +51,16 @@ h1{ text-align:center;}
       </td>				
 		</tr>
 		<tr>
-		<td>개당 가격:<input type="text" name="price" maxlength="8" value="${product.price}"> 원
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;재고 수량:<input type="text" name="stock" maxlength="5" value="${product.stock}">개</td> 
+		<td>개당 가격:<input type="text" name="price" id="Price" maxlength="8" value="${product.price}"> 원
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;재고 수량:<input type="text" id="Stock" name="stock" maxlength="5" value="${product.stock}">개</td> 
 	</tr>
 		<tr>			
-			<td><textarea name='productDetail'  cols=85 rows=40 maxlength=2000>${product.productDetail}</textarea></td>
+			<td><textarea name='productDetail'  cols=85 rows=40 id="Detail" maxlength=2000>${product.productDetail}</textarea></td>
 		</tr>
 		<tr>
 			<td colspan="2">
 			<input type="button" onclick="location.href='./adminProductList'" value="상품 리스트"/>
-			<button id='submitBtn' type='button' onclick='javascript:save()'>상품 수정하기</button>
+			<button id='submitBtn' type='button' onclick='javascript:f1()'>상품 수정하기</button>
 			</td>
 		</tr>
 	</table>
@@ -71,6 +71,15 @@ h1{ text-align:center;}
 	var msg = "${msg}";
 	if(msg != ""){
 		alert(msg);
+	}
+	
+	function f1(){
+		if($("#Name").val().length==0){alert("상품이름을 입력하세요."); $("#Name").focus(); return;}
+	      if($("#Price").val().length==0){alert("가격을 입력하세요."); $("#Price").focus(); return;}
+	      if($("#Stock").val().length==0){alert("수량을 입력하세요."); $("#Stock").focus(); return;}
+	      if($("#Detail").val().length==0){alert("상품내용을 입력하세요."); $("#Detail").focus(); return;}
+		
+		save();
 	}
 </script>
 </html>

@@ -37,7 +37,7 @@ position: relative;
 <div class="wrapper">
 		<table>
 			<tr>
-				<td><input type="text" name="productName" maxlength="20"
+				<td><input type="text" name="productName" id="Name" maxlength="20"
 					placeholder="상품 이름을 입력해주세요."></td>
 			</tr>
 			<tr>
@@ -46,25 +46,38 @@ position: relative;
 					</c:import></td>
 			</tr>
 			<tr>
-				<td>개당 가격: <input type="text" name="price" maxlength="8">원
+				<td>개당 가격: <input type="text" name="price" id="Price" maxlength="8">원
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;재고 수량:<input type="text"
-					name="stock" maxlength="5">개
+					name="stock" id="Stock" maxlength="5">개
 				</td>
 			</tr>
 			<tr>
-				<td><textarea name='productDetail' cols=85 rows=40
+				<td><textarea name='productDetail' cols=85 rows=40 id="Detail"
 						maxlength=2000 placeholder="상품 상세내용을 입력해주세요."></textarea></td>
 			</tr>
 			<tr>
 				<td colspan="2"><input type="button" onclick="history.back();" value="취소하기">
-				<button id='submitBtn' type='button' onclick='javascript:save()'>상품 추가하기</button>
+				<button id='submitBtn' type='button' onclick='javascript:f1()'>상품 추가하기</button>
 				</td>
 			</tr>
 		</table>
 		</div>
 	</form>		
-</div>
-	
+</div>	
 </body>
-
+	<script>
+	var msg = "${msg}";
+	if(msg != ""){
+		alert(msg);
+	}
+	
+	function f1(){
+		if($("#Name").val().length==0){alert("상품이름을 입력하세요."); $("#Name").focus(); return;}
+	      if($("#Price").val().length==0){alert("가격을 입력하세요."); $("#Price").focus(); return;}
+	      if($("#Stock").val().length==0){alert("수량을 입력하세요."); $("#Stock").focus(); return;}
+	      if($("#Detail").val().length==0){alert("상품내용을 입력하세요."); $("#Detail").focus(); return;}
+		
+		save();
+	}
+	</script>
 </html>
