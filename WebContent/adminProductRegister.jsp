@@ -76,7 +76,8 @@ position: relative;
 	      if($("#Price").val().length==0){alert("가격을 입력하세요."); $("#Price").focus(); return;}
 	      if($("#Stock").val().length==0){alert("수량을 입력하세요."); $("#Stock").focus(); return;}
 	      if($("#Detail").val().length==0){alert("상품내용을 입력하세요."); $("#Detail").focus(); return;}
-		
+	      if($("#Price").val()<0){alert("가격이 마이너스입니다.."); $("#Price").focus(); return;}
+	      if($("#Stock").val()<0){alert("수량이 마이너스입니다."); $("#Stock").focus(); return;}
 		save();
 	}
 	</script>
