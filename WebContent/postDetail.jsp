@@ -267,8 +267,8 @@ figcaption {
 										class="btns" />
 								</c:if>
 								<button
-									onclick="location.href='./category?categoryId=${post.categoryId }'"
-									class="btns">리스트</button>
+									onclick="history.back();"
+									class="btns">리스트</button>	
 								<button onclick="location.href='./postList'" class="btns">전체
 									목록</button>
 								<button type="button" onclick="postLike();">

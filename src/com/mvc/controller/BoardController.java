@@ -52,7 +52,7 @@ public class BoardController extends HttpServlet {
 		
 		case "/postWrite" : //영환
 			System.out.println("게시물 글쓰기 요청");
-			
+
 			String postId = service.write();
 			page = postId != null ? "./postDetail?postId="+postId:"writeForm.jsp";
 			resp.sendRedirect(page);
