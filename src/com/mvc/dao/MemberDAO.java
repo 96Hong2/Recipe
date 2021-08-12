@@ -1258,6 +1258,99 @@ public class MemberDAO {
 		
 		return map;		
 	}
+
+	public ArrayList<MainDTO> myOrder(String userId) {
+		System.out.println("MemberDAO myOrder 들어옴, userId : "+userId);
+		String sql="select paymentId, to_char(paymentdate,'yyyy-mm-dd hh24:mi:ss') paymentdate,paymentprice,orderstatus FROM payment WHERE userId=? ORDER BY paymentdate DESC";
+		MainDTO dto = null;
+		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, userId);	
+			rs = ps.executeQuery();	
+			while(rs.next()) {
+				dto = new MainDTO();
+				dto.setPaymentId(rs.getString("paymentId"));
+				dto.setPaymentdate(rs.getString("paymentdate"));
+				dto.setPaymentPrice(rs.getString("paymentprice"));
+				dto.setOrderStatus(rs.getString("orderStatus"));
+				list.add(dto);
+			}
+			System.out.println("myOrder list size : "+list.size());
+		} catch (Exception e) {
+			System.out.println("MemberDAO myOrder() 에러");
+			e.toString();
+		}
+		return list;
+	}
+
+	public HashMap<String, Object> orderHistory(String paymentId) { //은홍
+		System.out.println("MemberDAO orderHistroy 들어옴, paymentId : "+paymentId);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		MainDTO dto = null;
+		
+		String paymentDate ="";
+		String orderStatus = "";
+		int orderPrice = 0;
+		int discount = 0;
+		int paymentPrice = 0;
+		sql = "SELECT to_char(paymentdate,'yyyy-mm-dd hh24:mi:ss')paymentDate, paymentPrice, orderPrice, discount,orderstatus\r\n" + 
+				"FROM payment WHERE paymentId=?";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, paymentId);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				paymentDate = rs.getString("paymentDate");
+				orderStatus = rs.getString("orderStatus");
+				orderPrice = rs.getInt("orderPrice");
+				discount = rs.getInt("discount");
+				paymentPrice = rs.getInt("paymentPrice");
+				System.out.println("paymentDate/orderStatus/orderPrice/discount/paymentPrice : "+paymentDate+" / "+orderStatus+" / "+orderPrice+" / "+discount+" / "+paymentPrice);
+				map.put("paymentDate", paymentDate);
+				map.put("orderStatus", orderStatus);
+				map.put("orderPrice", orderPrice);
+				map.put("discount", discount);
+				map.put("paymentPrice", paymentPrice);
+			}
+		} catch (Exception e) {
+			e.toString();
+		}
+		
+		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
+		String imgNewName = "";
+		String productName = "";
+		int productCnt = 0;
+		int price = 0;
+		String productId = "";
+		sql = "SELECT (SELECT imgNewName FROM image WHERE imgField='product_th' AND fieldId=o.productId) imgNewName ,o.* fROM orderHistory o WHERE paymentId=?";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, paymentId);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				dto = new MainDTO();
+				imgNewName = rs.getString("imgNewName");
+				productName = rs.getString("productName");
+				productCnt = rs.getInt("productCnt");
+				price = rs.getInt("price");
+				productId = rs.getString("productId");
+				System.out.println("imgNewName/productName/productCnt/price : "+imgNewName+"/"+productName+"/"+productCnt+"/"+price+"/"+productId);
+				dto.setImgNewName(imgNewName);
+				dto.setProductName(productName);
+				dto.setProductCount(productCnt);
+				dto.setPrice(price);
+				dto.setProductId(productId);
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			e.toString();
+		}
+		System.out.println("MemberDAO orderHistory() list size : "+list.size());
+		map.put("orderList", list);
+		
+		return map;
+	}
 	
 	
 	

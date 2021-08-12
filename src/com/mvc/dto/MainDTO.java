@@ -3,6 +3,7 @@ package com.mvc.dto;
 import java.sql.Date;
 
 public class MainDTO {
+	private String paymentdate;
 	private String pointDate;
 	private String pointField;
 	private int getPoint;
@@ -590,6 +591,12 @@ public String getBestDate() {
 }
 public void setBestDate(String bestDate) {
 	this.bestDate = bestDate;
+}
+public String getPaymentdate() {
+	return paymentdate;
+}
+public void setPaymentdate(String paymentdate) {
+	this.paymentdate = paymentdate;
 }
 
    

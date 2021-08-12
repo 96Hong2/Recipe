@@ -363,6 +363,28 @@ public class MemberService {
 
         return map;
    }
+
+
+	public ArrayList<MainDTO> myOrder() {
+		System.out.println("MemberService myOrder() 들어옴");
+		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
+		String userId = (String) req.getSession().getAttribute("userId");
+		MemberDAO dao = new MemberDAO();
+		list = dao.myOrder(userId);
+		dao.resClose();
+		return list;
+	}
+
+
+	public HashMap<String, Object> orderHistory() {
+		System.out.println("MemberService myOrder() 들어옴");
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		String paymentId = req.getParameter("paymentId");
+		MemberDAO dao = new MemberDAO();
+		map = dao.orderHistory(paymentId);
+		dao.resClose();
+		return map;
+	}
 	
 
 }

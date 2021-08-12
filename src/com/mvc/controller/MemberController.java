@@ -16,7 +16,7 @@ import com.mvc.dto.MainDTO;
 import com.mvc.service.MemberService;
 import com.mvc.service.UploadService;
 
-@WebServlet({"/myPage","/myCash", "/info","/showCash", "/cashHistory", "/chargeCash", "/write", "/fileUpload", "/fileUpdate", "/test", "/clientInfo", "/updateForm", "/update", "/userDel", "/myWrite", "/myWritedetail", "/myLike", "/myComment", "/overlay", "/overlay1", "/join", "/login", "/logout", "/pointHistory", "/myOrderHistory"})
+@WebServlet({"/myPage","/myCash", "/info","/showCash", "/cashHistory", "/chargeCash", "/write", "/fileUpload", "/fileUpdate", "/test", "/clientInfo", "/updateForm", "/update", "/userDel", "/myWrite", "/myWritedetail", "/myLike", "/myComment", "/overlay", "/overlay1", "/join", "/login", "/logout", "/pointHistory", "/orderHistory", "/myOrder"})
 public class MemberController extends HttpServlet {
 
 	@Override
@@ -55,10 +55,46 @@ public class MemberController extends HttpServlet {
 			System.out.println("업로드한 이미지번호 : "+req.getParameter("img"));
 		break;
 		
+		case "/myOrder": //은홍
+			System.out.println("주문 내역 조회 요청");
+			ArrayList<MainDTO> list = new ArrayList<MainDTO>();
+			try {
+				list = service.myOrder();
+				req.setAttribute("orderList", list);
+				msg = req.getParameter("msg");
+				if(msg != null && msg != "") {
+					req.setAttribute("msg", msg);
+				}
+				dis = req.getRequestDispatcher("myPage_myOrder.jsp");
+				dis.forward(req, resp);
+			} catch (Exception e) {
+				System.out.println("**에러 : MemberController /myOrder");
+				e.printStackTrace();
+			}
+		break;
+		
+		case "/orderHistory":
+			System.out.println("주문 상세내역 조회 요청");
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			try {
+				map = service.orderHistory();
+				req.setAttribute("map", map);
+				msg = req.getParameter("msg");
+				if(msg != null && msg != "") {
+					req.setAttribute("msg", msg);
+				}
+				dis = req.getRequestDispatcher("myPage_myOrderHistory.jsp");
+				dis.forward(req, resp);
+			} catch (Exception e) {
+				System.out.println("**에러 : MemberController /myOrder");
+				e.printStackTrace();
+			}
+		break;
+		
 		case "/fileUpload": //은홍 - 파일업로드 ajax모듈
 			System.out.println("파일업로드 또는 수정 요청 - ajax");
 			try {
-				HashMap<String, Object> map = service.fileUpload();
+				map = service.fileUpload();
 				//map에는 업로드한 썸네일PK, 이미지PK, 성공여부success 데이터가 들어있다.
 				Gson gson = new Gson();
 				String obj = gson.toJson(map);
@@ -76,7 +112,7 @@ public class MemberController extends HttpServlet {
 				dto = service.info();
 				
 				Gson gson = new Gson();
-				HashMap<String, Object> map = new HashMap<String, Object>();
+				map = new HashMap<String, Object>();
 				map.put("rank", dto.getRankName());
 				map.put("cash", dto.getCash());
 				map.put("point", dto.getTotalPoint());
@@ -94,7 +130,7 @@ public class MemberController extends HttpServlet {
 				int currCash = service.showCash();
 				
 				Gson gson = new Gson();
-				HashMap<String, Object> map = new HashMap<String, Object>();
+				map = new HashMap<String, Object>();
 				map.put("currentCash", currCash);
 				String obj = gson.toJson(map);
 				resp.getWriter().println(obj);
@@ -124,7 +160,7 @@ public class MemberController extends HttpServlet {
 
 		case "/cashHistory": //은홍
 			System.out.println("캐시 내역 조회 요청");
-			HashMap<String, Object> map = new HashMap<String, Object>();
+			map = new HashMap<String, Object>();
 			try {
 				map = service.cashHistory();
 				req.setAttribute("cashList", map.get("list"));
