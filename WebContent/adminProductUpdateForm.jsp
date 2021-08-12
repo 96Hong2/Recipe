@@ -53,6 +53,8 @@ h1{ text-align:center;}
 		<tr>
 		<td><input type='hidden' id='thImg' name='thImg'/>
 		<input type='hidden' id='img' name='img'/></td>
+		</tr>
+		<tr>
 		<td>개당 가격:<input type="text" name="price" id="Price" maxlength="8" value="${product.price}"> 원
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;재고 수량:<input type="text" id="Stock" name="stock" maxlength="5" value="${product.stock}"> 개</td> 
 	</tr>
