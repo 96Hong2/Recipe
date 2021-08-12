@@ -310,6 +310,7 @@ public class AdminDAO {
 	public int memberBlind(String nickName, String postId, String adminName, String blindReason, String classification) throws SQLException {//지현
 
 		int change = 0;
+		int change2 = 0;
 		
 		String sql = "INSERT INTO blind (blindid, userid, classification, fieldid, blindreason, managerid) "
 				+ "VALUES(blind_seq.NEXTVAL, ?, ?, ?, ?, ?)";
@@ -327,11 +328,16 @@ public class AdminDAO {
 				ps.setString(4, blindReason);
 				ps.setString(5, adminName);
 				change = ps.executeUpdate();
+				if(change > 0) {
+					sql2 = "UPDATE member SET blindcount = blindcount + 1";
+					ps = conn.prepareStatement(sql2);
+					change2 = ps.executeUpdate();
+				}
 			}else {
 				System.out.println("닉네임 오류 발생!");
 			}
 		
-		return change;
+		return change2;
 	}
 
 	public ArrayList<MainDTO> reportList() throws SQLException {//지현
