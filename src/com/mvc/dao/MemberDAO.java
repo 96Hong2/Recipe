@@ -679,17 +679,19 @@ public class MemberDAO {
 				rs = ps.executeQuery();
 				if (rs.next()) {
 					point_now = Integer.parseInt(rs.getString("totalPoint"));
-				
-					//현재 명예점수를 가져왔다면 명예점수 히스토리를 추가해준다
-					sql = "INSERT INTO point(getPoint,totalPoint,userId,pointField)VALUES(?,?,?,?)";
-					ps = conn.prepareStatement(sql);
-					ps.setInt(1, getPoint);
-					ps.setInt(2, point_now+getPoint);
-					ps.setString(3, userId);
-					ps.setString(4, pointField);
-					if (ps.executeUpdate() > 0) {
-						success = true;
-					}
+				}else {
+					point_now = 0;
+				}
+				System.out.println("포인트나우"+point_now+"겟포인"+getPoint+"아이디"+userId);
+				//현재 명예점수를 가져왔다면 명예점수 히스토리를 추가해준다
+				sql = "INSERT INTO point(getPoint,totalPoint,userId,pointField)VALUES(?,?,?,?)";
+				ps = conn.prepareStatement(sql);
+				ps.setInt(1, getPoint);
+				ps.setInt(2, point_now+getPoint);
+				ps.setString(3, userId);
+				ps.setString(4, pointField);
+				if (ps.executeUpdate() > 0) {
+					success = true;
 				}
 		} catch (Exception e) {
 			e.printStackTrace();
