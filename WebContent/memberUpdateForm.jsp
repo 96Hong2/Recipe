@@ -40,11 +40,11 @@ if("${sessionScope.isAdmin}"!="Y"){
 		</tr>
 		<tr>
 			<td>연락처(TEL)</td>
-			<td><input type = "hidden" name = "tel" value = "${member.tel}" readonly/></td>
+			<td><input type = "hidden" name = "tel" value = "${member.tel}" readonly/>${member.tel}</td>
 		</tr>
 		<tr>
 			<td>주소(ADDRESS)</td>
-			<td><input type = "text" name = "address" value = "${member.address}" readonly/></td>
+			<td><input type = "hidden" name = "address" value = "${member.address}" readonly/>${member.address}</td>
 		</tr>
 		<tr>
 			<td>등급(RANK)</td>
@@ -103,6 +103,10 @@ $("#overlay").click(function(){
 			console.log(e);
 		}			
 	});
+});
+
+$("#nickArea").on("change keyup paste", function(){
+	overChk = false;
 });
 
 

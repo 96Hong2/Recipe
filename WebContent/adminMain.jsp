@@ -14,7 +14,12 @@ if("${sessionScope.isAdmin}"!="Y"){
 }
 </script>
 <style>
-h1{ text-align:center;}
+h1{
+ text-align:center;
+ padding-top: 30px;
+ 
+ }
+ 
 .button {
   background-color: gray;
   border: none;
@@ -28,6 +33,10 @@ h1{ text-align:center;}
   cursor: pointer;
   width: 250px;
   height: 170px;
+}
+
+.button:hover{
+	background-color: lightgrey;
 }
 .wrapper{
 position: relative;
