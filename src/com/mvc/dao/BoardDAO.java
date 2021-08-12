@@ -239,7 +239,7 @@ public class BoardDAO {
 				     ",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName,p.categoryId "+
 				     ",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+
 				     "FROM post p LEFT OUTER JOIN image i ON p.postId=i.fieldId AND i.imgField='post_th' "+
-				     "WHERE p.isDel = 'N' AND p.postId !=(SELECT p.postid FROM post p, blind b WHERE b.classification = 'P' AND  p.postId = b.fieldId) "+
+				     "WHERE p.isDel = 'N' "+
 				     "ORDER BY p.postDate DESC) WHERE rnum between ? AND ?";
 		try {
 			ps = conn.prepareStatement(sql);
@@ -306,7 +306,6 @@ public class BoardDAO {
 				     ",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName "+
 				     ",(SELECT nickname FROM member WHERE userid=p.userId) nickname,p.categoryId "+
 				     "FROM post p LEFT OUTER JOIN image i ON (p.postId=i.fieldId AND i.imgField='post_th') WHERE p.isDel = 'N' "+
-				     "AND p.postId !=(SELECT p.postid FROM post p, blind b WHERE b.classification = 'P' AND  p.postId = b.fieldId) "+
 				     "ORDER BY p.postDate DESC) WHERE categoryId=? AND rnum between ? AND ?";
 		try {
 			ps = conn.prepareStatement(sql);
@@ -385,7 +384,6 @@ public class BoardDAO {
 					",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
 					"FROM post p LEFT OUTER JOIN image i ON (p.postId=i.fieldId AND i.imgField='post_th') "+ 
 					"WHERE p.isDel = 'N' AND (title like ? OR contents like ?) "+
-					"AND p.postId !=(SELECT p.postid FROM post p, blind b WHERE b.classification = 'P' AND  p.postId = b.fieldId) "+
 					"ORDER BY p.postDate DESC) WHERE rnum between ? AND ?";
 		
 			try {
@@ -436,7 +434,6 @@ public class BoardDAO {
 					",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
 					"FROM post p LEFT OUTER JOIN image i ON (p.postId=i.fieldId AND i.imgField='post_th') "+ 
 					"WHERE p.isDel = 'N' AND (title like ? OR contents like ?) "+
-					"AND p.postId !=(SELECT p.postid FROM post p, blind b WHERE b.classification = 'P' AND  p.postId = b.fieldId) "+
 					"ORDER BY p.postDate DESC) WHERE categoryId= ? AND rnum between ? AND ?";
 		try {
 			ps = conn.prepareStatement(sql);
@@ -474,7 +471,6 @@ public class BoardDAO {
 					",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
 					"FROM post p LEFT OUTER JOIN image i ON (p.postId=i.fieldId AND i.imgField='post_th') "+ 
 					"WHERE  p.isDel = 'N' AND recipePrice between ? AND ? "+
-					"AND p.postId !=(SELECT p.postid FROM post p, blind b WHERE b.classification = 'P' AND  p.postId = b.fieldId) "+
 					"ORDER BY p.postDate DESC) WHERE rnum between ? AND ?";
 			try {
 				ps = conn.prepareStatement(sql);
@@ -511,7 +507,6 @@ public class BoardDAO {
 					",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
 					"FROM post p LEFT OUTER JOIN image i ON (p.postId=i.fieldId AND i.imgField='post_th') "+ 
 					"WHERE p.isDel = 'N' AND recipePrice between ? AND ? "+
-					"AND p.postId !=(SELECT p.postid FROM post p, blind b WHERE b.classification = 'P' AND  p.postId = b.fieldId) "+
 					"ORDER BY p.postDate DESC) WHERE categoryId= ? AND rnum between ? AND ?";
 			
 				try {
@@ -548,7 +543,6 @@ public class BoardDAO {
 				  "nickname,categoryId,contents FROM(SELECT p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName, "+
 				  "p.categoryId,p.contents, (SELECT nickname FROM member WHERE userid=p.userId) nickname "+
 				  "FROM post p LEFT OUTER JOIN image i ON (p.postId=i.fieldId AND i.imgField='post_th') WHERE p.isDel = 'N' "+
-				  "AND p.postId !=(SELECT p.postid FROM post p, blind b WHERE b.classification = 'P' AND  p.postId = b.fieldId) "+
 				  "ORDER BY p.postDate DESC)) "+
 				  "u WHERE nickname like ?) WHERE rnum between ? AND ?";
 		
@@ -584,7 +578,6 @@ public class BoardDAO {
 						  "nickname,categoryId,contents FROM(SELECT p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName, "+
 						  "p.categoryId,p.contents, (SELECT nickname FROM member WHERE userid=p.userId) nickname "+
 						  "FROM post p LEFT OUTER JOIN image i ON (p.postId=i.fieldId AND i.imgField='post_th') WHERE p.isDel = 'N' "+
-						  "AND p.postId !=(SELECT p.postid FROM post p, blind b WHERE b.classification = 'P' AND  p.postId = b.fieldId) "+
 						  " ORDER BY p.postDate DESC)) "+
 						  "u WHERE categoryId=? AND nickname like ?) WHERE rnum between ? AND ?";
 				try {
@@ -622,7 +615,6 @@ public class BoardDAO {
 					",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
 					"FROM post p LEFT OUTER JOIN image i ON (p.postId=i.fieldId AND i.imgField='post_th') "+ 
 					"WHERE p.isDel = 'N' AND p.item like ? "+
-					"AND p.postId !=(SELECT p.postid FROM post p, blind b WHERE b.classification = 'P' AND  p.postId = b.fieldId) "+
 					" ORDER BY p.postDate DESC) WHERE rnum between ? AND ? ";
 					
 			try {
@@ -658,7 +650,6 @@ public class BoardDAO {
 					",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName,p.categoryId,p.contents "+ 
 					",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+ 
 					"FROM post p LEFT OUTER JOIN image i ON (p.postId=i.fieldId AND i.imgField='post_th') WHERE p.isDel = 'N' AND item like ? "+
-					"AND p.postId !=(SELECT p.postid FROM post p, blind b WHERE b.classification = 'P' AND  p.postId = b.fieldId) "+
 					"ORDER BY p.postDate DESC) WHERE categoryId=? AND rnum between ? AND ?";
 			
 						try {
