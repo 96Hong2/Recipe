@@ -703,8 +703,7 @@ public class MemberDAO {
 	public MainDTO clientInfo(String userId) { // 찬호
 
 		MainDTO dto = null;
-		String sql = "SELECT userId, pw, name, nickName, address, tel, rankId, blindCount, regDate"
-				+ " FROM member where userId = ?";
+		String sql = "SELECT m.userId as userid, m.pw as pw, m.name as name, m.nickName as nickname, r.rankName as rankName , m.address as address, m.tel as tel, m.blindCount as blindCount, m.regDate as regDate FROM member m left outer join rank r on m.rankid = r.rankid where userid = ?";
 
 		try {
 			ps = conn.prepareStatement(sql);
@@ -716,9 +715,9 @@ public class MemberDAO {
 				dto.setPw(rs.getString("pw"));
 				dto.setName(rs.getString("name"));
 				dto.setNickName(rs.getString("nickName"));
+				dto.setRankName(rs.getString("rankName"));
 				dto.setAddress(rs.getString("address"));
 				dto.setTel(rs.getString("tel"));
-				dto.setRankId(rs.getString("rankId"));
 				dto.setBlindCount(rs.getInt("blindCount"));
 				dto.setRegDate(rs.getDate("regDate"));
 			}
@@ -730,7 +729,7 @@ public class MemberDAO {
 
 	}
 
-	public int update(String pw, String nickName, int tel, String address, String userId) { // 찬호
+	public int update(String pw, String nickName, String tel, String address, String userId) { // 찬호
 
 		int change = 0;
 		String sql = "UPDATE member SET pw = ?, nickname = ?, tel = ?, address = ? WHERE userId=?";
@@ -739,7 +738,7 @@ public class MemberDAO {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, pw);
 			ps.setString(2, nickName);
-			ps.setInt(3, tel);
+			ps.setString(3, tel);
 			ps.setString(4, address);
 			ps.setString(5, userId);
 			change = ps.executeUpdate();
@@ -779,7 +778,6 @@ public class MemberDAO {
 
 		ArrayList<MainDTO> myWrite = new ArrayList<MainDTO>();
 		String item = "로드실패";
-		userId = "chanho@naver.com"; // 지워야하는거에용
 		int start = 0;
 		int end = 0;
 		int endPage = 0;
@@ -926,7 +924,6 @@ public class MemberDAO {
 
 		ArrayList<MainDTO> myLike = new ArrayList<MainDTO>();
 		String item = "로드실패";
-		userId = "kwangbae@gmail.com"; // 지워야하는거에용
 		int start = 0;
 		int end = 0;
 		int endPage = 0;
@@ -1018,7 +1015,6 @@ public class MemberDAO {
 		System.out.println("page : " + page);
 
 		ArrayList<MainDTO> myComment = new ArrayList<MainDTO>();
-		userId = "kwangbae@gmail.com"; // 로그인 안되니까 일단 값만 넣엇음 실제로 할때 "" 안에 지우기
 		int start = 0;
 		int end = 0;
 		int endPage = 0;

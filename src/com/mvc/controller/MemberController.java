@@ -236,14 +236,20 @@ public class MemberController extends HttpServlet {
 			dis = req.getRequestDispatcher("updateForm.jsp");
 			dis.forward(req, resp);
 			break;
-
+			
 		case "/update": // 찬호
 			System.out.println("수정완료 요청");
 			userId = req.getParameter("userId");
-			System.out.println("userId : " + userId);
+			String pw = req.getParameter("pw");
+			String nickName = req.getParameter("nickName");
+			String tel = req.getParameter("tel");
+			String address = req.getParameter("address");
+			System.out.println("userId : " + userId + "/" + "pw : " + pw + "/" + "nickName : " + "/" + nickName + "tel : " + "/" + tel + "address : " + address);
 			msg = "수정에 실패 했습니다.";
 			page = "updateForm?userId=" + userId;
-			if (service.update(userId) > 0) {
+			if(pw == null || pw == "" || nickName == null || nickName == "" || tel == null || tel == "" || address == null || address == "") {
+				msg = "빈칸을  채워주세요.";
+			} else if (service.update(userId) > 0) {
 				msg = "수정에 성공 했습니다.";
 				page = "clientInfo?userId=" + userId;
 			} else {

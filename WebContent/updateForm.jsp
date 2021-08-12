@@ -12,35 +12,41 @@ if("${sessionScope.userId}"==""){
    location.href = "./";
 }
 </script>
+</head>
+<body>
 	<header>
 		<%@include file="header_afterLogin.jsp"%>
 	</header>
-</head>
-<body>
+<div class = "wrap">
+<div>
 <h2>${sessionScope.nickName} 님의회원정보 수정</h2>
+</div>
+<div>
 <!-- <button onclick = "location.href = './myPage_myPage.jsp'">MY PAGE로 돌아가기</button> -->
 <a href='./myPage' id='backToMyPage'><h4 style="border:2px solid #bbb; border-radius:10px; text-align:center; width:230px;"> ← MY PAGE로 돌아가기</h4></a>
+</div>
+<div>
 <form action = "update" method = "POST"> 
-	<table>
-		<tr>
-			<td>아이디(ID)</td>
+	<table border = "1px solid black">
+		<tr style = "height : 40px;">
+			<td style = "width : 200px">아이디(ID)</td>
 			<td><input type = "hidden" name = "userId" value = "${member.userId}" readonly/>${member.userId}</td>
 		</tr>
-		<tr>
-			<td>비밀번호(PW)</td>
-			<td><input type = "password" name = "pw" value = "${member.pw}" /></td>
+		<tr style = "height : 40px;">
+			<td style = "width : 200px">비밀번호(PW)</td>
+			<td><input type = "password" name = "pw" maxlength = "10" value = "${member.pw}" /></td>
 		</tr>
-		<tr>
-			<td>이름(NAME)</td>
+		<tr style = "height : 40px;">
+			<td style = "width : 200px">이름(NAME)</td>
 			<td><input type = "hidden" name = "name" value = "${member.name}" readonly/>${member.name}</td>
 		</tr>
-		<tr>
-			<td>닉네임(NICKNAME)</td>
-			<td><input type = "text" name = "nickName" value = "${member.nickName}" />
+		<tr style = "height : 40px;">
+			<td style = "width : 200px">닉네임(NICKNAME)</td>
+			<td><input type = "text" name = "nickName" maxlength = "10" value = "${member.nickName}" />
 			<input type = "button" id = "overlay1" value = "중복확인"/>
 			</td>
 		</tr>
-		<tr>
+		<tr style = "height : 40px;">
 			<td>연락처(TEL)</td>
 			<td><input type = "text" name = "tel" value = "${member.tel}" /></td>
 		</tr>
@@ -49,11 +55,11 @@ if("${sessionScope.userId}"==""){
 			<td><input type = "text" name = "address" value = "${member.address}" /></td>
 		</tr>
 		<tr>
-			<td>등급(RANK)</td>
-			<td><input type = "hidden" name = "rankId" value = "${member.rankId}" readonly/>${member.rankId}</td>
+			<td>등급(RANKNAME)</td>
+			<td><input type = "hidden" name = "rankName" value = "${member.rankName}" readonly/>${member.rankName}</td>
 		</tr>
 		<tr>
-			<td>블라인드(BLINDCOUNT)</td>
+			<td>블라인드횟수(BLINDCOUNT)</td>
 			<td><input type = "hidden" name = "blindCount" value = "${member.blindCount}" readonly/>${member.blindCount}</td>
 		</tr>
 		<tr>
@@ -63,6 +69,8 @@ if("${sessionScope.userId}"==""){
 	</table>
 	<input type="submit" value="저장" style="margin: 5px;"/>
 </form>
+	</div>
+	</div>
 </body>
 <script>
 var overChk = false;
@@ -95,5 +103,11 @@ $("#overlay1").click(function(){
       }         
    });
 });
+</script>
+<script>
+	var msg = "${msg}";
+	if(msg != ""){
+		alert(msg);
+	}
 </script>
 </html>

@@ -12,18 +12,23 @@ if("${sessionScope.userId}"==""){
    location.href = "./";
 }
 </script>
+<style>
+	table {
+		width : 900px;
+	}
+</style>
+</head>
+<body>
 	<header>
 		<%@include file="header_afterLogin.jsp"%>
 	</header>
-</head>
-<body>
-<div style="width: 900px; display: flex; margin-bottom: 20px;">
+<div class ="wrap">
 <div>
 <!-- <button onclick = "location.href = './myPage'">MY PAGE로 돌아가기</button> -->
 <a href='./myPage' id='backToMyPage'><h4 style="border:2px solid #bbb; border-radius:10px; text-align:center; width:230px;"> ← MY PAGE로 돌아가기</h4></a>
 </div>
 <div>
-<h3>내가 쓴 댓글 목록</h3>
+<h3>${sessionScope.nickName} 님이 작성한 댓글 목록</h3>
 </div>
 <div>
 <table>
@@ -34,23 +39,23 @@ if("${sessionScope.userId}"==""){
 	</c:if>
 	<c:if test="${!empty myComment}">
 		<c:forEach items = "${myComment}" var = "comment">
-			<tr>				
-				<td>${comment.comment_content}</td>
-				<td>${comment.comment_date}</td>
+			<tr style = "height : 70px;">				
+				<td style = "width : 700px; text-align: left">&nbsp&nbsp${comment.comment_content}</td>
+				<td style = "width : 200px">${comment.comment_date}</td>
+				<%-- <a href="postDetail?postId=${like.postId}"> --%>
 			</tr>
 		</c:forEach>
 	</c:if>
 </table>
 </div>
-
-	<div class="pageArea">
+</div>
+	<div class="pageArea" style="width:740px; margin:auto; text-align:center;">
 		<c:forEach var="i" begin="1" end="${totalPage}" step="1">
 			<span class="page">
-				<c:if test="${i ne currPage}"><a href="./myComment?page=${i}">${i}</a></c:if>
+				<c:if test="${i ne currPage}"><a href="./myLike?page=${i}">${i}</a></c:if>
 				<c:if test="${i eq currPage}"><b>${i}</b></c:if>
 			</span>
 		</c:forEach> 
 	</div>
-</div>
 </body>
 </html>

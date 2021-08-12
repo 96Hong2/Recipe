@@ -182,7 +182,7 @@ public class MemberService {
 		userId = (String) req.getSession().getAttribute("userId");
 		String pw = req.getParameter("pw");
 		String nickname = req.getParameter("nickName");
-		int tel = Integer.parseInt(req.getParameter("tel"));
+		String tel = req.getParameter("tel");
 		String address = req.getParameter("address");
 
 		System.out.println(pw + "/" + nickname + "/" + tel + "/" + address+"/"+userId);

@@ -18,6 +18,7 @@
 	<header>
 		<c:import url="./header_afterLogin.jsp" />
 	</header>
+	<div class ="wrap">
 	<main id="body" style="padding: 20px;">
 		<a href='./myPage' id='backToMyPage'>
 			<h4 style="border: 2px solid #bbb; border-radius: 10px; text-align: center; width: 230px;">
@@ -64,6 +65,7 @@
 		</c:forEach>
 		</table>
 	</main>
+	</div>
 </body>
 <script>
 function showOrderDetail(pId){

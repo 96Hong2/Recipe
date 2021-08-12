@@ -12,12 +12,12 @@ if("${sessionScope.userId}"==""){
    location.href = "./";
 }
 </script>
+</head>
+<body>
 	<header>
 		<%@include file="header_afterLogin.jsp"%>
 	</header>
-</head>
-<body>
-	<div style="width: 900px; display: flex; margin-bottom: 20px;">
+	<div class ="wrap">
 	<div>
 	<h2>${sessionScope.nickName} 님의회원정보 보기</h2>
 	</div>
@@ -26,44 +26,40 @@ if("${sessionScope.userId}"==""){
 	<a href='./myPage' id='backToMyPage'><h4 style="border:2px solid #bbb; border-radius:10px; text-align:center; width:230px;"> ← MY PAGE로 돌아가기</h4></a>
 	</div>
 	<div>
-	<table>
-		<tr>
-			<td>항목</td>
-			<td>값</td>
+	<table border = "1px solid black">
+		<tr style = "height : 40px;">
+			<td style = "width : 200px" >항목</td>
+			<td style = "width : 200px" >값</td>
 		</tr>
-		<tr>
-			<td>아이디(ID)</td>
-			<td>${member.userId}</td>
+		<tr style = "height : 40px;">
+			<td style = "width : 200px" >아이디(ID)</td>
+			<td style = "width : 200px" >${member.userId}</td>
 		</tr>
-		<tr>
-			<td>비밀번호(PW)</td>
-			<td>${member.pw}</td>
-		</tr>
-		<tr>
+		<tr style = "height : 40px;">
 			<td>이름(NAME)</td>
 			<td>${member.name}</td>
 		</tr>
-		<tr>
+		<tr style = "height : 40px;">
 			<td>닉네임(NICKNAME)</td>
 			<td>${member.nickName}</td>
 		</tr>
-		<tr>
+		<tr style = "height : 40px;">
 			<td>연락처(TEL)</td>
 			<td>${member.tel}</td>
 		</tr>
-		<tr>
+		<tr style = "height : 40px;">
 			<td>주소(ADDRESS)</td>
 			<td>${member.address}</td>
 		</tr>
-		<tr>
+		<tr style = "height : 40px;">
 			<td>등급(RANK)</td>
-			<td>${member.rankId}</td>
+			<td>${member.rankName}</td>
 		</tr>
-		<tr>
-			<td>블라인드(BLIND)</td>
+		<tr style = "height : 40px;">
+			<td>블라인드횟수(BLINDCount)</td>
 			<td>${member.blindCount}</td>
 		</tr>
-		<tr>
+		<tr style = "height : 40px;">
 			<td>가입날짜(REGDATE)</td>
 			<td>${member.regDate}</td>
 		</tr>
