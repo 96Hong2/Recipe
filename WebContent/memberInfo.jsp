@@ -12,6 +12,15 @@ if("${sessionScope.isAdmin}"!="Y"){
    location.href = "./login.jsp";
 }
 </script>
+<style>
+	table{
+		margin: auto;
+	}
+	
+	h2{
+		text-align: center;
+	}
+</style>
 </head>
 <header>
 	<c:import url="./header_afterLogin.jsp"/>
@@ -59,7 +68,6 @@ if("${sessionScope.isAdmin}"!="Y"){
 			<td>가입날짜(REGDATE)</td>
 			<td>${member.reg_date}</td>
 		</tr>
-		
 		<tr>
 			<td colspan = "2">
 				<button onclick= "location.href= './memberUpdateForm?userId=${member.userId}'">수정하기</button>

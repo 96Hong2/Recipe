@@ -12,6 +12,15 @@ if("${sessionScope.isAdmin}"!="Y"){
    location.href = "./login.jsp";
 }
 </script>
+<style>
+	table{
+		margin: auto;
+	}
+	
+	h2{
+		text-align: center;
+	}
+</style>
 </head>
 <header>
 	<c:import url="./header_afterLogin.jsp"/>
@@ -57,10 +66,14 @@ if("${sessionScope.isAdmin}"!="Y"){
 		<tr>
 			<td>가입날짜(REGDATE)</td>
 			<td><input type = "hidden" name = "regDate" value = "${member.reg_date}" readonly/>${member.reg_date}</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<input type="button" value="저장" style="margin: 5px;" onclick="Check()"/>
+				<input type="button" value="취소" onclick="location.href='./memberInfo?userId=${member.userId}'"/>
+			</td>
 		</tr>		
 	</table>
-	<input type="button" value="저장" style="margin: 5px;" onclick="Check()"/>
-	<input type="button" value="취소" onclick="location.href='./memberInfo?userId=${member.userId}'"/>
 </form>
 </body>
 <script>
