@@ -553,6 +553,23 @@ public class BoardService {
 		return map;
 	}
 
+	
+	public int bestSelect1() {
+		
+		BoardDAO dao = new BoardDAO();
+		int result = dao.bestSelect1();
+		
+		return result;
+	}
+	
+	public int bestSelect2() {
+		
+		BoardDAO dao = new BoardDAO();
+		int result = dao.bestSelect2();
+		
+		
+		return result;
+	}
 
 
 }

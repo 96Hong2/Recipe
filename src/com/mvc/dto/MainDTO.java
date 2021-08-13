@@ -88,6 +88,7 @@ public class MainDTO {
    private String field;
    private String searchResult;
    private String bestDate;
+   private String bestClassification;
    public Date getRegDate() {
       return regDate;
    }
@@ -597,6 +598,12 @@ public String getPaymentdate() {
 }
 public void setPaymentdate(String paymentdate) {
 	this.paymentdate = paymentdate;
+}
+public String getBestClassification() {
+	return bestClassification;
+}
+public void setBestClassification(String bestClassification) {
+	this.bestClassification = bestClassification;
 }
 
    

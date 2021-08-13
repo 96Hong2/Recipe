@@ -1285,8 +1285,9 @@ public class BoardDAO {
 
 		HashMap<String, Object> map = new HashMap<String, Object>();
 
-		String sql = "SELECT rnum, postid, title, recipePrice, hits , likes, userid, item, bestdate "
-				+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, p.postid, p.title, p.recipePrice, p.hits , p.likes, p.userid, p.item, b.bestdate "
+		String sql = "SELECT rnum, postid, title, recipePrice, hits , likes, userid, nickname , item, bestdate "
+				+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, p.postid, p.title, p.recipePrice, "
+				+ "p.hits , p.likes, p.userid, (SELECT nickname FROM member WHERE userid=p.userId)nickname, p.item, b.bestdate "
 				+ "FROM post p left outer join bestpost b on p.postid = b.postid ORDER BY p.likes desc, p.hits desc) "
 				+ "where bestdate is not null and rnum between ? and ?";
 
@@ -1308,6 +1309,7 @@ public class BoardDAO {
 				dto.setHits(rs.getInt("hits"));
 				dto.setLikes(rs.getInt("likes"));
 				dto.setUserId(rs.getString("userId"));
+				dto.setNickname(rs.getString("nickname"));
 				// 재료 3개만 가져오기
 	            String[] itemArr = item.split(",");
 	            item = "";
@@ -1393,9 +1395,7 @@ public class BoardDAO {
 
 	public int bestPostTotalCount() throws SQLException { // 찬호
 
-		String sql = "SELECT count(*) "
-				+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, p.postid, p.title, p.recipePrice, p.hits , p.likes, p.userid, p.item "
-				+ "FROM post p left outer join bestpost b on p.postid = b.postid ORDER BY p.likes desc, p.hits desc)";
+		String sql = "SELECT count(*) FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, p.postid, p.title, p.recipePrice, p.hits , p.likes, p.userid, (SELECT nickname FROM member WHERE userid=p.userId)nickname, p.item, b.bestdate FROM post p left outer join bestpost b on p.postid = b.postid ORDER BY p.likes desc, p.hits desc)";
 		
 		
 		ps = conn.prepareStatement(sql);
@@ -1444,10 +1444,7 @@ public class BoardDAO {
 
 		HashMap<String, Object> map = new HashMap<String, Object>();
 
-		String sql = "SELECT rnum, postid, title, recipePrice, hits , likes, userid, item, bestdate, bestclassification "
-				+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, p.postid, p.title, p.recipePrice, p.hits , p.likes, p.userid, p.item, b.bestdate, b.bestclassification "
-				+ "FROM post p left outer join bestpost b on p.postid = b.postid ORDER BY p.likes desc, p.hits desc) "
-				+ "where bestclassification = '월간베스트' and rnum between 1 and 9 order by bestdate desc";
+		String sql = "SELECT rnum, postid, title, recipePrice, hits , likes, userid, item, nickname, bestdate, bestclassification FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, p.postid, p.title, p.recipePrice, p.hits , p.likes, p.userid, (SELECT nickname FROM member WHERE userid=p.userId)nickname, p.item, b.bestdate, b.bestclassification FROM post p left outer join bestpost b on p.postid = b.postid ORDER BY p.likes desc, p.hits desc) where bestclassification = '월간베스트' and rnum between 1 and 9 order by bestdate desc";
 
 
 		bestMonth = new ArrayList<MainDTO>();
@@ -1468,6 +1465,9 @@ public class BoardDAO {
 				dto.setHits(rs.getInt("hits"));
 				dto.setLikes(rs.getInt("likes"));
 				dto.setUserId(rs.getString("userId"));
+				dto.setNickname(rs.getString("nickname"));
+				dto.setBestDate(rs.getString("bestDate"));
+				dto.setBestClassification(rs.getString("bestclassification"));
 				// 재료 3개만 가져오기
 	            String[] itemArr = item.split(",");
 	            item = "";
@@ -1500,9 +1500,7 @@ public class BoardDAO {
 
 	public int bestMonthTotalCount() throws SQLException { // 찬호
 
-		String sql = "SELECT count(*) "
-				+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, post.* "
-				+ "FROM post ORDER BY likes desc, hits desc) WHERE rnum BETWEEN 1 AND 9";
+		String sql = "SELECT count(*) FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, p.postid, p.title, p.recipePrice, p.hits , p.likes, p.userid, (SELECT nickname FROM member WHERE userid=p.userId)nickname, p.item, b.bestdate, b.bestclassification FROM post p left outer join bestpost b on p.postid = b.postid ORDER BY p.likes desc, p.hits desc) where bestclassification = '월간베스트' and rnum between 1 and 9 order by bestdate desc";
 		
 		ps = conn.prepareStatement(sql);
 		rs = ps.executeQuery();
@@ -1550,11 +1548,7 @@ public class BoardDAO {
 
 		HashMap<String, Object> map = new HashMap<String, Object>();
 
-		String sql = "SELECT rnum, postid, title, recipePrice, hits , likes, userid, item, bestdate, bestclassification "
-				+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, "
-				+ "p.postid, p.title, p.recipePrice, p.hits , p.likes, p.userid, p.item, b.bestdate, b.bestclassification "
-				+ "FROM post p left outer join bestpost b on p.postid = b.postid ORDER BY p.likes desc, p.hits desc) "
-				+ "where bestclassification = '주간베스트' and rnum between 1 and 9 order by bestdate desc";
+		String sql = "SELECT rnum, postid, title, recipePrice, hits , likes, userid, item, nickName, bestdate, bestclassification FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, p.postid, p.title, p.recipePrice, p.hits , p.likes, p.userid, (SELECT nickname FROM member WHERE userid=p.userId)nickname, p.item, b.bestdate, b.bestclassification FROM post p left outer join bestpost b on p.postid = b.postid ORDER BY p.likes desc, p.hits desc) where bestclassification = '주간베스트' and rnum between 1 and 9 order by bestdate desc";
 
 
 		bestWeek = new ArrayList<MainDTO>();
@@ -1575,6 +1569,9 @@ public class BoardDAO {
 				dto.setHits(rs.getInt("hits"));
 				dto.setLikes(rs.getInt("likes"));
 				dto.setUserId(rs.getString("userId"));
+				dto.setNickname(rs.getString("nickname"));
+				dto.setBestDate(rs.getString("bestdate"));
+				dto.setBestClassification(rs.getString("bestclassification"));
 				// 재료 3개만 가져오기
 	            String[] itemArr = item.split(",");
 	            item = "";
@@ -1603,63 +1600,6 @@ public class BoardDAO {
 			e.printStackTrace();
 		}
 		return map;
-	}
-	
-	public void setBestWeek() { // 찬호
-		
-		String sql = "SELECT rnum, postid FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, post.postid "
-				+ "FROM post ORDER BY likes desc, hits desc) WHERE rnum BETWEEN 1 AND 9";
-		
-		try {
-			ps = conn.prepareStatement(sql);
-			rs = ps.executeQuery();
-			while(rs.next()) {
-				String postId = rs.getString("postId");
-				
-				sql = "Insert into bestpost (BESTCLASSIFICATION, BESTDATE, POSTID) values ('주간베스트', sysdate, ?)";
-				ps = conn.prepareStatement(sql);
-				ps.setString(1, postId);
-				
-				ps.executeUpdate();
-				
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		
-		
-	}
-	
-	public void setBestMonth() { // 찬호
-		
-		String sql = "SELECT rnum, postid FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, post.postid "
-				+ "FROM post ORDER BY likes desc, hits desc) WHERE rnum BETWEEN 1 AND 9";
-		
-		try {
-			ps = conn.prepareStatement(sql);
-			rs = ps.executeQuery();
-			while(rs.next()) {
-				String postId = rs.getString("postId");
-				
-				sql = "insert into bestpost (BESTCLASSIFICATION, BESTDATE, POSTID) values ('월간베스트', sysdate, postId)";
-				ps = conn.prepareStatement(sql);
-				ps.executeUpdate();
-				
-				if(ps.executeUpdate() > 0) {
-					
-				}else{
-					System.out.println("잘못돌고있음");
-					
-				}
-				
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		
-		
 	}
 
 	public int bestWeekTotalCount() throws SQLException { // 찬호
@@ -1803,6 +1743,109 @@ public class BoardDAO {
 
 		return total;
 	}
+	
+	public ArrayList<String> getBestUserId(String bestcls) {
+		//베스트게시물로 등록된 포스트의 작성자들의 userId를 가져오는 메소드
+		//bestcls에는 주간베스트면 '주간베스트', 월간베스트면 '월간베스트' 넣기
+		System.out.println("DAO getBestUserId() 들어옴, bestcls : "+bestcls);
+		ArrayList<String> userIdArr = new ArrayList<String>();
+		sql = "SELECT p.userId userId FROM (SELECT postId FROM (SELECT ROW_NUMBER() OVER (ORDER BY bestDate DESC) as rnum, postId FROM bestpost WHERE BestClassification='주간베스트') WHERE rnum <= 9) a, post p WHERE a.postId=p.postId";
+		try {
+			ps = conn.prepareStatement(sql);
+			System.out.println("try문 들어옴 ps : "+ps);
+			//ps.setString(1, bestcls);
+			rs = ps.executeQuery(); //rs.next가 없음
+			while(rs.next()) {
+				System.out.println("while문 userId : "+rs.getString("userId"));
+				userIdArr.add(rs.getString("userId"));
+			}
+		} catch (Exception e) {
+			e.toString();
+			System.out.println(e.toString());
+		}
+		System.out.println("userIdArr size : "+userIdArr.size());
+		return userIdArr;
+	}
+	
+	public int bestSelect1() { // 찬호
+		
+		int result = 0;
+		MemberDAO memDao = new MemberDAO();
+		ArrayList<String> userArr = new ArrayList<String>();
+		String sql = "INSERT INTO BESTPOST (BESTCLASSIFICATION, BESTDATE, POSTID) "
+				+ "SELECT '주간베스트' as BESTCLASSIFICATION, sysdate as BESTDATE, postid "
+				+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, post.postid "
+				+ "FROM post ORDER BY likes desc, hits desc, postdate desc ) "
+				+ "WHERE rnum BETWEEN 1 AND 9";
+		try {
+			ps = conn.prepareStatement(sql);
+			result = ps.executeUpdate();
+			
+			userArr = getBestUserId("주간베스트");
+			System.out.println("bestSelect1() userArr size : "+userArr.size());
+			for(String user:userArr) {
+				System.out.println("주간베스트 선정된 유저 : "+user);
+				memDao.getPoint(user, "주간 베스트 선정", 500);				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println("DAO bestSelect1 주간 베스트 선정 성공여부 : "+result);
+		return result;
+		
+	}
+	
+	public int bestSelect2() { // 찬호
+		
+		int result = 0;
+		MemberDAO memDao = new MemberDAO();
+		ArrayList<String> userArr = new ArrayList<String>();
+		String sql = "INSERT INTO BESTPOST (BESTCLASSIFICATION, BESTDATE, POSTID) "
+				+ "SELECT '월간베스트' as BESTCLASSIFICATION, sysdate as BESTDATE, postid "
+				+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, post.postid "
+				+ "FROM post ORDER BY likes desc, hits desc, postdate desc ) "
+				+ "WHERE rnum BETWEEN 1 AND 9";
+		try {
+			ps = conn.prepareStatement(sql);
+			result = ps.executeUpdate();
+			
+			userArr = getBestUserId2("월간베스트");
+			System.out.println("bestSelect2() userArr size : "+userArr.size());
+			for(String user:userArr) {
+				System.out.println("월간베스트 선정된 유저 : "+user);
+				memDao.getPoint(user, "월간 베스트 선정", 1000);				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println("DAO bestSelect2 월간 베스트 선정 성공여부 : "+result);
+		return result;
+		
+	}
+	
+	public ArrayList<String> getBestUserId2(String bestcls) {
+		//베스트게시물로 등록된 포스트의 작성자들의 userId를 가져오는 메소드
+		//bestcls에는 주간베스트면 '주간베스트', 월간베스트면 '월간베스트' 넣기
+		System.out.println("DAO getBestUserId() 들어옴, bestcls : "+bestcls);
+		ArrayList<String> userIdArr = new ArrayList<String>();
+		sql = "SELECT p.userId userId FROM (SELECT postId FROM (SELECT ROW_NUMBER() OVER (ORDER BY bestDate DESC) as rnum, postId FROM bestpost WHERE BestClassification='월간베스트') WHERE rnum <= 9) a, post p WHERE a.postId=p.postId";
+		try {
+			ps = conn.prepareStatement(sql);
+			System.out.println("try문 들어옴 ps : "+ps);
+			//ps.setString(1, bestcls);
+			rs = ps.executeQuery(); //rs.next가 없음
+			while(rs.next()) {
+				System.out.println("while문 userId : "+rs.getString("userId"));
+				userIdArr.add(rs.getString("userId"));
+			}
+		} catch (Exception e) {
+			e.toString();
+			System.out.println(e.toString());
+		}
+		System.out.println("userIdArr size : "+userIdArr.size());
+		return userIdArr;
+	}
+
 
 	public boolean blindCheck(MainDTO dto) {
 		System.out.println("boardDAO blindCheck() : 실행");

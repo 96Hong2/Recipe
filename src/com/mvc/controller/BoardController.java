@@ -15,7 +15,7 @@ import com.mvc.dto.MainDTO;
 import com.mvc.service.BoardService;
 import com.mvc.service.MemberService;
 
-@WebServlet({"/", "/postWriteForm","/postWrite","/postDetail","/postUpdateForm","/postUpdate","/postDel","/postList","/category","/postSearch","/writeComment", "/loadComments", "/updateComment", "/writeRecomment", "/deleteComment","/itemListCall","/postLike","/postLikeCheck", "/bestPost", "/bestWeek", "/bestMonth", "/bestSearch"})
+@WebServlet({"/", "/postWriteForm","/postWrite","/postDetail","/postUpdateForm","/postUpdate","/postDel","/postList","/category","/postSearch","/writeComment", "/loadComments", "/updateComment", "/writeRecomment", "/deleteComment","/itemListCall","/postLike","/postLikeCheck", "/bestPost", "/bestWeek", "/bestMonth", "/bestSearch", "/bestSelect1", "/bestSelect2"})
 public class BoardController extends HttpServlet {
 
 	@Override
@@ -381,6 +381,32 @@ public class BoardController extends HttpServlet {
 			req.setAttribute("endDate", req.getParameter("endDate"));
 
 			dis = req.getRequestDispatcher("bestSearch.jsp");
+			dis.forward(req, resp);
+			break;
+			
+		case "/bestSelect1": // 찬호
+			System.out.println("주간베스트 선정요청");
+			result = service.bestSelect1();
+			
+			msg = "주간 베스트 선정이 실패했습니다.";
+			if(result > 0) {
+				msg = "주간 베스트 선정이 완료되었습니다";
+			}
+			req.setAttribute("msg", msg);
+			dis = req.getRequestDispatcher("bestPost");
+			dis.forward(req, resp);
+			break;
+			
+		case "/bestSelect2": // 찬호
+			System.out.println("월간베스트 선정요청");
+			result = service.bestSelect2();
+			
+			msg = "월간 베스트 선정이 실패했습니다.";
+			if(result > 0) {
+				msg = "월간 베스트 선정이 완료되었습니다";
+			}
+			req.setAttribute("msg", msg);
+			dis = req.getRequestDispatcher("bestPost");
 			dis.forward(req, resp);
 			break;
 			
