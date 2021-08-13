@@ -101,6 +101,18 @@ $("#userId").on("input",function(){
       var $address = $("input[name='address']");
       var $tel = $("input[name='tel']");
       
+    //아이디 이메일 형식
+      var emailChk = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;//이메일 정규식
+      if(!emailChk.test($("input[id='userId']").val())) {            
+                  alert("아이디를 이메일 형식으로 적어주세요");
+                  return;
+      }
+      //전화 숫자만
+      var telChk = /^\d{10,11}$/;
+      if(!telChk.test($("input[id='tel']").val())) {            
+          alert("전화번호를 숫자로 정확하게 적어주세요");
+          return;
+      }
       	
       if($userId.val() == ""||$pw.val()==""||$name.val() == ""||$nickName.val() == ""||$address.val() == ""||$tel.val() == ""){         
       alert("빈칸을 입력해 주세요.");   
