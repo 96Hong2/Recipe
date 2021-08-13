@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>베스트 게시판</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" type="text/css" href="css/common.css" media="all" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -16,15 +16,7 @@ window.onkeydown  = function(e){
         e.preventDefault();
         e.returnValue = false;
       }
-      if(ua.indexOf("Macintosh") > -1){
-        if(e.keyCode == 91 /*Ctrl*/){
-          alert("보안상의 이유로 Command 버튼이 금지되어 있습니다.");
-        }
-      }else{
-        if(e.keyCode == 17 /*Ctrl*/){
-          alert("보안상의 이유로 Ctrl 버튼이 금지되어 있습니다.");
-        }
-      }
+     
   }
   document.oncontextmenu = function (e) {
     alert("보안상의 이유로 우클릭이 금지되어 있습니다.");
