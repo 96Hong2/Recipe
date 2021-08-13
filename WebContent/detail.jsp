@@ -72,16 +72,8 @@
 
 	$("#stockSelect").click(function() {
 		$pCnt = $("input[name='productCnt']").val();
-		var $stock = $
-		{
-			product.stock
-		}
-		;
-		var $price = $
-		{
-			product.price
-		}
-		;
+		var $stock = ${product.stock};
+		var $price = ${product.price};
 		var $totalPrice = $pCnt * $price;
 		console.log($stock);
 		console.log($pCnt);
@@ -103,18 +95,10 @@
 			var $pId = new String("${product.productId}");
 			//var $pId = ${product.productId};
 			var $pName = new String("${product.productName}");
-			var $pPrice = $
-			{
-				product.price
-			}
-			;
+			var $pPrice = ${product.price};
 			var $pCnt = $("input[name='productCnt']").val();
 			var $tPrice = $pCnt * $pPrice;
-			var $stock = $
-			{
-				product.stock
-			}
-			;
+			var $stock = ${product.stock};
 			console.log("id_" + $pId);
 			console.log("name_" + $pName);
 			console.log("price_" + $pPrice);
@@ -177,18 +161,10 @@
 			var $pId = new String("${product.productId}");
 			//var $pId = ${product.productId};
 			var $pName = new String("${product.productName}");
-			var $pPrice = $
-			{
-				product.price
-			}
-			;
+			var $pPrice = ${product.price};
 			var $pCnt = $("input[name='productCnt']").val();
 			var $tPrice = $pCnt * $pPrice;
-			var $stock = $
-			{
-				product.stock
-			}
-			;
+			var $stock = ${product.stock};
 			var $imgName = new String("${imgNewName}");
 
 			console.log("id_" + $pId);

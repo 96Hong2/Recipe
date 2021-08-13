@@ -272,7 +272,7 @@ public class MemberController extends HttpServlet {
 			if (del.equals("Y")) {
 				msg = "회원이 탈퇴되었습니다.";
 				req.getSession().removeAttribute("userId");
-				page = "./index.jsp";
+				page = "/";
 			} else {
 				msg = "회원탈퇴 실패";
 				resp.sendRedirect("./");
@@ -413,7 +413,7 @@ public class MemberController extends HttpServlet {
 			System.out.println("로그아웃 요청");
 			req.getSession().invalidate();			
 			msg = "로그아웃 되었습니다.";
-			page = "/index.jsp";
+			page = "/";
 			req.setAttribute("msg", msg);
 			dis = req.getRequestDispatcher(page);
 			dis.forward(req, resp);
