@@ -216,8 +216,8 @@
 						</c:if>
 						<c:forEach items='${myPage_Comment}' var='commentItem'>
 							<tr>
-								<td><a href='#?postid=${commentItem.postId}'>${commentItem.title}</a></td>
-								<td><a href='#?postid=${commentItem.postId}'>${commentItem.comment_content}</a></td>
+								<td><a href='./postDetail?postId=${commentItem.postId}'>${commentItem.title}</a></td>
+								<td><a href='./postDetail?postId=${commentItem.postId}'>${commentItem.comment_content}</a></td>
 								<td>${commentItem.comment_date}</td>
 							</tr>
 						</c:forEach>
