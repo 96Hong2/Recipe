@@ -328,7 +328,7 @@ public class BoardDAO {
 
 	public int totalCount() { //영환
 		System.out.println("BoardDAO totalCount() 실행");
-		String sql = "SELECT COUNT(postId) FROM post";
+		String sql = "SELECT COUNT(postId) FROM post WHERE isdel='N' ";
 		int total = 0;
 		try {
 			ps = conn.prepareStatement(sql);
@@ -395,7 +395,7 @@ public class BoardDAO {
 
 	public int categoryCount(int categoryId) { //영환
 		System.out.println("BoardDAO categoryCount() 실행");
-		String sql = "SELECT COUNT(postId) FROM post WHERE categoryId=?";
+		String sql = "SELECT COUNT(postId) FROM post WHERE categoryId=? AND isdel='N' ";
 		int total = 0;
 		try {
 			ps = conn.prepareStatement(sql);
