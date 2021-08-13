@@ -39,13 +39,13 @@ h1{ text-align:center;}
          <th>비밀번호</th>
       </tr>
       <tr>
-         <td><input type="text" name="pw" maxlength="20" style="width:300px;"  placeholder="6~20 글자를 입력해주세요" /></td>
+         <td><input type="text" name="pw" maxlength="20" id="pw" style="width:300px;"  placeholder="6~20 글자를 입력해주세요" /></td>
       </tr>
       <tr>
          <th>이름</th>
       </tr>
       <tr>
-         <td><input type="text" name="name" maxlength="10" style="width:300px;" placeholder="이름을 입력해주세요." /></td>
+         <td><input type="text" name="name" maxlength="10" id="name" style="width:300px;" placeholder="이름을 입력해주세요." /></td>
       </tr>
       <tr>
          <th>닉네임</th>
@@ -59,14 +59,14 @@ h1{ text-align:center;}
          <th>주소</th>
       </tr>
       <tr>
-         <td><input type="text" name="address" maxlength="50" style="width:300px;" placeholder="주소를 입력해주세요." /></td>
+         <td><input type="text" name="address" id="address" maxlength="50" style="width:300px;" placeholder="주소를 입력해주세요." /></td>
       </tr>
       <tr>
       <tr>
          <th>연락처</th>
       </tr>
       <tr>
-         <td><input type="text" name="tel" maxlength="11" style="width:300px;" placeholder="-제외 폰번호를 입력해주세요." /></td>
+         <td><input type="text" name="tel" id="tel" maxlength="11" style="width:300px;" placeholder="-제외 폰번호를 입력해주세요." /></td>
       </tr>
       <tr>
          <td colspan="2">
