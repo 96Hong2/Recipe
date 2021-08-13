@@ -89,7 +89,7 @@ div.commentAreaBox {
 			<div id="emptyComment"></div>
 			<b style='color: rosybrown;'>♥ 댓글 작성</b>
 			<hr></hr>
-			<img src="./staticImg/user.jpeg" id='cmtUser' alt="댓글작성자이미지"
+			<img src="./staticImg/user.png" id='cmtUser' alt="댓글작성자이미지"
 				width=100px height=100px />
 			<textarea id='cmtInput' name='cmtInput'
 				placeholder="여기에 댓글을 입력해주세요. ^ㅇ^" ></textarea>
@@ -164,7 +164,7 @@ div.commentAreaBox {
 					if (item.isDel == "Y") { //삭제된 댓글이라면?
 						content += "<tbody class='cmtTbodyClass' id='cmtTbody"+idx+"'>";
 						content += "<tr>";
-						content += "<td rowspan='2'><img src=\"./staticImg/user.jpeg\"";
+						content += "<td rowspan='2'><img src=\"./staticImg/user.png\"";
 				content +=	" id='cmtContentUser' alt=\"댓글작성자이미지\" width=0px height=0px /></td>";
 						content += "<td></td>";
 						content += "<td style='color:rosybrown;'><b>삭제된 댓글입니다.</b></td>";
@@ -191,7 +191,7 @@ div.commentAreaBox {
 						content += "</tr>";
 						}else{
 						content += "<tr>";
-						content += "<td rowspan='2'><img src=\"./staticImg/user.jpeg\"";
+						content += "<td rowspan='2'><img src=\"./staticImg/user.png\"";
 						content +=	" id='cmtContentUser' alt=\"댓글작성자이미지\" width=0px height=0px /></td>";
 						content += "<td></td>";
 						content += "<td style='color:rosybrown;'><b>관리자에 의해 블라인드 처리된 댓글입니다.</b></td>";
@@ -205,7 +205,7 @@ div.commentAreaBox {
 						//댓글 보여주기
 						content += "<tbody class='cmtTbodyClass' id='cmtTbody"+idx+"'>";
 						content += "<tr>";
-						content += "<td rowspan='2'><img src=\"./staticImg/user.jpeg\"";
+						content += "<td rowspan='2'><img src=\"./staticImg/user.png\"";
 				content +=	" id='cmtContentUser' alt=\"댓글작성자이미지\" width=80px height=80px /></td>";
 
 						//이 댓글의 작성자가 현재 로그인된 유저아이디와 같다면 색깔을 입혀서 보여준다
@@ -275,7 +275,7 @@ div.commentAreaBox {
 						content += "<tbody class='cmtUpdateTbodyClass' id='cmtUpdateTbody"+idx+"'>";
 						content += "<tr><td><b style='color:rosybrown;'>&nbsp;♥ 댓글 수정</b></td></tr>";
 						content += "<tr>";
-						content += "<td rowspan='2'><img src=\"./staticImg/user.jpeg\"";
+						content += "<td rowspan='2'><img src=\"./staticImg/user.png\"";
 				content +=		"id='cmtContentUser' alt=\"댓글작성자이미지\" width=80px height=80px /></td>";
 						content += "<td></td>";
 						content += "<td style='color:rosybrown;'><b>작성날짜</b> "
@@ -405,7 +405,7 @@ div.commentAreaBox {
 						content += "<tr><td></td><td><b style='color:rosybrown;'>&nbsp;♥ 대댓글 수정</b></td></tr>";
 						content += "<tr>";
 						//content += "<td rowspan='2'>";
-						//content +=	"<img src=\"./staticImg/user.jpeg\" id='cmtContentUser' alt=\"댓글작성자이미지\" width=70px height=70px />";
+						//content +=	"<img src=\"./staticImg/user.png\" id='cmtContentUser' alt=\"댓글작성자이미지\" width=70px height=70px />";
 						//content += "</td>";
 						content += "<td></td>";
 						content += "<td></td>";
