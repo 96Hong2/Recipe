@@ -71,7 +71,7 @@ h1{ text-align:center;}
       <tr>
          <td colspan="2">
          <div class="button">
-            <button onclick="location.href='./index.jsp'">돌아가기</button>&nbsp; &nbsp;<button onclick="join()">가입하기</button>
+            <button onclick="location.href='./main.jsp'">돌아가기</button>&nbsp; &nbsp;<button onclick="join()">가입하기</button>
          </div>
          </td>
       </tr>
@@ -137,7 +137,7 @@ $("#userId").on("input",function(){
                console.log(data);
                if(data.success > 0){
                   alert('가입이 완료되었습니다.');
-                  location.href='index.jsp';
+                  location.href='./main.jsp';
                }else{              
               	alert('가입에 실패했습니다.')
             }
