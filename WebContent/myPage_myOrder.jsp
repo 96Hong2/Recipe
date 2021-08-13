@@ -33,13 +33,13 @@
 			</div>
 		</div>
 		
-		<table id='orderListTable'>
+		<table id='orderListTable' style="width:100%;">
 		<tr>
-			<th>주문번호</th><th>주문날짜</th><th>주문총액</th><th>주문상태</th><th>주문상세보기</th>
+			<th>주문번호</th><th style="width:200px;">주문날짜</th><th>주문총액</th><th style="width:300px;">주문상태</th><th>주문상세보기</th>
 		</tr>
 		<c:if test="${empty orderList}">
 			<tr>
-				<td>주문내역이 없습니다.</td>
+				<td colspan="5">주문내역이 없습니다.</td>
 			</tr>
 		</c:if>
 		<c:forEach items='${orderList}' var='order'>
