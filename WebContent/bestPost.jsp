@@ -21,10 +21,9 @@
 				<button onclick="location.href='./bestPost'">전체</button>
 				<button onclick="location.href='./bestMonth'">이달의 레시피</button>
 				<button onclick="location.href='./bestWeek'">이주의 레시피</button>
-				<c:if
-				test="${sessionScope.isAdmin eq 'Y' || sessionScope.userId eq admin}">
-				<button onclick="location.href='./bestSelect1'" class="btns" id="blindBtn">주간베스트레시피 선정버튼</button>
-				<button onclick="location.href='./bestSelect2'" class="btns" id="blindBtn">월간베스트레시피 선정버튼</button>
+				<c:if test="${not empty sessionScope.isAdmin}">
+					<button onclick="location.href='./bestSelect1'" class="btns" id="blindBtn">주간베스트레시피 선정버튼</button>
+					<button onclick="location.href='./bestSelect2'" class="btns" id="blindBtn">월간베스트레시피 선정버튼</button>
 				</c:if>
 				<div>
 					<form action="bestSearch" method="get">
