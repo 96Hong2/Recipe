@@ -21,7 +21,7 @@
 			<a href='./myPage' id='backToMyPage'><h4 style="border:2px solid #bbb; border-radius:10px; text-align:center; width:230px;"> ← MY PAGE로 돌아가기</h4></a>
 			<div style="width: 900px; display: flex; margin-bottom: 20px;">
 				<div style="width: 660px;">
-					<img src="./staticImg/user.jpeg" id='userImg' alt="유저이미지"
+					<img src="./staticImg/user.png" id='userImg' alt="유저이미지"
 						width='100px' height='100px' />
 
 					<h3>${sessionScope.nickName}님의캐시내역조회</h3>
