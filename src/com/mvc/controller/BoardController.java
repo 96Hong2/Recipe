@@ -15,7 +15,7 @@ import com.mvc.dto.MainDTO;
 import com.mvc.service.BoardService;
 import com.mvc.service.MemberService;
 
-@WebServlet({"/postWriteForm","/postWrite","/postDetail","/postUpdateForm","/postUpdate","/postDel","/postList","/category","/postSearch","/writeComment", "/loadComments", "/updateComment", "/writeRecomment", "/deleteComment","/itemListCall","/postLike","/postLikeCheck", "/bestPost", "/bestWeek", "/bestMonth", "/bestSearch"})
+@WebServlet({"/", "/postWriteForm","/postWrite","/postDetail","/postUpdateForm","/postUpdate","/postDel","/postList","/category","/postSearch","/writeComment", "/loadComments", "/updateComment", "/writeRecomment", "/deleteComment","/itemListCall","/postLike","/postLikeCheck", "/bestPost", "/bestWeek", "/bestMonth", "/bestSearch"})
 public class BoardController extends HttpServlet {
 
 	@Override
@@ -49,6 +49,16 @@ public class BoardController extends HttpServlet {
 		HashMap<String, Object> map = null;
 		
 		switch(addr) {
+		
+		case "/":
+			System.out.println("메인페이지");
+			map = service.indexBest();
+			req.setAttribute("mainBestPost", map.get("bestPost"));
+			map = service.indexPost();
+			req.setAttribute("mainPost", map.get("post"));
+			dis = req.getRequestDispatcher("main.jsp");
+			dis.forward(req, resp);
+			break;
 		
 		case "/postWrite" : //영환
 			System.out.println("게시물 글쓰기 요청");

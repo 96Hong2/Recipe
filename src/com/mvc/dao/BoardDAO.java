@@ -278,6 +278,54 @@ public class BoardDAO {
 		return list;
 	}
 
+	public HashMap<String, Object> postList() { //영환
+		System.out.println("BoardDAO postList() 실행 : 게시글 리스트");
+		ArrayList<MainDTO> list = new ArrayList<MainDTO>();
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		MainDTO dto = null;
+		String sql = "SELECT rnum,postid, title,recipePrice, item, hits, likes, imgNewName, nickname, categoryId "+
+					 "FROM(SELECT ROW_NUMBER() OVER(ORDER BY p.postDate DESC)AS RNUM "+
+				     ",p.postId,p.title,p.recipePrice,p.item,p.hits,p.likes,i.imgNewName,p.categoryId "+
+				     ",(SELECT nickname FROM member WHERE userid=p.userId) nickname "+
+				     "FROM post p LEFT OUTER JOIN image i ON p.postId=i.fieldId AND i.imgField='post_th' "+
+				     "WHERE p.isDel = 'N' "+
+				     "ORDER BY p.postDate DESC) where rnum <= 3";
+		try {
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				dto = new MainDTO();
+				dto.setPostId(rs.getString("postId"));
+				dto.setTitle(rs.getString("title"));
+				dto.setRecipePrice(rs.getInt("recipePrice"));
+				String item = rs.getString("item");
+				// 재료 3개만 가져오기
+	            String[] itemArr = item.split(",");
+	            item = "";
+	            int i = 0;
+	            while (i < 3 && itemArr.length > i) {
+	               // 재료가 3개 미만일 경우 itemArr.length < i 에 걸린다
+	               item += (",#" + itemArr[i]);
+	               i += 1;
+	               //System.out.println("i : " + i);
+	            }
+	            item = item.substring(1);
+	            // System.out.println("재료(item)3개만 : "+item);
+				dto.setItem(item);
+				dto.setHits(rs.getInt("hits"));
+				dto.setLikes(rs.getInt("likes"));
+				dto.setImgNewName(rs.getString("imgNewName"));
+				dto.setNickName(rs.getString("nickName"));
+				dto.setCategoryId(rs.getString("categoryId"));
+				list.add(dto);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		map.put("post", list);
+		return map;
+	}
+
 	public int totalCount() { //영환
 		System.out.println("BoardDAO totalCount() 실행");
 		String sql = "SELECT COUNT(postId) FROM post";
@@ -1283,6 +1331,59 @@ public class BoardDAO {
 			map.put("currPage", page);
 			map.put("start", startPage);
 			map.put("end", endPage);
+		} catch (Exception e) {
+			System.out.println("DAO list()에러");
+			e.printStackTrace();
+		}
+		return map;
+	}
+	
+	public HashMap<String, Object> bestPost() { // 찬호
+
+		ArrayList<MainDTO> bestPost = new ArrayList<MainDTO>();
+		String item = "로드실패";
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+
+		String sql = "SELECT rnum, postid, title, recipePrice, hits , likes, userid, item, bestdate "
+				+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY likes desc) AS rnum, p.postid, p.title, p.recipePrice, p.hits , p.likes, p.userid, p.item, b.bestdate "
+				+ "FROM post p left outer join bestpost b on p.postid = b.postid ORDER BY p.likes desc, p.hits desc) where rnum <= 3";
+
+		bestPost = new ArrayList<MainDTO>();
+		System.out.println("DAO bestPost() size : " + bestPost.size());
+		try {
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			bestPost = new ArrayList<MainDTO>();
+			System.out.println("들어오는지확인");
+			while (rs.next()) {
+				MainDTO dto = new MainDTO();
+				item = rs.getString("item");
+				dto.setPostId(rs.getString("postId"));
+				dto.setTitle(rs.getString("title"));
+				dto.setRecipePrice(rs.getInt("recipePrice"));
+				dto.setHits(rs.getInt("hits"));
+				dto.setLikes(rs.getInt("likes"));
+				dto.setUserId(rs.getString("userId"));
+				// 재료 3개만 가져오기
+	            String[] itemArr = item.split(",");
+	            item = "";
+	            int i = 0;
+	            while (i < 3 && itemArr.length > i) {
+	               // 재료가 3개 미만일 경우 itemArr.length < i 에 걸린다
+	               item += (",#" + itemArr[i]);
+	               i += 1;
+	               System.out.println("i : " + i);
+	            }
+	            item = item.substring(1);
+	            // System.out.println("재료(item)3개만 : "+item);
+				dto.setItem(item);
+				System.out.println("dto : " + dto);
+				bestPost.add(dto);
+			}
+			System.out.println("bestPost() size : " + bestPost.size());
+
+			map.put("bestPost", bestPost);
 		} catch (Exception e) {
 			System.out.println("DAO list()에러");
 			e.printStackTrace();

@@ -531,6 +531,28 @@ public class BoardService {
 		return map;
 	}
 
+	public HashMap<String, Object> indexBest() {
+		BoardDAO dao = new BoardDAO();
+		HashMap<String, Object> map = dao.bestPost();
+		System.out.println("map : " + map.size());
+		System.out.println("map : " + map);
+
+		dao.resClose();
+
+		return map;
+	}
+
+	public HashMap<String, Object> indexPost() {
+		BoardDAO dao = new BoardDAO();
+		HashMap<String, Object> map = dao.postList();
+		System.out.println("map : " + map.size());
+		System.out.println("map : " + map);
+
+		dao.resClose();
+
+		return map;
+	}
+
 
 
 }
