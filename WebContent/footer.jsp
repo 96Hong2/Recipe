@@ -11,7 +11,7 @@
 <link rel="stylesheet" type="text/css" href="css/common.css" media="all" />
 </head>
 <body>
-	<div class="wrap">
+	<div class="wrap" style="clear:both;">
 		<div style="display: flex; margin-top:50px;  border-top:2px solid black;">
 			<div style="width:200px; padding:10px; margin-left:50px; ">
 				<a href="./"><img src="hlogo.png" alt="센터"

@@ -16,18 +16,18 @@
 	}
 </script>
 </head>
-
 <body>
 	<div class="wrap">
 		<header>
 			<%@include file="header_afterLogin.jsp"%>
 		</header>
 
-		<main id="body">
-			<h1
-				style="border: 2px solid #bbb; border-radius: 10px; text-align: center; width: 200px;">
+			<h1	style="border: 2px solid #bbb; border-radius: 10px; text-align: center; width: 200px;">
 				장바구니</h1>
-			<div class="divtable">
+		<main id="body" style="width:700px; float:left;">
+
+
+			<div class="divtable" style="width: 700px;">
 				<table class="table">
 					<thead>
 						<tr>
@@ -43,7 +43,10 @@
 					<tbody></tbody>
 				</table>
 			</div>
-			<div class="table-right" id="table-right">
+
+		</main>
+		<aside style="margin-left:700px; width: 200px; float: right; position:fixed">
+			<div class="table-right">
 				<h4>결제 예정금액</h4>
 
 				<div class="cartprice">상품 금액</div>
@@ -63,14 +66,14 @@
 				<button onclick="del()">선택삭제</button>
 				<button onclick="order()">주문하기</button>
 			</div>
+		</aside>
 
-		</main>
-		
 		<footer>
 			<%@include file="footer.jsp"%>
 		</footer>
 	</div>
 </body>
+
 <script>
 	listCall();
 	var $dis = 0;

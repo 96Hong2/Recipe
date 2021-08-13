@@ -22,18 +22,18 @@ if("${sessionScope.userId}"==""){
 		<header>
 			<%@include file="header_afterLogin.jsp"%>
 		</header>
-
-		<main id="body">
-
-			<h1
-				style="border: 2px solid #bbb; border-radius: 10px; text-align: center; width: 200px;">
+		<h1	style="border: 2px solid #bbb; border-radius: 10px; text-align: center; width: 200px;">
 				주문하기</h1>
-			<div>
-				<h2>배송정보</h2>
-				이름 : ${member.name} <br /> 배송주소 : ${member.address}<br /> 연락처 :
-				${member.tel} <input type="hidden" name="memberCash"
-					value="${member.cash}" />
-			</div>
+		<div>
+			<h2>배송정보</h2>
+			이름 : ${member.name} <br /> 배송주소 : ${member.address}<br /> 연락처 :
+			${member.tel} <input type="hidden" name="memberCash"
+				value="${member.cash}" />
+		</div>
+		<main id="body" style="width:700px; float:left;">
+
+			
+			
 
 			<h2>주문상품</h2>
 			<table class="table">
@@ -73,7 +73,8 @@ if("${sessionScope.userId}"==""){
 					<c:set var="total" value="${total + payment.totalPrice}" />
 				</c:forEach>
 			</table>
-
+		</main>
+		<aside style="margin-left:700px; width: 200px; float: right; position:fixed">
 			<div class="table-right">
 				<fmt:formatNumber var="total_sum" type="number"
 					maxFractionDigits="0" groupingUsed="false" value="${total}" />
@@ -100,7 +101,7 @@ if("${sessionScope.userId}"==""){
 				<button onclick="cancel()">취소</button>
 				<button onclick="order()">주문</button>
 			</div>
-		</main>
+		</aside>
 		<footer>
 			<%@include file="footer.jsp"%>
 		</footer>
