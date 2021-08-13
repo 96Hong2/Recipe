@@ -261,7 +261,7 @@ public class MemberDAO {
 			// 좋아요 불러오기
 			sql = "SELECT i.imgNewName, u.* FROM (SELECT postId,likes,title,hits,item,recipePrice,(SELECT nickName FROM member WHERE userid=p.userid) nickName"
 					+ " FROM (SELECT * FROM post WHERE postid IN (SELECT postId FROM "
-					+ "(SELECT postId FROM postLike WHERE userId=? ORDER BY likedate DESC) WHERE ROWNUM < 4) ORDER BY postdate DESC) p) u "
+					+ "(SELECT postId FROM postLike WHERE userId=? ORDER BY likedate DESC) WHERE ROWNUM < 4) ORDER BY postdate DESC) p WHERE isdel='N') u "
 					+ "LEFT OUTER JOIN image i ON u.postId=i.fieldid AND i.imgfield='post_th'";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, userId);
@@ -314,7 +314,7 @@ public class MemberDAO {
 			// 내가 쓴 글 불러오기
 			sql = "SELECT i.imgNewName, u.* FROM (SELECT postId,likes,title,hits,item,recipePrice,"
 					+ "(SELECT nickname FROM member WHERE userid=u.userid) nickname "
-					+ "FROM (SELECT * FROM post WHERE userId=? ORDER BY postdate DESC) u WHERE ROWNUM<4) u"
+					+ "FROM (SELECT * FROM post WHERE userId=? AND isdel='N' ORDER BY postdate DESC) u WHERE ROWNUM<4) u"
 					+ " LEFT OUTER JOIN image i ON u.postId=i.fieldid AND i.imgfield='post_th'";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, userId);
@@ -371,9 +371,9 @@ public class MemberDAO {
 					+ "FROM (SELECT ROW_NUMBER() OVER (ORDER BY comment_date DESC) as rnum, "
 					+ "commentid, comment_content, userid, comment_date "
 					+ "FROM (SELECT commentid, comment_content, userid, comment_date "
-					+ "FROM recomment WHERE userid=? " + "UNION "
+					+ "FROM recomment WHERE userid=? AND isdel='N'" + "UNION "
 					+ "SELECT commentid, comment_content, userid, comment_date FROM postcomment "
-					+ "WHERE userid=?)) WHERE rnum<=3) c, post p "
+					+ "WHERE userid=? AND isdel='N')) WHERE rnum<=3) c, post p "
 					+ "WHERE p.postid IN(SELECT postid FROM postcomment WHERE commentid=c.commentid)";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, userId);
