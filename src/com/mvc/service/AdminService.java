@@ -456,7 +456,7 @@ public class AdminService {
 		String classification = req.getParameter("classification");
 		String opt = req.getParameter("opt");
 		
-		System.out.println("글 아이디 : "+postId+" /작성자 닉 : "+nickName+" /블라인드 이유 : "+reportReason+" /분류 : "+classification+" /옵션 : "+opt);
+		System.out.println("글 아이디 : "+postId+" /작성자 닉 : "+nickName+" /신고 이유 : "+reportReason+" /분류 : "+classification+" /옵션 : "+opt);
 		
 		AdminDAO adDao = new AdminDAO();
 		try {
@@ -465,7 +465,7 @@ public class AdminService {
 			e.printStackTrace();
 		}
 		if(change > 0) {
-			System.out.println("신고 성공 : "+change);
+			System.out.println("신고 성공 or 이미 접수된 신고(10) : "+change);
 		}else {
 			System.out.println("신고 실패");
 		}

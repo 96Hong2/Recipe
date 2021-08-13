@@ -234,8 +234,12 @@ public class AdminController extends HttpServlet {
 		case "/reportSth": //지현
 			System.out.println("신고 요청");
 			msg = "실패";
+			int theResult = 0;
+			theResult = adService.memberReport();
 			
-			if(adService.memberReport() > 0) {
+			if(theResult == 10) {
+				msg = "이미 신고된 글/댓글입니다.";
+			}else if(theResult > 0 && theResult < 4) {
 				System.out.println("신고 성공!!");
 				msg = "신고가 성공적으로 접수되었습니다.";
 			}else {

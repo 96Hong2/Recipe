@@ -705,19 +705,30 @@ public class AdminDAO {
 		String sql = "INSERT INTO report (reportid, userid, classification, fieldid, details, categoryid) "
 				+ "VALUES(blind_seq.NEXTVAL, ?, ?, ?, ?, ?)";
 		String sql2 = "SELECT userid FROM member WHERE nickname = ?";
+		String sql3 = "SELECT reportid FROM report WHERE userid = ? AND classification = ? AND fieldid = ?";
 		
 			ps = conn.prepareStatement(sql2);
 			ps.setString(1, nickName);
 			rs = ps.executeQuery();
 		
 			if(rs.next()) {
-				ps = conn.prepareStatement(sql);
+				ps = conn.prepareStatement(sql3);
 				ps.setString(1, rs.getString("userid"));
 				ps.setString(2, classification);
 				ps.setString(3, postId);
-				ps.setString(4, reportReason);
-				ps.setString(5, opt);
-				change = ps.executeUpdate();
+				ResultSet rs2 = ps.executeQuery();
+				if(rs2.next()) {
+					change = 10;
+				}else {
+					ps = conn.prepareStatement(sql);
+					ps.setString(1, rs.getString("userid"));
+					ps.setString(2, classification);
+					ps.setString(3, postId);
+					ps.setString(4, reportReason);
+					ps.setString(5, opt);
+					change = ps.executeUpdate();
+				}
+				
 			}else {
 				System.out.println("닉네임 오류 발생!");
 			}
