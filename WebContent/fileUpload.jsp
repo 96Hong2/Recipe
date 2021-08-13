@@ -33,11 +33,11 @@ div .fileUpload_wrap {
 			</tr>
 			<tr>
 				<th>썸네일</th>
-				<td><input id='thumbnail' class='uploadInputBox' type="file" name="thumbnail" /><td>
+				<td><input id='thumbnail' class='uploadInputBox' type="file" name="thumbnail" onchange="checkSize(this)"/><td>
 			</tr>
 			<tr>
 				<th>첨부 이미지</th>
-				<td><input id='content_image' class='uploadInputBox' type="file" name="content_image" /></td>
+				<td><input id='content_image' class='uploadInputBox' type="file" name="content_image" onchange="checkSize(this)"/></td>
 			</tr>
 			<tr>
 				<td colspan='2'>
@@ -168,7 +168,13 @@ div .fileUpload_wrap {
 		$("#con_img").attr("width", "0px;");
 		$("#preview_p").empty();
 	}
-	
+
+	function checkSize(input) {
+	    if (input.files && input.files[0].size > (10 * 1024 * 1024)) {
+	        alert("이미지 용량은 10MB까지만 첨부 가능합니다.");
+	        input.value = null;
+	    }
+	}
 </script>
 
 </html>
