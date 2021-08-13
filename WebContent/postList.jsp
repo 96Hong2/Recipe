@@ -170,7 +170,9 @@
 			</div>
 	
 	</main>
-	<footer></footer>
+	<footer>
+			<%@include file="footer.jsp"%>
+		</footer>
 	</div>
 </body>
 <script>

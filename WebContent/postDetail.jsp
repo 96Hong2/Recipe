@@ -288,7 +288,9 @@ figcaption {
 				</c:import>
 			</div>
 		</main>
-		
+		<footer>
+			<%@include file="footer.jsp"%>
+		</footer>
 	</div>
 </body>
 <script>

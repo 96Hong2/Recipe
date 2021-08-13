@@ -231,7 +231,9 @@
 				<input type="button" value="회원 탈퇴" style="margin-top: 10px;" id='delAccount' onclick="popUp();" />
 			</div>
 		</main>
-		<footer> </footer>
+		<footer>
+			<%@include file="footer.jsp"%>
+		</footer>
 	</div>
 </body>
 <script>

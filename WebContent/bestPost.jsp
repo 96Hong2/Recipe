@@ -73,7 +73,7 @@
 													<small>${best.recipePrice}\</small>
 												</div>
 												<div style="text-align: right;">
-													<small>${best.userId}</small>
+													<small>${best.nickName}</small>
 												</div>
 											</div>
 
@@ -100,6 +100,9 @@
 				</c:forEach>
 			</div>
 		</main>
+		<footer>
+			<%@include file="footer.jsp"%>
+		</footer>
 	</div>
 </body>
 </html>

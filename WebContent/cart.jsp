@@ -10,10 +10,10 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" type="text/css" href="css/common.css" media="all" />
 <script>
-if("${sessionScope.userId}"==""){
-	alert("로그인이 필요한 서비스입니다.");
-	location.href = "login.jsp";
-}
+	if ("${sessionScope.userId}" == "") {
+		alert("로그인이 필요한 서비스입니다.");
+		location.href = "login.jsp";
+	}
 </script>
 </head>
 
@@ -24,7 +24,6 @@ if("${sessionScope.userId}"==""){
 		</header>
 
 		<main id="body">
-
 			<h1
 				style="border: 2px solid #bbb; border-radius: 10px; text-align: center; width: 200px;">
 				장바구니</h1>
@@ -66,13 +65,15 @@ if("${sessionScope.userId}"==""){
 			</div>
 
 		</main>
-		<footer></footer>
+		
+		<footer>
+			<%@include file="footer.jsp"%>
+		</footer>
 	</div>
 </body>
 <script>
 	listCall();
 	var $dis = 0;
-	
 
 	function listCall() {
 		console.log("리스트");
@@ -170,7 +171,7 @@ if("${sessionScope.userId}"==""){
 		param.pCnt = $pCnt;
 
 		console.log(param);
-		if($pCnt <= 0) {
+		if ($pCnt <= 0) {
 			alert('수량을 다시 선택해주세요');
 		} else {
 
@@ -194,7 +195,7 @@ if("${sessionScope.userId}"==""){
 					} else {
 						alert("장바구니에 담지 못했습니다.\r\n 다시 시도해주세요.")
 					}
-	
+
 				},
 				error : function(e) {
 					console.log(e);
@@ -371,39 +372,68 @@ if("${sessionScope.userId}"==""){
 		$("tbody").append(content);
 	}
 
-
 	function drawList(list) {
 		var content = "";
 
 		var tPrice = 0;
 		var id = 1;
-		list.forEach(function(item, idx) {
+		list
+				.forEach(function(item, idx) {
 
-			content += "<tr>";
-			
-			if(item.stock == 0) {
-				content += "<td><input class='del-chk' name='chkBox' type='checkbox' disabled  value='"+ item.productId+","+ item.totalPrice +"'/></td>";
-				content += "<td><label style='color: white !important; position: absolute; background: red; '>품절</label>";
-				content += "<a href='shopDetail?productId=" + item.productId + "'><img src='/photo/" + item.imgNewName + "' style='width: 180px; height: 100px;' /></a></td>";
-				content += "<td class='info' colspan='3'><div><div><a href='shopDetail?productId=" + item.productId + "'>" + item.productName + "</a></div><div><hr/><div><input name='cntModify" + id +"' style='width:40px' type='number' min='0' style='width:20px; text-align:center;' value= '"  + item.productCount + "' /><input name='stock" + id +"' type='hidden' style='width:20px; text-align:center;' value= '"  + item.stock + "' /><input onclick='modify(this.id)' id='btn" + id +"'type='button' value='수정'/><input onclick='deldel(this.id)' id='btn" + id +"'type='button' value='삭제'/></div></div></div><input name='productId" + id +"' type='hidden' value='"+ item.productId+"'/></td>";
-			} else if(item.stock < item.productCount) {
-				content += "<td><input class='del-chk' name='chkBox' type='checkbox' disabled  value='"+ item.productId+","+ item.totalPrice +"'/></td>";
-				content += "<td><label style='color: white !important; position: absolute; background: red; '>수량 수정 필요</label>";
-				content += "<a href='shopDetail?productId=" + item.productId + "'><img src='/photo/" + item.imgNewName + "' style='width: 180px; height: 100px;' /></a></td>";
-				content += "<td class='info' colspan='3'><div><div><a href='shopDetail?productId=" + item.productId + "'>" + item.productName + "</a></div><div><hr/><div><input name='cntModify" + id +"' style='width:40px' type='number' min='0' style='width:20px; text-align:center;' value= '"  + item.productCount + "' /><input name='stock" + id +"' type='hidden' style='width:20px; text-align:center;' value= '"  + item.stock + "' /><input onclick='modify(this.id)' id='btn" + id +"'type='button' value='수정'/> "+ "남은 개수 : " + item.stock + "</div></div></div><input name='productId" + id +"' type='hidden' value='"+ item.productId+"'/></td>";
-			} else {
-				content += "<td><input class='del-chk' name='chkBox' type='checkbox' value='"+ item.productId+","+ item.totalPrice +"'/></td>";
-				content += "<td><a href='shopDetail?productId=" + item.productId + "'><img src='/photo/" + item.imgNewName + "' style='width: 180px; height: 100px;' /></a></td>";
-				content += "<td class='info' colspan='3'><div><div><a href='shopDetail?productId=" + item.productId + "'>" + item.productName + "</a></div><div><hr/><div><input name='cntModify" + id +"' style='width:40px' type='number' min='0' style='width:20px; text-align:center;' value= '"  + item.productCount + "' /><input name='stock" + id +"' type='hidden' style='width:20px; text-align:center;' value= '"  + item.stock + "' /><input onclick='modify(this.id)' id='btn" + id +"'type='button' value='수정'/></div></div></div><input name='productId" + id +"' type='hidden' value='"+ item.productId+"'/></td>";
-			}
-			//content += "<td>" + item.productName + "</td>";
-			content += "<td>" + item.price + " 원</td>";
-			//content += "<td><input name='cntModify" + id +"' type='text' style='width:20px; text-align:center;' value= '"  + item.productCount + "' /><input onclick='modify(this.id)' id='btn" + id +"'type='button' value='수정'/></td>";
-			content += "<td>" + item.totalPrice + " 원</td>";
-			content += "</div></tr>";
-			content += "<tr><td colspan='7'><hr></td></div></tr>"
-			id++;
-		});
+					content += "<tr>";
+
+					if (item.stock == 0) {
+						content += "<td><input class='del-chk' name='chkBox' type='checkbox' disabled  value='"+ item.productId+","+ item.totalPrice +"'/></td>";
+						content += "<td><label style='color: white !important; position: absolute; background: red; '>품절</label>";
+						content += "<a href='shopDetail?productId="
+								+ item.productId
+								+ "'><img src='/photo/" + item.imgNewName + "' style='width: 180px; height: 100px;' /></a></td>";
+						content += "<td class='info' colspan='3'><div><div><a href='shopDetail?productId="
+								+ item.productId
+								+ "'>"
+								+ item.productName
+								+ "</a></div><div><hr/><div><input name='cntModify" + id +"' style='width:40px' type='number' min='0' style='width:20px; text-align:center;' value= '"  + item.productCount + "' /><input name='stock" + id +"' type='hidden' style='width:20px; text-align:center;' value= '"  + item.stock + "' /><input onclick='modify(this.id)' id='btn"
+								+ id
+								+ "'type='button' value='수정'/><input onclick='deldel(this.id)' id='btn"
+								+ id
+								+ "'type='button' value='삭제'/></div></div></div><input name='productId" + id +"' type='hidden' value='"+ item.productId+"'/></td>";
+					} else if (item.stock < item.productCount) {
+						content += "<td><input class='del-chk' name='chkBox' type='checkbox' disabled  value='"+ item.productId+","+ item.totalPrice +"'/></td>";
+						content += "<td><label style='color: white !important; position: absolute; background: red; '>수량 수정 필요</label>";
+						content += "<a href='shopDetail?productId="
+								+ item.productId
+								+ "'><img src='/photo/" + item.imgNewName + "' style='width: 180px; height: 100px;' /></a></td>";
+						content += "<td class='info' colspan='3'><div><div><a href='shopDetail?productId="
+								+ item.productId
+								+ "'>"
+								+ item.productName
+								+ "</a></div><div><hr/><div><input name='cntModify" + id +"' style='width:40px' type='number' min='0' style='width:20px; text-align:center;' value= '"  + item.productCount + "' /><input name='stock" + id +"' type='hidden' style='width:20px; text-align:center;' value= '"  + item.stock + "' /><input onclick='modify(this.id)' id='btn"
+								+ id
+								+ "'type='button' value='수정'/> "
+								+ "남은 개수 : "
+								+ item.stock
+								+ "</div></div></div><input name='productId" + id +"' type='hidden' value='"+ item.productId+"'/></td>";
+					} else {
+						content += "<td><input class='del-chk' name='chkBox' type='checkbox' value='"+ item.productId+","+ item.totalPrice +"'/></td>";
+						content += "<td><a href='shopDetail?productId="
+								+ item.productId
+								+ "'><img src='/photo/" + item.imgNewName + "' style='width: 180px; height: 100px;' /></a></td>";
+						content += "<td class='info' colspan='3'><div><div><a href='shopDetail?productId="
+								+ item.productId
+								+ "'>"
+								+ item.productName
+								+ "</a></div><div><hr/><div><input name='cntModify" + id +"' style='width:40px' type='number' min='0' style='width:20px; text-align:center;' value= '"  + item.productCount + "' /><input name='stock" + id +"' type='hidden' style='width:20px; text-align:center;' value= '"  + item.stock + "' /><input onclick='modify(this.id)' id='btn"
+								+ id
+								+ "'type='button' value='수정'/></div></div></div><input name='productId" + id +"' type='hidden' value='"+ item.productId+"'/></td>";
+					}
+					//content += "<td>" + item.productName + "</td>";
+					content += "<td>" + item.price + " 원</td>";
+					//content += "<td><input name='cntModify" + id +"' type='text' style='width:20px; text-align:center;' value= '"  + item.productCount + "' /><input onclick='modify(this.id)' id='btn" + id +"'type='button' value='수정'/></td>";
+					content += "<td>" + item.totalPrice + " 원</td>";
+					content += "</div></tr>";
+					content += "<tr><td colspan='7'><hr></td></div></tr>"
+					id++;
+				});
 
 		$("tbody").empty();
 		$("tbody").append(content);
