@@ -17,6 +17,10 @@ div.commentInputBox {
 	padding: 5px;
 }
 
+.commentAreaBox td{
+	text-align: left;
+}
+
 #commentAreaTable {
 	width: 100%;
 	padding-right: 10px;
@@ -31,6 +35,7 @@ textarea {
 	height: 80px;
 	border: 2px solid #ccc;
 	margin: 5px;
+	resize: none;
 }
 
 #cmtContentUser {
@@ -87,7 +92,7 @@ div.commentAreaBox {
 			<img src="./staticImg/user.jpeg" id='cmtUser' alt="댓글작성자이미지"
 				width=100px height=100px />
 			<textarea id='cmtInput' name='cmtInput'
-				placeholder="여기에 댓글을 입력해주세요. ^ㅇ^"></textarea>
+				placeholder="여기에 댓글을 입력해주세요. ^ㅇ^" ></textarea>
 			<button id="cmtInputBtn">댓글달기</button>
 		</div>
 
@@ -171,9 +176,23 @@ div.commentAreaBox {
 
 					} else if (item.isBlind != null) { //블라인드된 댓글이라면?
 						content += "<tbody class='cmtTbodyClass' id='cmtTbody"+idx+"'>";
+						if(loginIdIsAdmin == "Y"){
+							content += "<tr>";
+							content += "<td cosplan='7' style='color:grey;'> <b>작성날짜</b> "
+								+ item.comment_date;
+						content += "<b>작성자</b> "
+								+ item.nickName;
+						content += "<b>등급</b> "
+								+ item.rankName + "</td>";
+						content += "</tr>";
+						content += "<tr>";
+						content += "<td class='cmt_content' colspan='9' style='color:grey;'>---- 블라인드 처리된 댓글 내용 ---- <pre>&nbsp;"
+							+ item.comment_content + "</pre></td>";
+						content += "</tr>";
+						}else{
 						content += "<tr>";
 						content += "<td rowspan='2'><img src=\"./staticImg/user.jpeg\"";
-				content +=	" id='cmtContentUser' alt=\"댓글작성자이미지\" width=0px height=0px /></td>";
+						content +=	" id='cmtContentUser' alt=\"댓글작성자이미지\" width=0px height=0px /></td>";
 						content += "<td></td>";
 						content += "<td style='color:rosybrown;'><b>관리자에 의해 블라인드 처리된 댓글입니다.</b></td>";
 						content += "</tr>";
@@ -181,7 +200,7 @@ div.commentAreaBox {
 						content += "<tbody>";
 						content += "<tr><td colspan='10'><hr/></td></tr>";
 						content += "</tbody>";
-
+						}
 					} else if (item.lev == "comment") { //댓글이라면?
 						//댓글 보여주기
 						content += "<tbody class='cmtTbodyClass' id='cmtTbody"+idx+"'>";
@@ -247,8 +266,8 @@ div.commentAreaBox {
 						content += "</tr>";
 
 						content += "<tr>";
-						content += "<td class='cmt_content' colspan='9'>&nbsp;"
-								+ item.comment_content + "</td>";
+						content += "<td class='cmt_content' colspan='9'><pre>&nbsp;"
+								+ item.comment_content + "</pre></td>";
 						content += "</tr>";
 						content += "</tbody>";
 
@@ -269,10 +288,7 @@ div.commentAreaBox {
 								+ "' onclick='javascript:cmtUpdateExecute("
 								+ idx + ", \"" + item.commentId + "\", \""
 								+ item.lev + "\")'>저장</button></td>";
-						content += "<td><button id='cmtUpdateCancelBtn" + idx
-								+ "' onclick='javascript:cmtUpdateCancel("
-								+ idx + ",\"" + item.comment_content
-								+ "\")'>취소</button></td>";
+						content += "<td><button id='cmtUpdateCancelBtn"+idx+"' onclick='javascript:cmtUpdateCancel("+idx+",\""+item.comment_content+"\")'>취소</button></td>";
 						content += "</tr>";
 						content += "<tr>";
 						content += "<td class='cmt_content"+idx+"' colspan='9'>";
@@ -285,7 +301,7 @@ div.commentAreaBox {
 
 						//대댓글 작성하기
 						content += "<tbody class='cmtReplyTbodyClass' id='cmtReplyTbody"+idx+"'>";
-						content += "<td rowspan='2' valign='top' align='right'>";
+						content += "<td rowspan='2' valign='top' align='right' style='text-align:right;'>";
 						content += "<img src=\"./staticImg/reply1.png\" id='reCmtImg' alt=\"대댓글\" width=30px height=30px />";
 						content += "</td>";
 						content += "<tr>"
@@ -295,10 +311,7 @@ div.commentAreaBox {
 								+ "' onclick='javascript:cmtReplyExecute("
 								+ idx + ", \"" + item.commentId
 								+ "\")'>저장</button></td>";
-						content += "<td><button id='cmtUpdateCancelBtn" + idx
-								+ "' onclick='javascript:cmtReplyCancel(" + idx
-								+ ",\"" + item.comment_content
-								+ "\")'>취소</button></td>";
+								content += "<td><button id='cmtUpdateCancelBtn"+idx+"' onclick='javascript:cmtReplyCancel("+idx+",\""+item.comment_content+"\")'>취소</button></td>";
 						content += "</tr>";
 						content += "<tr>";
 						content += "<td></td>";
@@ -321,7 +334,7 @@ div.commentAreaBox {
 						content += "<tbody class='cmtTbodyClass' id='cmtTbody"+idx+"'>";
 						content += "<tr>";
 						content += "<td rowspan='2' valign='top' align='right'>";
-						content += "<img src=\"./staticImg/reply1.png\" id='reCmtImg' alt=\"대댓글표시\" width=30px height=30px />"
+						content += "<img src=\"./staticImg/reply1.png\" id='reCmtImg' alt=\"대댓글표시\" width=30px height=30px/>"
 						content += "&nbsp;&nbsp;</td>";
 
 						//이 대댓글의 작성자가 현재 로그인된 유저아이디와 같다면 색깔을 입혀서 보여준다
@@ -379,8 +392,8 @@ div.commentAreaBox {
 						content += "</tr>";
 
 						content += "<tr>";
-						content += "<td class='cmt_content' colspan='9'>&nbsp;"
-								+ item.comment_content + "</td>";
+						content += "<td class='cmt_content' colspan='9'><pre>&nbsp;"
+								+ item.comment_content + "</pre></td>";
 						content += "</tr>";
 						content += "</tbody>";
 
@@ -407,18 +420,15 @@ div.commentAreaBox {
 								+ "' onclick='javascript:cmtUpdateExecute("
 								+ idx + ", \"" + item.recomId + "\", \""
 								+ item.lev + "\")'>저장</button></td>";
-						content += "<td><button id='cmtUpdateCancelBtn" + idx
-								+ "' onclick='javascript:cmtUpdateCancel("
-								+ idx + ",\"" + item.comment_content
-								+ "\")'>취소</button></td>";
+						content += "<td><button id='cmtUpdateCancelBtn" + idx+ "' onclick='javascript:cmtUpdateCancel("+ idx + ",\"" + item.comment_content+ "\")'>취소</button></td>";
 						content += "</tr>";
 						content += "<tr>";
 						content += "<td></td>";
 						content += "<td></td>";
 						content += "<td class='cmt_content"+idx+"' colspan='9'>";
 						content += "<textarea id='cmtUpdateInput"+idx+"' name='cmtUpdateInput"+idx+"'";
-				content +=	"style='width:500px;'>"
-								+ item.comment_content + "</textarea>";
+				content +=	"style='width:500px;'><pre>"
+								+ item.comment_content + "</pre></textarea>";
 						content += "</td>";
 						content += "</tr>";
 						content += "</tbody>";
